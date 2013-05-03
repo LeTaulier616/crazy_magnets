@@ -1,0 +1,357 @@
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using FarseerPhysics.Dynamics.Contacts;
+using FarseerPhysics.Dynamics;
+
+public class Interruptor : MonoBehaviour
+{
+	// Structures
+	public enum Direction {
+		NONE = 0, TOP, RIGHT, BOTTOM, LEFT
+	};
+	public enum Activator {
+		PLAYER_OR_CUBE = 0, TOUCH, ELECTRIC_TOUCH
+	};
+	public enum Type {
+		PERMANENT = 0, ONOFF, TIMER, STAY
+	};
+	
+	// Customisable Datas
+	public GameObject[] targets;
+	public Type       type          = Type.PERMANENT;
+	public Activator  activator     = Activator.PLAYER_OR_CUBE;
+	public Direction  pushDirection = Direction.BOTTOM;
+	public float      timeToExecute = 0.0f; // Time Between the Push   and the Activation
+	public float      timeToRevoke  = 0.0f; // Time between the Unpush and the Desactivation
+	
+	// Engine Datas
+	private float     pushTime      = 0.0f;
+	private float     unpushTime    = 0.0f;
+	[HideInInspector]
+	public  bool      activated     = false;
+	[HideInInspector]
+	public  bool      isPushed      = false;
+	private Body      body          = null;
+	private int       pushCounter   = 0;
+	private float     tmpPorteeElec;
+	private float     tmpPorteeNorm;
+	private bool      isElectrified;
+	private bool      waitActiveToSetOff = false;
+	
+	private AudioClip interruptorSound;
+	private AudioClip interruptorReleaseSound;
+	private AudioClip buttonSound;
+	private AudioClip electricButtonSound;
+	
+	void Start()
+	{
+		activated = false;
+		isPushed = false;
+		
+		tmpPorteeElec = GlobalVarScript.instance.ChargeButtonRadius;
+		tmpPorteeNorm = GlobalVarScript.instance.ButtonRadius;
+		
+		unpushTime = timeToRevoke+0.1f;
+			
+		body = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
+		
+		body.IsSensor = true;
+		
+		body.OnCollision  += OnCollisionEvent;
+		body.OnSeparation += OnSeparationEvent;
+				
+		interruptorSound = GlobalVarScript.instance.InterruptorSound;
+		interruptorReleaseSound = GlobalVarScript.instance.InterruptorReleaseSound;
+		buttonSound = GlobalVarScript.instance.ButtonSound;
+		electricButtonSound = GlobalVarScript.instance.ElectricButtonSound;
+		
+		SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
+		SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
+	}
+	
+	void FixedUpdate()
+	{
+		bool resultat = activated;
+		
+		pushTime   = ((isPushed || unpushTime < 0.1f) ? pushTime   + Time.deltaTime : pushTime  );
+		unpushTime = (!isPushed                       ? unpushTime + Time.deltaTime : unpushTime);
+		
+		bool wasActivated = activated;
+		
+		if(!activated && isPushed && pushTime >= timeToExecute)
+			activated = true;
+		
+		if(!wasActivated && activated && type == Type.TIMER)
+		{
+			setOff();
+		}
+		
+		if((type == Type.TIMER || type == Type.ONOFF || type == Type.STAY) && activated && !isPushed && unpushTime >= timeToRevoke+0.1f)
+			activated = false;
+		
+		if(!wasActivated && activated)
+		{
+			for(int trg = 0; trg < targets.Length; ++trg)
+			{
+				targets[trg].GetComponent<InterruptorReceiver>().OnActivate();
+			}
+			
+			if(!audio.isPlaying)
+			{
+				if(activator == Activator.TOUCH)
+				{
+					audio.clip = buttonSound;
+					audio.Play();
+				}
+				
+				else if(activator == Activator.ELECTRIC_TOUCH)
+				{
+					audio.clip = electricButtonSound;
+					audio.Play();
+				}
+							
+				else if (activator == Activator.PLAYER_OR_CUBE)
+				{
+					audio.clip = interruptorSound;
+					audio.Play();
+				}
+			}
+			
+						
+			else if (activator == Activator.PLAYER_OR_CUBE)
+			{
+				audio.clip = interruptorSound;
+				audio.Play();
+			}
+		}
+		
+		else if(wasActivated && !activated)
+		{
+			for(int trg = 0; trg < targets.Length; ++trg)
+			{
+				targets[trg].GetComponent<InterruptorReceiver>().OnDesactivate();
+			}
+			
+			if(activator == Activator.PLAYER_OR_CUBE && (type == Type.STAY || type == Type.ONOFF))
+			{
+				audio.clip = interruptorReleaseSound;
+				audio.Play();
+			}
+		}
+		
+		if(resultat != activated)
+			Debug.Log("Push value is : " + (activated ? "Pushed" : "Unpushed"));
+		
+		if(activated && waitActiveToSetOff)
+		{
+			setOff ();
+			waitActiveToSetOff = false;
+		}
+		
+		isElectrified = GlobalVarScript.instance.player.GetComponent<InterruptorPusher>().isElectrified;
+		
+		if (this.type != Type.STAY)
+		{
+			if(activator == Activator.TOUCH)
+			{
+				if (Vector3.Distance(GameObject.FindGameObjectWithTag("PlayerObject").transform.position, gameObject.transform.position) < tmpPorteeNorm)
+				{
+					SendMessage("ConstantParams", Color.green, SendMessageOptions.DontRequireReceiver);
+				}
+				
+				else
+				{
+					SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
+				}
+			}
+			
+			else if (activator == Activator.ELECTRIC_TOUCH)
+			{
+				if (Vector3.Distance(GameObject.FindGameObjectWithTag("PlayerObject").transform.position, gameObject.transform.position) < tmpPorteeElec)
+				{
+					SendMessage("ConstantParams", Color.green, SendMessageOptions.DontRequireReceiver);
+				}
+				
+				else
+				{
+					SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
+				}	
+			}
+		}
+	}
+	
+	private bool OnCollisionEvent(Fixture fixtureA, Fixture fixtureB, Contact contact)
+	{
+		if(activator == Activator.TOUCH || activator == Activator.ELECTRIC_TOUCH)
+			return false;
+		
+		Body bodyB = fixtureB.Body;
+		if( (bodyB.UserTag == "PlayerObject" && this.activator == Activator.PLAYER_OR_CUBE)
+			|| ( (bodyB.UserData is GameObject) && (bodyB.UserData as GameObject).GetComponent<InterruptorPusher>().isPusher && this.activator == Activator.PLAYER_OR_CUBE ))
+		{
+			Direction tmpDirection = Direction.NONE;
+			FVector2 colNorm = contact.Manifold.LocalNormal;
+			
+			if(Mathf.Abs(colNorm.X) > 0.1f)
+			{
+				if (colNorm.X > 0)
+				    tmpDirection = Direction.LEFT;
+				else
+				    tmpDirection = Direction.RIGHT;
+			}
+			
+			if(tmpDirection != pushDirection && Mathf.Abs(colNorm.Y) > 0.1f)
+			{
+				if (colNorm.Y > 0)
+				    tmpDirection = Direction.BOTTOM;
+				else
+				    tmpDirection = Direction.TOP;
+			}
+			
+			if(tmpDirection == pushDirection || pushDirection == Direction.NONE)
+			{
+				if(activated && type == Type.ONOFF)
+				{
+					setOff();
+				}
+				else if(!activated)
+				{
+					setOn();
+				}
+				
+				else
+				{
+					pushCounter++;
+				}
+			}
+		}
+		return true;
+	}
+	
+	
+	private void OnSeparationEvent(Fixture fixtureA, Fixture fixtureB)
+	{
+		if(activator == Activator.TOUCH || activator == Activator.ELECTRIC_TOUCH)
+			return;
+		
+		Body bodyB = fixtureB.Body;
+		if( (bodyB.UserTag == "PlayerObject" && this.activator == Activator.PLAYER_OR_CUBE)
+			|| ( (bodyB.UserData is GameObject) && (bodyB.UserData as GameObject).GetComponent<InterruptorPusher>().isPusher && this.activator == Activator.PLAYER_OR_CUBE ))
+		{
+			unpushTime         = 0.0f;
+			if(type == Type.TIMER || type == Type.STAY)
+			{
+				pushCounter    = Mathf.Max(pushCounter - 1, 0);
+				if(pushCounter == 0)
+				{
+					if(type == Type.STAY || type == Type.TIMER)
+						waitActiveToSetOff = true;
+					//setOff ();
+				}
+			}
+		}
+	}
+	
+	public void TouchTap()
+	{
+		if(this.activator != Activator.TOUCH && this.activator != Activator.ELECTRIC_TOUCH)
+			return;
+		
+		if(!(this.activator == Activator.ELECTRIC_TOUCH && !isElectrified)
+			&& Vector3.Distance(GameObject.FindGameObjectWithTag("PlayerObject").transform.position, gameObject.transform.position) < (isElectrified ? tmpPorteeElec : tmpPorteeNorm) )
+		{
+			if(this.activator == Activator.ELECTRIC_TOUCH)
+			{
+				GlobalVarScript.instance.player.SendMessageUpwards("SetSparkPoint", this.transform.position, SendMessageOptions.DontRequireReceiver);
+				GlobalVarScript.instance.player.SendMessageUpwards("Discharge", SendMessageOptions.DontRequireReceiver);
+			}
+			
+			if(activated && type == Type.ONOFF)
+			{
+				setOff();
+			}
+			else if(!activated)
+			{
+				setOn();
+			}
+		}
+	}
+	
+	public void MouseLeft()
+	{
+		if(this.activator != Activator.TOUCH && this.activator != Activator.ELECTRIC_TOUCH)
+			return;
+		
+		if(!(this.activator == Activator.ELECTRIC_TOUCH && !isElectrified)
+			&& Vector3.Distance(GameObject.FindGameObjectWithTag("PlayerObject").transform.position, gameObject.transform.position) < (isElectrified ? tmpPorteeElec : tmpPorteeNorm) )
+		{
+			if(this.activator == Activator.ELECTRIC_TOUCH)
+			{
+				GlobalVarScript.instance.player.SendMessageUpwards("SetSparkPoint", this.transform.position, SendMessageOptions.DontRequireReceiver);
+				GlobalVarScript.instance.player.SendMessageUpwards("Discharge", SendMessageOptions.DontRequireReceiver);
+			}
+			
+			if(activated && type == Type.ONOFF)
+			{
+				setOff();
+			}
+			else if(!activated)
+			{
+				setOn();
+			}
+		}
+	}
+	
+	private void setOn()
+	{
+		pushCounter  = pushCounter + 1;
+		unpushTime   = 0.0f;
+		if(!isPushed)
+			pushTime = 0.0f;
+		isPushed     = true;
+		if(animation != null || this.GetComponentInChildren<Animation>() != null)
+		{
+			if(activator == Activator.TOUCH)
+			{
+				animation["action"].speed = 1.0f;
+				animation.Play();
+			}
+			
+			else if (activator == Activator.PLAYER_OR_CUBE)
+			{
+				this.GetComponentInChildren<Animation>().animation["press"].speed = 1.0f;
+				this.GetComponentInChildren<Animation>().Play();
+			}
+
+		}	
+		Debug.Log("Set On");
+	}
+	
+	private void setOff()
+	{
+		pushCounter  = 0;
+		unpushTime   = 0.0f;
+		isPushed     = false;
+		
+		if(animation != null || this.GetComponentInChildren<Animation>() != null)
+		{
+			if(activator == Activator.TOUCH)
+			{
+				animation["action"].speed = -1.0f;
+				animation["action"].time = animation["action"].length;
+				this.GetComponentInChildren<Animation>().Play();
+			}
+			
+			else if (activator == Activator.PLAYER_OR_CUBE)
+			{
+				this.GetComponentInChildren<Animation>().animation["press"].speed = -1.0f;
+				this.GetComponentInChildren<Animation>().animation["press"].time = this.transform.GetComponentInChildren<Animation>().animation["press"].length;
+				this.GetComponentInChildren<Animation>().Play();
+			}
+		}
+		
+		Debug.Log("Set Off");
+	}
+}

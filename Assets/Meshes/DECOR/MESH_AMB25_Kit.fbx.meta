@@ -1,0 +1,133 @@
+fileFormatVersion: 2
+guid: c1c389e161d8a694792b6bdb95a85a50
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: BAse
+    100002: dome
+    100004: ecrou1
+    100006: ecrou2
+    100008: ecrou3
+    100010: ecrou4
+    100012: ecrou5
+    100014: ecrou6
+    100016: gros_tube
+    100018: middle
+    100020: mini_dome
+    100022: plugin_toit
+    100024: //RootNode
+    100026: tuyau1
+    100028: tuyau2
+    100030: up
+    400000: BAse
+    400002: dome
+    400004: ecrou1
+    400006: ecrou2
+    400008: ecrou3
+    400010: ecrou4
+    400012: ecrou5
+    400014: ecrou6
+    400016: gros_tube
+    400018: middle
+    400020: mini_dome
+    400022: plugin_toit
+    400024: //RootNode
+    400026: tuyau1
+    400028: tuyau2
+    400030: up
+    2300000: BAse
+    2300002: dome
+    2300004: ecrou1
+    2300006: ecrou2
+    2300008: ecrou3
+    2300010: ecrou4
+    2300012: ecrou5
+    2300014: ecrou6
+    2300016: gros_tube
+    2300018: middle
+    2300020: mini_dome
+    2300022: plugin_toit
+    2300024: tuyau1
+    2300026: tuyau2
+    2300028: up
+    3300000: BAse
+    3300002: dome
+    3300004: ecrou1
+    3300006: ecrou2
+    3300008: ecrou3
+    3300010: ecrou4
+    3300012: ecrou5
+    3300014: ecrou6
+    3300016: gros_tube
+    3300018: middle
+    3300020: mini_dome
+    3300022: plugin_toit
+    3300024: tuyau1
+    3300026: tuyau2
+    3300028: up
+    4300000: dome
+    4300002: tuyau1
+    4300004: tuyau2
+    4300006: BAse
+    4300008: middle
+    4300010: up
+    4300012: ecrou1
+    4300014: ecrou2
+    4300016: ecrou3
+    4300018: ecrou4
+    4300020: plugin_toit
+    4300022: gros_tube
+    4300024: ecrou5
+    4300026: ecrou6
+    4300028: mini_dome
+    9500000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 2
+  userData: 
