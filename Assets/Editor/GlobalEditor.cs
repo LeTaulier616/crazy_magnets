@@ -160,6 +160,11 @@ public class GlobalEditor : Editor
 			"Son du bumper",
 			"");
 		
+		this.target_.BoltSound = addSoundField(this.target_.BoltSound,
+			false,
+			"Son du boulon d'or",
+			"");
+				
 		this.target_.DoorOpenSound = addSoundField(this.target_.DoorOpenSound,
 			false,
 			"Son d'ouverture de porte",
@@ -169,15 +174,41 @@ public class GlobalEditor : Editor
 			false,
 			"Son de fermeture de porte",
 			"Son de fermeture de porte");
-		/*	
-		for(int i=0; i < target_.WalkSounds.Length; i++)
+		
+		EditorGUILayout.Space();
+			
+		target_.ClockSoundsExpand = EditorGUILayout.Foldout(target_.ClockSoundsExpand, "Sons du timer");
+		
+		if(target_.ClockSoundsExpand)
 		{
-			this.target_.WalkSounds[i] = addSoundField(this.target_.WalkSounds[i],
-				false,
-				"Sons de marche " + (i + 1),
-				"");
-		}*/
+			int x = 0;	
+			target_.ClockSoundsSize = EditorGUILayout.IntField("Size", target_.ClockSoundsSize);
+			
+			if(target_.ClockSounds.Length != target_.ClockSoundsSize)
+			{
+				AudioClip[] newClockSounds = new AudioClip[target_.ClockSoundsSize];
 				
+				for(x = 0; x < target_.ClockSoundsSize; x++)
+				{
+					if(target_.ClockSounds.Length > x)
+					{
+						newClockSounds[x] = target_.ClockSounds[x];
+					}
+				}
+				target_.ClockSounds = newClockSounds;
+			}
+			
+			for(x = 0; x < target_.ClockSounds.Length; x++)
+			{
+				target_.ClockSounds[x] = addSoundField(target_.ClockSounds[x],
+					false,
+					"Vitesse " + (x + 1),
+					"");
+			}
+		}
+		
+		EditorGUILayout.Space();
+			
 		target_.WalkSoundsExpand = EditorGUILayout.Foldout(target_.WalkSoundsExpand, "Sons de marche");
 		
 		if(target_.WalkSoundsExpand)
@@ -207,6 +238,8 @@ public class GlobalEditor : Editor
 					"");
 			}
 		}
+		
+		EditorGUILayout.Space();
 		
 		target_.SteamSoundsExpand = EditorGUILayout.Foldout(target_.SteamSoundsExpand, "Effets de marche - Vapeur");
 		
@@ -238,6 +271,8 @@ public class GlobalEditor : Editor
 			}
 		}
 		
+		EditorGUILayout.Space();
+
 		target_.MechSoundsExpand = EditorGUILayout.Foldout(target_.MechSoundsExpand, "Effets de marche - Mecanique");
 		
 		if(target_.MechSoundsExpand)

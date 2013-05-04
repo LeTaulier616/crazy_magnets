@@ -51,7 +51,12 @@ public class GlobalVarScript : MonoBehaviour
 	public AudioClip BumperSound;
 	public AudioClip DoorOpenSound;
 	public AudioClip DoorCloseSound;
+	public AudioClip BoltSound;
 	public AudioClip JumpSound;
+	
+	public bool ClockSoundsExpand = true;
+	public int ClockSoundsSize = 1;
+	public AudioClip[] ClockSounds;
 	
 	public bool WalkSoundsExpand = true;
 	public int WalkSoundsSize = 1;

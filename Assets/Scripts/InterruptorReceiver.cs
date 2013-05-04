@@ -132,7 +132,7 @@ public class InterruptorReceiver : MonoBehaviour
 	
 	public void OnDesactivate()
 	{
-		isActivated =false;
+		isActivated = false;
 		// Call the correct function or do something
 			
 		if(gameObject.CompareTag("Door") || gameObject.CompareTag("Ground"))
@@ -162,7 +162,9 @@ public class InterruptorReceiver : MonoBehaviour
 				GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = !gameObject.active;
 				
 			}
-
+			
+			audio.clip = GlobalVarScript.instance.DoorCloseSound;
+			audio.Play();
 		}
 		
 		if(gameObject.CompareTag("Attractor"))

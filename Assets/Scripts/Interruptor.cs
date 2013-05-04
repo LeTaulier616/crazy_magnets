@@ -45,6 +45,9 @@ public class Interruptor : MonoBehaviour
 	private AudioClip buttonSound;
 	private AudioClip electricButtonSound;
 	
+	private AudioSource audio1;
+	private AudioSource audio2;
+	
 	void Start()
 	{
 		activated = false;
@@ -53,7 +56,7 @@ public class Interruptor : MonoBehaviour
 		tmpPorteeElec = GlobalVarScript.instance.ChargeButtonRadius;
 		tmpPorteeNorm = GlobalVarScript.instance.ButtonRadius;
 		
-		unpushTime = timeToRevoke+0.1f;
+		unpushTime = timeToRevoke + 0.1f;
 			
 		body = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
 		
@@ -69,10 +72,19 @@ public class Interruptor : MonoBehaviour
 		
 		SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
 		SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
+		
+		foreach(AudioSource source in this.GetComponents<AudioSource>())
+		{
+			if(source.loop)
+				audio2 = source;
+			
+			else
+				audio1 = source;
+		}
 	}
 	
 	void FixedUpdate()
-	{
+	{		
 		bool resultat = activated;
 		
 		pushTime   = ((isPushed || unpushTime < 0.1f) ? pushTime   + Time.deltaTime : pushTime  );
@@ -89,7 +101,9 @@ public class Interruptor : MonoBehaviour
 		}
 		
 		if((type == Type.TIMER || type == Type.ONOFF || type == Type.STAY) && activated && !isPushed && unpushTime >= timeToRevoke+0.1f)
+		{
 			activated = false;
+		}
 		
 		if(!wasActivated && activated)
 		{
@@ -98,32 +112,32 @@ public class Interruptor : MonoBehaviour
 				targets[trg].GetComponent<InterruptorReceiver>().OnActivate();
 			}
 			
-			if(!audio.isPlaying)
+			if(!audio1.isPlaying)
 			{
 				if(activator == Activator.TOUCH)
 				{
-					audio.clip = buttonSound;
-					audio.Play();
+					audio1.clip = buttonSound;
+					audio1.Play();
 				}
 				
 				else if(activator == Activator.ELECTRIC_TOUCH)
 				{
-					audio.clip = electricButtonSound;
-					audio.Play();
+					audio1.clip = electricButtonSound;
+					audio1.Play();
 				}
 							
 				else if (activator == Activator.PLAYER_OR_CUBE)
 				{
-					audio.clip = interruptorSound;
-					audio.Play();
+					audio1.clip = interruptorSound;
+					audio1.Play();
 				}
 			}
 			
 						
 			else if (activator == Activator.PLAYER_OR_CUBE)
 			{
-				audio.clip = interruptorSound;
-				audio.Play();
+				audio1.clip = interruptorSound;
+				audio1.Play();
 			}
 		}
 		
@@ -136,8 +150,8 @@ public class Interruptor : MonoBehaviour
 			
 			if(activator == Activator.PLAYER_OR_CUBE && (type == Type.STAY || type == Type.ONOFF))
 			{
-				audio.clip = interruptorReleaseSound;
-				audio.Play();
+				audio1.clip = interruptorReleaseSound;
+				audio1.Play();
 			}
 		}
 		
@@ -272,6 +286,7 @@ public class Interruptor : MonoBehaviour
 			{
 				setOff();
 			}
+			
 			else if(!activated)
 			{
 				setOn();
@@ -300,6 +315,7 @@ public class Interruptor : MonoBehaviour
 			else if(!activated)
 			{
 				setOn();
+				Debug.Log("Here");
 			}
 		}
 	}
