@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using FarseerPhysics.Dynamics;
+using FarseerPhysics.Dynamics.Joints;
+using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 
 public class CubeScript : MonoBehaviour
@@ -22,6 +24,10 @@ public class CubeScript : MonoBehaviour
 	private Vector3 startPosition;
 	
 	private GameObject player;
+	
+	protected FixedMouseJoint mouseJoint;
+	static public float MouseXWorldPhys = 0f;
+	static public float MouseYWorldPhys = 0f;
 	
 	void Start ()
 	{		
@@ -46,7 +52,7 @@ public class CubeScript : MonoBehaviour
 	}
 	
 	void Update ()
-	{		
+	{
 		if(Vector3.Distance(this.player.transform.position, this.transform.position) > range)
 		{
 			SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
@@ -90,10 +96,8 @@ public class CubeScript : MonoBehaviour
 			this.body.LinearVelocity = new FVector2(this.body.LinearVelocity.X - 0.1f, this.body.LinearVelocity.Y);
 		}
 		*/
-		if (this.selected == 1)
-		{
-			this.body.ApplyForce(new FVector2(2f * (this.target.x - transform.position.x), 2f * (this.target.y - transform.position.y)));
-		}
+		UpdateMouseWorld();
+		MouseDrag();
 		
 		if(audio.isPlaying)
 		{
@@ -174,5 +178,48 @@ public class CubeScript : MonoBehaviour
 	{
 		Debug.Log("There");
 		this.body.SetTransform(new FVector2(startPosition.x, startPosition.y), 0.0f);
+	}
+	
+	public void UpdateMouseWorld()
+	{
+		Vector3 fwd = Camera.main.transform.forward;
+		Vector3 pos = Camera.main.transform.position + fwd * (-Camera.main.transform.position.z);
+		// create a plane at distance, and facing the camera:
+		Plane plane = new Plane(-fwd, pos);
+		Ray ray; // ray to intersect the plane
+		float dist = 0; // will contain the distance along the ray
+		
+		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		plane.Raycast(ray, out dist); // find the distance of the hit point
+		Vector3 wp = ray.GetPoint(dist);
+		
+		MouseXWorldPhys = wp.x;// -parent.position.x;
+		MouseYWorldPhys = wp.y;// - parent.position.y;
+	}
+	
+	public void MouseDrag()
+	{
+		// mouse press
+		if(this.selected == 1 && mouseJoint == null)
+		{
+			FVector2 target = new FVector2(MouseXWorldPhys, MouseYWorldPhys);
+			mouseJoint = JointFactory.CreateFixedMouseJoint(FSWorldComponent.PhysicsWorld, this.body, target);
+			mouseJoint.CollideConnected = true;
+			mouseJoint.MaxForce = 30f * this.body.Mass;
+			this.body.Awake = true;
+		}
+		// mouse release
+		if(this.selected == 0 && mouseJoint != null)
+		{
+			FSWorldComponent.PhysicsWorld.RemoveJoint(mouseJoint);
+			mouseJoint = null;
+		}
+		
+		// mouse move
+		if(mouseJoint != null)
+		{
+			FVector2 p2 = new FVector2(MouseXWorldPhys, MouseYWorldPhys);
+			mouseJoint.WorldAnchorB = p2;
+		}
 	}
 }
