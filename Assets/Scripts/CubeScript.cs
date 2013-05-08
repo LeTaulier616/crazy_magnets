@@ -21,6 +21,8 @@ public class CubeScript : MonoBehaviour
 	
 	private Vector3 startPosition;
 	
+	private GameObject player;
+	
 	void Start ()
 	{		
 		this.body = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
@@ -39,12 +41,13 @@ public class CubeScript : MonoBehaviour
 		
 		this.startPosition = this.transform.position;
 		SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
-
+		
+		player = GameObject.FindGameObjectWithTag("PlayerObject");
 	}
 	
 	void Update ()
 	{		
-		if(Vector3.Distance(GameObject.FindGameObjectWithTag("PlayerObject").transform.position, this.transform.position) > range)
+		if(Vector3.Distance(this.player.transform.position, this.transform.position) > range)
 		{
 			SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
 		}
@@ -53,7 +56,7 @@ public class CubeScript : MonoBehaviour
 		{
 			SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
 		}
-		
+		/*
 		if (this.selected == 1 && Mathf.Abs(this.target.x - transform.position.x) > 1.2f)
 		{
 			int dir = transform.position.x < this.target.x ? 1 : -1;
@@ -86,7 +89,12 @@ public class CubeScript : MonoBehaviour
 		{
 			this.body.LinearVelocity = new FVector2(this.body.LinearVelocity.X - 0.1f, this.body.LinearVelocity.Y);
 		}
-				
+		*/
+		if (this.selected == 1)
+		{
+			this.body.ApplyForce(new FVector2(2f * (this.target.x - transform.position.x), 2f * (this.target.y - transform.position.y)));
+		}
+		
 		if(audio.isPlaying)
 		{
 			if(this.selected == 1 || this.selected == -1)
@@ -120,6 +128,7 @@ public class CubeScript : MonoBehaviour
 	
 	void Move(Vector3 target)
 	{
+		this.player.SendMessage("GrabObject", true, SendMessageOptions.DontRequireReceiver);
 		this.selected = 1;
 		this.target = target;
 		if(!audio.isPlaying)
@@ -146,6 +155,7 @@ public class CubeScript : MonoBehaviour
 	
 	void UnselectObject()
 	{
+		this.player.SendMessage("GrabObject", false, SendMessageOptions.DontRequireReceiver);
 		this.body.GravityScale = 2f;
 		this.selected = 0;
 		if(renderer != null)

@@ -23,6 +23,9 @@ public class PlayerScript : MonoBehaviour
 	private bool canResurrect;
 	private bool      isWalking;
 	private bool      isCharged;
+	[HideInInspector]
+	public bool		isGrabbing;
+	[HideInInspector]
 	public bool      onGround;
 	private bool	headStucked;
 	private Vector3   grabTarget;
@@ -34,6 +37,7 @@ public class PlayerScript : MonoBehaviour
 	private float     AccelerationTime;
 	
 	private FVector2  walkVelocity;
+	[HideInInspector]
 	public  bool      onPFM   = false;
 	public  Body      bodyPFM = null;
 	
@@ -62,6 +66,7 @@ public class PlayerScript : MonoBehaviour
 		this.canResurrect = false;
 		this.isWalking  = false;
 		this.isCharged  = false;
+		this.isGrabbing = false;
 		this.onGround   = true;
 		this.headStucked = false;
 		this.onPFM      = false;
@@ -191,7 +196,7 @@ public class PlayerScript : MonoBehaviour
 		if (this.onGround == false && this.playerBody.LinearVelocity.Y < 0)
 		{			
 			// pour que le perso tombe plus vite
-			this.playerBody.GravityScale = 3.25f;
+			this.playerBody.GravityScale = 2.5f;
 			
 			RaycastHit hit;
 			if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.down, out hit, 4.5f) && GlobalVarScript.instance.groundTags.Contains(transform.tag))
@@ -469,5 +474,19 @@ public class PlayerScript : MonoBehaviour
 		this.playerBody.Position = new FVector2(currentCheckpoint.x, currentCheckpoint.y);
 	}
 	
-
+	public void GrabObject(bool grab)
+	{
+		if (grab)
+		{
+			// TODO : halo de couleur sur la main
+			//this.playerBody.BodyType = BodyType.Kinematic;
+			this.playerBody.Mass = 100f;
+		}
+		else
+		{
+			//this.playerBody.BodyType = BodyType.Dynamic;
+			this.playerBody.ResetDynamics();
+			this.playerBody.Mass = 1f;
+		}
+	}
 }

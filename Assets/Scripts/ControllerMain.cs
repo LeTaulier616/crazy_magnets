@@ -88,6 +88,12 @@ public class ControllerMain : MonoBehaviour
 						break;					
 						
 						case TouchPhase.Ended:
+							float tapTime = Time.time - touchObj.startTime;
+							if (tapTime < 0.2f)
+							{
+							// tap : saut
+								this.slide = true;
+							}
 							touchesToRemove.Add(touchObj);
 						break;
 					}
@@ -145,6 +151,7 @@ public class ControllerMain : MonoBehaviour
 							if (Physics.Raycast(cRay, out cHitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
 							{
 								// gestion de l'objet sélectionné en fonction de son tag
+								/*
 								if (cHitInfo.transform.gameObject.tag == "Player")
 								{
 									if(Vector3.Distance(touchObj.selectedObject.transform.position, this.transform.position) < blockRange)
@@ -163,6 +170,29 @@ public class ControllerMain : MonoBehaviour
 								{
 									touchObj.selectedObject = cHitInfo.transform.gameObject;
 									gameObject.SendMessage("Grab", touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+								}
+								*/
+								if(Vector3.Distance(touchObj.selectedObject.transform.position, this.transform.position) < blockRange)
+								{
+									if (cHitInfo.transform.gameObject.tag == "Bloc" || cHitInfo.transform.gameObject.tag == "Grab")
+									{
+										this.selectedObject = cHitInfo.transform.gameObject;
+										if (cHitInfo.transform.gameObject.tag == "Grab")
+										{
+											gameObject.SendMessage("Grab", touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+										}
+									}
+									Vector3 fwd = Camera.main.transform.forward;
+									Vector3 pos = Camera.main.transform.position + fwd * (-Camera.main.transform.position.z);
+									// create a plane at distance, and facing the camera:
+									Plane plane = new Plane(-fwd, pos);
+									Ray rayP; // ray to intersect the plane
+									float dist = 0; // will contain the distance along the ray
+									
+									rayP = Camera.main.ScreenPointToRay(Input.mousePosition);
+									plane.Raycast(rayP, out dist); // find the distance of the hit point
+									Vector3 wp = rayP.GetPoint(dist);
+									touchObj.selectedObject.SendMessageUpwards("Move", wp, SendMessageOptions.DontRequireReceiver);
 								}
 							}
 						}
