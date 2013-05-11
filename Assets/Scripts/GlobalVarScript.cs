@@ -12,6 +12,7 @@ public class GlobalVarScript : MonoBehaviour
 	public float comfortZone;
 	public float minSwipeDist;
 	public float maxSwipeTime;
+	public float maxTapTime;
 
 	public GameObject playerGameObject;
 	public float playerSpeed;

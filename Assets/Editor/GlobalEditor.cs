@@ -24,6 +24,8 @@ public class GlobalEditor : Editor
 		
 		this.target_.maxSwipeTime = addSlider (this.target_.maxSwipeTime, 0.1f, 2f, "Temps de slide max.", "Temps maximal de detection du slide", "sec.");
 		
+		this.target_.maxTapTime = addSlider (this.target_.maxTapTime, 0.1f, 0.5f, "Temps de tap max.", "Temps maximal de detection du tap pour le saut", "sec.");
+		
 		closeBox ();
 		
 		

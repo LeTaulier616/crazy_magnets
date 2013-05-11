@@ -88,11 +88,14 @@ public class ControllerMain : MonoBehaviour
 						break;					
 						
 						case TouchPhase.Ended:
-							float tapTime = Time.time - touchObj.startTime;
-							if (tapTime < 0.2f)
+							if (touchObj.leftTouched || touchObj.rightTouched)
 							{
-							// tap : saut
-								this.slide = true;
+								float tapTime = Time.time - touchObj.startTime;
+								if (tapTime < GlobalVarScript.instance.maxTapTime)
+								{
+									// tap : saut
+									this.slide = true;
+								}
 							}
 							touchesToRemove.Add(touchObj);
 						break;
