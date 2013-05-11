@@ -53,7 +53,7 @@ public class AttractorScript : MonoBehaviour
 					pos.x = newX;
 			        if (Physics.Raycast(pos, Vector3.down, out hit, Range))
 					{
-			            hit.collider.gameObject.SendMessageUpwards("Attract", hit.distance < 1f ? 30f : 12f, SendMessageOptions.DontRequireReceiver);
+			            hit.collider.gameObject.SendMessageUpwards("Attract", hit.distance < 1f ? 30f : 15f, SendMessageOptions.DontRequireReceiver);
 					}
 				}
 			}
@@ -62,12 +62,12 @@ public class AttractorScript : MonoBehaviour
 				pos.x = transform.position.x - 0.5f;
 				if (Physics.Raycast(pos, Vector3.down, out hit, Range))
 				{
-		            hit.collider.gameObject.SendMessageUpwards("Attract", hit.distance < 1f ? 30f : 12f, SendMessageOptions.DontRequireReceiver);
+		            hit.collider.gameObject.SendMessageUpwards("Attract", hit.distance < 1f ? 30f : 15f, SendMessageOptions.DontRequireReceiver);
 				}
 				pos.x = transform.position.x + 0.5f;
 				if (Physics.Raycast(pos, Vector3.down, out hit, Range))
 				{
-		            hit.collider.gameObject.SendMessageUpwards("Attract", hit.distance < 1f ? 30f : 12f, SendMessageOptions.DontRequireReceiver);
+		            hit.collider.gameObject.SendMessageUpwards("Attract", hit.distance < 1f ? 30f : 15f, SendMessageOptions.DontRequireReceiver);
 				}
 			}
 		}

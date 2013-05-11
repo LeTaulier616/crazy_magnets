@@ -205,7 +205,7 @@ public class CubeScript : MonoBehaviour
 			FVector2 target = new FVector2(MouseXWorldPhys, MouseYWorldPhys);
 			mouseJoint = JointFactory.CreateFixedMouseJoint(FSWorldComponent.PhysicsWorld, this.body, target);
 			mouseJoint.CollideConnected = true;
-			mouseJoint.MaxForce = 30f * this.body.Mass;
+			mouseJoint.MaxForce = 125.0f * this.body.Mass;
 			this.body.Awake = true;
 		}
 		// mouse release
