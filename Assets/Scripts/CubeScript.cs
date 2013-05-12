@@ -26,8 +26,11 @@ public class CubeScript : MonoBehaviour
 	private GameObject player;
 	
 	protected FixedMouseJoint mouseJoint;
+	
 	static public float MouseXWorldPhys = 0f;
 	static public float MouseYWorldPhys = 0f;
+	
+	private float cubeForce;
 	
 	void Start ()
 	{		
@@ -44,6 +47,7 @@ public class CubeScript : MonoBehaviour
 		
 		this.audioTime = 0.0f;
 		this.range = GlobalVarScript.instance.BlockRadius;
+		this.cubeForce = GlobalVarScript.instance.BlockForce;
 		
 		this.startPosition = this.transform.position;
 		SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
@@ -205,7 +209,7 @@ public class CubeScript : MonoBehaviour
 			FVector2 target = new FVector2(MouseXWorldPhys, MouseYWorldPhys);
 			mouseJoint = JointFactory.CreateFixedMouseJoint(FSWorldComponent.PhysicsWorld, this.body, target);
 			mouseJoint.CollideConnected = true;
-			mouseJoint.MaxForce = 125.0f * this.body.Mass;
+			mouseJoint.MaxForce = this.cubeForce * this.body.Mass;
 			this.body.Awake = true;
 		}
 		// mouse release

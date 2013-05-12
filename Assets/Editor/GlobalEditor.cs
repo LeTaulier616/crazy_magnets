@@ -35,6 +35,10 @@ public class GlobalEditor : Editor
 		this.target_.playerSpeed = addFloatField (this.target_.playerSpeed, "Vitesse", "Vitesse du déplacement du personnage au sol et en l'air", "unites/s");
 		
 		this.target_.playerJumpForce = addFloatField (this.target_.playerJumpForce, "Hauteur du saut", "Puissance de l'impulsion de saut", "unites");
+		
+		this.target_.playerDamping = addFloatField (this.target_.playerDamping, "Amortissement", "Friction de l'air en saut", "u.a");
+		
+		this.target_.playerGravityScale = addFloatField (this.target_.playerGravityScale, "Acceleration en chute", "Facteur d'acceleration pendant une chute", "u.a");
 
 		
 		this.target_.accelerationFactor = 
@@ -82,6 +86,11 @@ public class GlobalEditor : Editor
 			"Portee du magnetisme",
 			"Distance maximum pour attirer/repousser des objets",
 			"unites");
+		
+		this.target_.BlockForce = addFloatField(this.target_.BlockForce,
+			"Force du magnetisme",
+			"Force de deplacement des cubes",
+			"u.a");
 		
 		this.target_.ButtonRadius = addFloatField(this.target_.ButtonRadius,
 			"Portee du levier",

@@ -17,6 +17,8 @@ public class GlobalVarScript : MonoBehaviour
 	public GameObject playerGameObject;
 	public float playerSpeed;
 	public float playerJumpForce;
+	public float playerDamping;
+	public float playerGravityScale;
 	public float accelerationFactor;
 	public float decelerationFactor;
 	public float slipperyFactor;
@@ -34,6 +36,7 @@ public class GlobalVarScript : MonoBehaviour
 	public float ButtonRadius;
 	
 	public float BlockRadius;
+	public float BlockForce;
 	
 	public float GrabRadius;
 		

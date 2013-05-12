@@ -75,12 +75,13 @@ public class PlayerScript : MonoBehaviour
 		this.grabTarget = Vector3.zero;
 		
 		this.target = GlobalVarScript.instance.cameraTarget;
-		Line = GetComponent<LineRenderer>();
+		Line = this.GetComponent<LineRenderer>();
 		
 		this.accelerationFactor = GlobalVarScript.instance.accelerationFactor;
 		this.decelerationFactor = GlobalVarScript.instance.decelerationFactor;
 		this.speed = GlobalVarScript.instance.playerSpeed;
 		this.jumpForce = GlobalVarScript.instance.playerJumpForce;
+		this.playerBody.LinearDamping = GlobalVarScript.instance.playerDamping;
 		
 		this.frictionFactor = 1f;
 		
@@ -105,6 +106,8 @@ public class PlayerScript : MonoBehaviour
 		this.checkpointIndex = 0;
 		
 		this.BroadcastMessage("ConstantParams", Color.cyan, SendMessageOptions.DontRequireReceiver);
+		this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
+		
 	}
 	
 	bool keyinputed = false;
@@ -196,7 +199,7 @@ public class PlayerScript : MonoBehaviour
 		if (this.onGround == false && this.playerBody.LinearVelocity.Y < 0)
 		{			
 			// pour que le perso tombe plus vite
-			this.playerBody.GravityScale = 2.5f;
+			this.playerBody.GravityScale = GlobalVarScript.instance.playerGravityScale;
 			
 			RaycastHit hit;
 			if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.down, out hit, 4.5f) && GlobalVarScript.instance.groundTags.Contains(transform.tag))
