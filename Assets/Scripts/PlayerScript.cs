@@ -23,6 +23,9 @@ public class PlayerScript : MonoBehaviour
 	private bool canResurrect;
 	private bool      isWalking;
 	private bool      isCharged;
+	private bool attraction;
+	private float angle;
+	private float localGravity;
 	[HideInInspector]
 	public bool		isGrabbing;
 	[HideInInspector]
@@ -30,7 +33,8 @@ public class PlayerScript : MonoBehaviour
 	private bool	headStucked;
 	private Vector3   grabTarget;
 	private Transform target; // cible de la camera
-	private int lastDir = 0;
+	private int lastDir;
+	private bool tap;
 	
 	//private List<Contact> lastContacts;
 	
@@ -73,6 +77,11 @@ public class PlayerScript : MonoBehaviour
 		this.bodyPFM    = null;
 		walkVelocity    = FVector2.Zero;
 		this.grabTarget = Vector3.zero;
+		this.lastDir = 0;
+		this.tap = false;
+		this.attraction = false;
+		this.angle = 0;
+		this.localGravity = 1;
 		
 		this.target = GlobalVarScript.instance.cameraTarget;
 		Line = this.GetComponent<LineRenderer>();
@@ -158,7 +167,7 @@ public class PlayerScript : MonoBehaviour
 			dir = (Input.GetKey(KeyCode.RightArrow) ? 1 : 0) + (Input.GetKey(KeyCode.LeftArrow) ? -1 : 0);
 		}
 		
-		if (dir != 0 && Mathf.Abs(this.walkVelocity.X) > 2f)
+		if (dir != 0 && Mathf.Abs(this.walkVelocity.X) > speed/4f)
 		{
 			this.lastDir = dir;
 		}
@@ -182,9 +191,10 @@ public class PlayerScript : MonoBehaviour
 			Walk(1);
 		}
 		
-		if (this.controllerMain.isSliding())
+		if (this.controllerMain.isSliding() || this.tap)
 		{
 			this.controllerMain.resetSlide();
+			this.tap = false;
 			if (this.onGround)
 			{
 				Jump ();
@@ -225,15 +235,45 @@ public class PlayerScript : MonoBehaviour
 			}
 		}
 		
-					 // orientation du joueur
-			if (dir != 0 && lastDir != 0)
-			{
-			 transform.forward = new Vector3(0, 0, (dir != 0 ? dir : lastDir));
-			}
-			  
-			// position cible de la camera
-			this.target.transform.localPosition = new Vector3(2.5f, 2.5f, 0.0f);	
+		// orientation du joueur
+		if (dir != 0 && lastDir != 0)
+		{
+			transform.forward = new Vector3(0, 0, (dir != 0 ? dir : lastDir));
 		}
+		  
+		// position cible de la camera
+		this.target.transform.localPosition = new Vector3(2.5f, 2.5f, 0.0f);
+	}
+	
+	void LateUpdate()
+	{
+		//this.transform.localRotation = Quaternion.Euler(new Vector3(this.angle, lastDir == 1 ? 0 : 180, 0));
+		if (this.attraction == true)
+		{
+			this.angle += Time.deltaTime * 400f;
+			this.attraction = false;
+			if (this.angle > 180)
+			{
+				this.angle = 180;
+			}
+			
+			// gestion gravite inverse
+			this.localGravity = -1f;
+			this.playerBody.ApplyForce(new FVector2(0, 9.8f * this.playerBody.Mass * this.playerBody.GravityScale));
+		}
+		else
+		{
+			this.angle -= Time.deltaTime * 400f;
+			if (this.angle < 0)
+			{
+				this.angle = 0;
+			}
+			
+			// gestion gravite
+			this.localGravity = 1f;
+		}
+		this.transform.localRotation = Quaternion.Euler(new Vector3(this.angle, lastDir == 1 ? 0 : 180, 0));
+	}
 	
 	private void Walk(int dir)
     {
@@ -290,7 +330,7 @@ public class PlayerScript : MonoBehaviour
 	private void Jump()
 	{
 		playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0f);
-		playerBody.ApplyLinearImpulse(new FVector2(0, jumpForce));
+		playerBody.ApplyLinearImpulse(new FVector2(0, jumpForce * this.localGravity));
 		this.onGround = false;
 		this.onPFM = false;
 		this.bodyPFM = null;
@@ -299,7 +339,11 @@ public class PlayerScript : MonoBehaviour
 	
 	public void Attract(float force)
 	{
-		playerBody.ApplyForce(new FVector2(0, force));
+		if (this.angle < 180)
+		{
+			playerBody.ApplyForce(new FVector2(0, force));
+		}
+		this.attraction = true;
 	}
 	
 	public void Grab(Vector3 target)
@@ -431,29 +475,34 @@ public class PlayerScript : MonoBehaviour
 	
 	private void CollisionHead(GameObject ceiling)
 	{
+		/*
 		if (ceiling.transform.tag == "Attractor")
 		{
 			this.headStucked = true;
 			this.playerBody.IgnoreGravity = true;
 		}
+		*/
 	}
 	
 	private void StayHead(GameObject ceiling)
-	{
+	{	/*
 		if (ceiling.transform.tag == "Attractor")
 		{
 			this.headStucked = true;
 			this.playerBody.IgnoreGravity = true;
 		}
+		*/
 	}
 	
 	private void ExitHead(GameObject ceiling)
 	{
+		/*
 		if (ceiling.transform.tag == "Attractor")
 		{
 			this.headStucked = false;
 			this.playerBody.IgnoreGravity = false;
 		}
+		*/
 	}
 	
 	private void GetCheckpoints()
@@ -491,5 +540,10 @@ public class PlayerScript : MonoBehaviour
 			this.playerBody.ResetDynamics();
 			this.playerBody.Mass = 1f;
 		}
+	}
+	
+	public void Tap()
+	{
+		this.tap = true;
 	}
 }
