@@ -28,7 +28,7 @@ public class StateMachine : MonoBehaviour
 {
 	public State curState { get; private set; }
 
-	void Start()
+	public StateMachine()
 	{
 		this.curState = null;
 	}
