@@ -17,6 +17,11 @@ public class KillzoneScript : MonoBehaviour
 		
 		killBody.OnCollision += OnCollisionEvent;
 	}
+
+	public void Disable()
+	{
+		killBody.OnCollision -= OnCollisionEvent;
+	}
 	
 	/*
 	void OnTriggerEnter(Collider other)

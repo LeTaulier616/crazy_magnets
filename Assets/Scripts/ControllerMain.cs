@@ -91,10 +91,10 @@ public class ControllerMain : MonoBehaviour
 							if (touchObj.leftTouched || touchObj.rightTouched)
 							{
 								float tapTime = Time.time - touchObj.startTime;
-								if (tapTime < GlobalVarScript.instance.maxTapTime)
+								if (tapTime < GlobalVarScript.instance.maxTapTime && this.touchesTab.Count > 1)
 								{
 									// tap : saut
-									this.slide = true;
+									this.SendMessage("Tap", SendMessageOptions.DontRequireReceiver);
 								}
 							}
 							touchesToRemove.Add(touchObj);
