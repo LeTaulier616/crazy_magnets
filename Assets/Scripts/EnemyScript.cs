@@ -266,7 +266,7 @@ public class EnemyScript : StateMachine
 
 		this.idle = new State();
 		
-		this.ray = new Ray(this.transform.position, this.transform.right + Vector3.down);
+		this.ray = new Ray(this.transform.position + new Vector3(0f, 0.1f, .0f), this.transform.right + Vector3.down);
 		RaycastHit hit = new RaycastHit();
 		Physics.Raycast(this.ray, out hit);
 		this.floorDist = hit.distance;
@@ -276,11 +276,16 @@ public class EnemyScript : StateMachine
 
 	public bool CanMove()
 	{
-		this.ray.origin = this.transform.position;
-		this.ray.direction = this.transform.right - this.transform.up;
+		this.ray.origin = new Vector3(this.transform.position.x, this.ray.origin.y, this.ray.origin.z);
+		this.ray.direction = this.transform.right + Vector3.down;
 		RaycastHit hit = new RaycastHit();
 		bool ret = (Physics.Raycast(this.ray, out hit, 20.0f, LayerMask.NameToLayer("World")) && Mathf.Approximately(hit.distance, this.floorDist));
-
+	/*	if (!ret)
+		{
+			Debug.DrawRay(this.ray.origin, this.ray.direction);
+			Debug.Log("origin: " + this.ray.origin.x + " ; " + this.ray.origin.y);
+			Debug.Log("dist is: " + hit.distance + " instead of: " + this.floorDist);
+		}*/
 		return ret;
 	}
 	
