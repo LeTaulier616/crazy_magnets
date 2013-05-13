@@ -82,6 +82,13 @@ public class InterruptorReceiver : MonoBehaviour
 				this.GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = !this.gameObject.active;
 			}
 		}
+
+		if(gameObject.CompareTag("Enemy"))
+		{
+			EnemyScript enemy = gameObject.GetComponent<EnemyScript>();
+
+			enemy.Control();
+		}
 		
 		if(gameObject.CompareTag("Attractor"))
 		{
