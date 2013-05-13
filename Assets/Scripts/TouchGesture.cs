@@ -50,21 +50,21 @@ public class TouchGesture : MonoBehaviour
 					case TouchPhase.Began:
 						if (Physics.Raycast(ray, out hitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
 						{
-							hitInfo.transform.gameObject.SendMessage("TouchBegan",  touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);	
+							hitInfo.collider.gameObject.SendMessage("TouchBegan", touch.position, SendMessageOptions.DontRequireReceiver);	
 						}
 					break;
 					
 					case TouchPhase.Stationary:
 						if (Physics.Raycast(ray, out hitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
 						{
-							hitInfo.transform.gameObject.SendMessage("TouchStation",  touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);	
+							hitInfo.collider.gameObject.SendMessage("TouchStation",  touch.position, SendMessageOptions.DontRequireReceiver);	
 						}
 					break;
 					
 					case TouchPhase.Moved:
 						if (Physics.Raycast(ray, out hitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
 						{
-							hitInfo.transform.gameObject.SendMessage("TouchMove",  touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);	
+							hitInfo.collider.gameObject.SendMessage("TouchMove",  touch.position, SendMessageOptions.DontRequireReceiver);	
 						}
 					break;
 					
@@ -73,11 +73,11 @@ public class TouchGesture : MonoBehaviour
 						{
 							if (touch.tapCount == 1 && !hitInfo.collider.CompareTag("Untagged"))
 							{
-								hitInfo.transform.gameObject.SendMessage("TouchTap",  touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);	
+								hitInfo.collider.gameObject.SendMessage("TouchTap",  touch.position, SendMessageOptions.DontRequireReceiver);	
 							}
 							else if(!hitInfo.collider.CompareTag("Untagged"))
 							{
-								hitInfo.transform.gameObject.SendMessage("TouchEnd", touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+								hitInfo.collider.gameObject.SendMessage("TouchEnd", touch.position, SendMessageOptions.DontRequireReceiver);
 							}
 						}
 						touchesToRemove.Add(touchObj);
