@@ -33,7 +33,8 @@ public class PlayerScript : MonoBehaviour
 	private bool	headStucked;
 	private Vector3   grabTarget;
 	private Transform target; // cible de la camera
-	private int lastDir = 0;
+	private int lastDir;
+	private bool tap;
 	
 	//private List<Contact> lastContacts;
 	
@@ -76,6 +77,8 @@ public class PlayerScript : MonoBehaviour
 		this.bodyPFM    = null;
 		walkVelocity    = FVector2.Zero;
 		this.grabTarget = Vector3.zero;
+		this.lastDir = 0;
+		this.tap = false;
 		this.attraction = false;
 		this.angle = 0;
 		this.localGravity = 1;
@@ -164,7 +167,7 @@ public class PlayerScript : MonoBehaviour
 			dir = (Input.GetKey(KeyCode.RightArrow) ? 1 : 0) + (Input.GetKey(KeyCode.LeftArrow) ? -1 : 0);
 		}
 		
-		if (dir != 0 && Mathf.Abs(this.walkVelocity.X) > 2f)
+		if (dir != 0 && Mathf.Abs(this.walkVelocity.X) > speed/4f)
 		{
 			this.lastDir = dir;
 		}
@@ -188,9 +191,10 @@ public class PlayerScript : MonoBehaviour
 			Walk(1);
 		}
 		
-		if (this.controllerMain.isSliding())
+		if (this.controllerMain.isSliding() || this.tap)
 		{
 			this.controllerMain.resetSlide();
+			this.tap = false;
 			if (this.onGround)
 			{
 				Jump ();
@@ -536,5 +540,10 @@ public class PlayerScript : MonoBehaviour
 			this.playerBody.ResetDynamics();
 			this.playerBody.Mass = 1f;
 		}
+	}
+	
+	public void Tap()
+	{
+		this.tap = true;
 	}
 }
