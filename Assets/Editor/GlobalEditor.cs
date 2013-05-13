@@ -67,6 +67,29 @@ public class GlobalEditor : Editor
 		closeBox ();
 		
 		
+		openBox ("Parametres enemis");
+		openBox ("Petits enemis");
+		this.target_.smallEnemySpeed = addFloatField (this.target_.smallEnemySpeed, "Vitesse", "Vitesse du déplacement du personnage au sol et en l'air", "unites/s");
+		this.target_.smallEnemyJumpForce = addFloatField (this.target_.smallEnemyJumpForce, "Hauteur du saut", "Puissance de l'impulsion de saut", "unites");
+		this.target_.smallEnemyDamping = addFloatField (this.target_.smallEnemyDamping, "Amortissement", "Friction de l'air en saut", "u.a");
+		this.target_.smallEnemyGravityScale = addFloatField (this.target_.smallEnemyGravityScale, "Acceleration en chute", "Facteur d'acceleration pendant une chute", "u.a");
+		this.target_.smallEnemyPatrolSpeed = addFloatField (this.target_.smallEnemyPatrolSpeed, "Vitesse de Patrouille", "Vitesse du déplacement de l'enemis en patrouille", "unites/s");
+		this.target_.smallEnemyPursuitSpeed = addFloatField (this.target_.smallEnemyPursuitSpeed, "Vitesse de Poursuite", "Vitesse du déplacement de l'enemis en poursuite", "unites/s");
+		this.target_.smallEnemyLocateDistance = addFloatField (this.target_.smallEnemyLocateDistance, "Distance de Reperage", "Distance maximale de reperage du personnage", "unites");
+		this.target_.smallEnemyAlertRange = addFloatField (this.target_.smallEnemyAlertRange, "Distance d'Alerte", "Distance d'abandon de la poursuite", "unites");
+		closeBox ();
+		openBox ("Gros enemis");
+		this.target_.bigEnemySpeed = addFloatField (this.target_.bigEnemySpeed, "Vitesse", "Vitesse du déplacement du personnage au sol et en l'air", "unites/s");
+		this.target_.bigEnemyJumpForce = addFloatField (this.target_.bigEnemyJumpForce, "Hauteur du saut", "Puissance de l'impulsion de saut", "unites");
+		this.target_.bigEnemyDamping = addFloatField (this.target_.bigEnemyDamping, "Amortissement", "Friction de l'air en saut", "u.a");
+		this.target_.bigEnemyGravityScale = addFloatField (this.target_.bigEnemyGravityScale, "Acceleration en chute", "Facteur d'acceleration pendant une chute", "u.a");
+		this.target_.bigEnemyPatrolSpeed = addFloatField (this.target_.bigEnemyPatrolSpeed, "Vitesse de Patrouille", "Vitesse du déplacement de l'enemis en patrouille", "unites/s");
+		this.target_.bigEnemyPursuitSpeed = addFloatField (this.target_.bigEnemyPursuitSpeed, "Vitesse de Poursuite", "Vitesse du déplacement de l'enemis en poursuite", "unites/s");
+		this.target_.bigEnemyLocateDistance = addFloatField (this.target_.bigEnemyLocateDistance, "Distance de Reperage", "Distance maximale de reperage du personnage", "unites");
+		this.target_.bigEnemyAlertRange = addFloatField (this.target_.bigEnemyAlertRange, "Distance d'Alerte", "Distance d'abandon de la poursuite", "unites");
+		closeBox ();
+		closeBox ();
+		
 		
 		openBox("Parametres camera");
 		

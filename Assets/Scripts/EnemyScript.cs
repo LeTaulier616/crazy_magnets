@@ -89,8 +89,6 @@ public class ControlledState : State
 
 	public override void EnterState (GameObject it)
 	{
-	//	Body body = it.gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
-	//	body.BodyType = BodyType.Dynamic;
 		GlobalVarScript.instance.cameraTarget = this.target;
 		GlobalVarScript.instance.cameraFree = 2;
 		Interruptor button = it.gameObject.GetComponentInChildren<Interruptor>();
@@ -147,7 +145,10 @@ public class ControlledState : State
 		if (this.enemy.onGround == false && this.enemy.playerBody.LinearVelocity.Y < 0)
 		{			
 			// pour que le perso tombe plus vite
-			this.enemy.playerBody.GravityScale = GlobalVarScript.instance.playerGravityScale;
+			if (this.enemy.type == EnemyScript.EnemyType.Small)
+				this.enemy.playerBody.GravityScale = GlobalVarScript.instance.smallEnemyGravityScale;
+			else //if (this.enemy.type == EnemyScript.EnemyType.Big)
+				this.enemy.playerBody.GravityScale = GlobalVarScript.instance.bigEnemyGravityScale;
 			
 			RaycastHit hit;
 			if (Physics.Raycast(new Vector3(it.transform.position.x, it.transform.position.y, it.transform.position.z), Vector3.down, out hit, 4.5f) && GlobalVarScript.instance.groundTags.Contains(it.transform.tag))
@@ -174,11 +175,15 @@ public class ControlledState : State
 
 public class EnemyScript : StateMachine
 {
-	public float	patrolingSpeed = 1;
-	public float	viewDepth = 2;
-	public float	pursuitSpeed = 3;
-	public float	alertRange = 4;
-	public float	waitingTime = 1;
+
+	public enum EnemyType
+	{
+		Small,
+		Big,
+		Whatever
+	}
+
+	public EnemyType type = EnemyType.Big;
 
 	public GameObject	leftWayPoint = null;
 	public GameObject	rightWayPoint = null;
@@ -186,38 +191,64 @@ public class EnemyScript : StateMachine
 	public GameObject	mesh;
 	public Transform	target;
 
+	[HideInInspector]
+	public float	patrolingSpeed = 1;
+	[HideInInspector]
+	public float	viewDepth = 2;
+	[HideInInspector]
+	public float	pursuitSpeed = 3;
+	[HideInInspector]
+	public float	alertRange = 4;
+	[HideInInspector]
+	public float	waitingTime = 1;
+	
 	private bool	isControlled = false;
 	private Ray		ray;
 	private float	floorDist;
-
+	
 	public PatrolState		patrol;
 	public PursuitState		pursuit;
 	public ControlledState	controlled;
 	public State			idle;
 
 	// control values
-
+	
+	[HideInInspector]
 	public AnimationCurve AccelerationCurve;
+	[HideInInspector]
 	public AnimationCurve DecelerationCurve;
 	
+	[HideInInspector]
 	public float accelerationFactor;
+	[HideInInspector]
 	public float decelerationFactor;
 	
+	[HideInInspector]
 	public ControllerMain controllerMain;
+	[HideInInspector]
 	public float	speed;
+	[HideInInspector]
 	public float	jumpForce;
 	public Body		playerBody;
 	private bool	headStucked;
+	[HideInInspector]
 	public bool		isWalking;
+	[HideInInspector]
 	public bool		onGround;
+	[HideInInspector]
 	public int		lastDir = 0;
 	
+	[HideInInspector]
 	public float dirCoeff = 0;
+	[HideInInspector]
 	public float frictionFactor;
 	
+	[HideInInspector]
 	public float     AccelerationTime;
 	
+	[HideInInspector]
 	public FVector2  walkVelocity;
+	[HideInInspector]
 	public  bool      onPFM   = false;
 	public  Body      bodyPFM = null;
 
@@ -240,10 +271,29 @@ public class EnemyScript : StateMachine
 
 		this.controllerMain = GlobalVarScript.instance.player.GetComponent<ControllerMain>();
 
+		if (this.type == EnemyType.Small)
+		{
+			this.patrolingSpeed = GlobalVarScript.instance.smallEnemyPatrolSpeed;
+			this.viewDepth = GlobalVarScript.instance.smallEnemyLocateDistance;
+			this.pursuitSpeed = GlobalVarScript.instance.smallEnemyPursuitSpeed;
+			this.alertRange = GlobalVarScript.instance.smallEnemyAlertRange;
+			this.waitingTime = 0; // unused
+			this.speed = GlobalVarScript.instance.smallEnemySpeed;
+			this.jumpForce = GlobalVarScript.instance.smallEnemyJumpForce;
+			this.playerBody.LinearDamping = GlobalVarScript.instance.smallEnemyDamping;
+		}
+		else// if (this.type == EnemyType.Big)
+		{
+			this.patrolingSpeed = GlobalVarScript.instance.bigEnemyPatrolSpeed;
+			this.viewDepth = GlobalVarScript.instance.bigEnemyLocateDistance;
+			this.pursuitSpeed = GlobalVarScript.instance.bigEnemyPursuitSpeed;
+			this.alertRange = GlobalVarScript.instance.bigEnemyAlertRange;
+			this.waitingTime = 0; // unused
+			this.speed = GlobalVarScript.instance.bigEnemySpeed;
+			this.jumpForce = GlobalVarScript.instance.bigEnemyJumpForce;
+		}
 		this.accelerationFactor = GlobalVarScript.instance.accelerationFactor;
 		this.decelerationFactor = GlobalVarScript.instance.decelerationFactor;
-		this.speed = GlobalVarScript.instance.playerSpeed;
-		this.jumpForce = GlobalVarScript.instance.playerJumpForce;
 
 		//this.playerMesh = GlobalVarScript.instance.playerMesh;
 		this.playerMesh = null;
