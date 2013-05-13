@@ -89,8 +89,6 @@ public class ControlledState : State
 
 	public override void EnterState (GameObject it)
 	{
-	//	Body body = it.gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
-	//	body.BodyType = BodyType.Dynamic;
 		GlobalVarScript.instance.cameraTarget = this.target;
 		GlobalVarScript.instance.cameraFree = 2;
 		Interruptor button = it.gameObject.GetComponentInChildren<Interruptor>();
@@ -147,7 +145,10 @@ public class ControlledState : State
 		if (this.enemy.onGround == false && this.enemy.playerBody.LinearVelocity.Y < 0)
 		{			
 			// pour que le perso tombe plus vite
-			this.enemy.playerBody.GravityScale = GlobalVarScript.instance.playerGravityScale;
+			if (this.enemy.type == EnemyScript.EnemyType.Small)
+				this.enemy.playerBody.GravityScale = GlobalVarScript.instance.smallEnemyGravityScale;
+			else //if (this.enemy.type == EnemyScript.EnemyType.Big)
+				this.enemy.playerBody.GravityScale = GlobalVarScript.instance.bigEnemyGravityScale;
 			
 			RaycastHit hit;
 			if (Physics.Raycast(new Vector3(it.transform.position.x, it.transform.position.y, it.transform.position.z), Vector3.down, out hit, 4.5f) && GlobalVarScript.instance.groundTags.Contains(it.transform.tag))
@@ -279,6 +280,7 @@ public class EnemyScript : StateMachine
 			this.waitingTime = 0; // unused
 			this.speed = GlobalVarScript.instance.smallEnemySpeed;
 			this.jumpForce = GlobalVarScript.instance.smallEnemyJumpForce;
+			this.playerBody.LinearDamping = GlobalVarScript.instance.smallEnemyDamping;
 		}
 		else// if (this.type == EnemyType.Big)
 		{
