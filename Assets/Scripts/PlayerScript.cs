@@ -23,6 +23,9 @@ public class PlayerScript : MonoBehaviour
 	private bool canResurrect;
 	private bool      isWalking;
 	private bool      isCharged;
+	private bool attraction;
+	private float angle;
+	private float localGravity;
 	[HideInInspector]
 	public bool		isGrabbing;
 	[HideInInspector]
@@ -73,6 +76,9 @@ public class PlayerScript : MonoBehaviour
 		this.bodyPFM    = null;
 		walkVelocity    = FVector2.Zero;
 		this.grabTarget = Vector3.zero;
+		this.attraction = false;
+		this.angle = 0;
+		this.localGravity = 1;
 		
 		this.target = GlobalVarScript.instance.cameraTarget;
 		Line = this.GetComponent<LineRenderer>();
@@ -225,15 +231,45 @@ public class PlayerScript : MonoBehaviour
 			}
 		}
 		
-					 // orientation du joueur
-			if (dir != 0 && lastDir != 0)
-			{
-			 transform.forward = new Vector3(0, 0, (dir != 0 ? dir : lastDir));
-			}
-			  
-			// position cible de la camera
-			this.target.transform.localPosition = new Vector3(2.5f, 2.5f, 0.0f);	
+		// orientation du joueur
+		if (dir != 0 && lastDir != 0)
+		{
+			transform.forward = new Vector3(0, 0, (dir != 0 ? dir : lastDir));
 		}
+		  
+		// position cible de la camera
+		this.target.transform.localPosition = new Vector3(2.5f, 2.5f, 0.0f);
+	}
+	
+	void LateUpdate()
+	{
+		//this.transform.localRotation = Quaternion.Euler(new Vector3(this.angle, lastDir == 1 ? 0 : 180, 0));
+		if (this.attraction == true)
+		{
+			this.angle += Time.deltaTime * 400f;
+			this.attraction = false;
+			if (this.angle > 180)
+			{
+				this.angle = 180;
+			}
+			
+			// gestion gravite inverse
+			this.localGravity = -1f;
+			this.playerBody.ApplyForce(new FVector2(0, 9.8f * this.playerBody.Mass * this.playerBody.GravityScale));
+		}
+		else
+		{
+			this.angle -= Time.deltaTime * 400f;
+			if (this.angle < 0)
+			{
+				this.angle = 0;
+			}
+			
+			// gestion gravite
+			this.localGravity = 1f;
+		}
+		this.transform.localRotation = Quaternion.Euler(new Vector3(this.angle, lastDir == 1 ? 0 : 180, 0));
+	}
 	
 	private void Walk(int dir)
     {
@@ -290,7 +326,7 @@ public class PlayerScript : MonoBehaviour
 	private void Jump()
 	{
 		playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0f);
-		playerBody.ApplyLinearImpulse(new FVector2(0, jumpForce));
+		playerBody.ApplyLinearImpulse(new FVector2(0, jumpForce * this.localGravity));
 		this.onGround = false;
 		this.onPFM = false;
 		this.bodyPFM = null;
@@ -299,7 +335,11 @@ public class PlayerScript : MonoBehaviour
 	
 	public void Attract(float force)
 	{
-		playerBody.ApplyForce(new FVector2(0, force));
+		if (this.angle < 180)
+		{
+			playerBody.ApplyForce(new FVector2(0, force));
+		}
+		this.attraction = true;
 	}
 	
 	public void Grab(Vector3 target)
@@ -431,29 +471,34 @@ public class PlayerScript : MonoBehaviour
 	
 	private void CollisionHead(GameObject ceiling)
 	{
+		/*
 		if (ceiling.transform.tag == "Attractor")
 		{
 			this.headStucked = true;
 			this.playerBody.IgnoreGravity = true;
 		}
+		*/
 	}
 	
 	private void StayHead(GameObject ceiling)
-	{
+	{	/*
 		if (ceiling.transform.tag == "Attractor")
 		{
 			this.headStucked = true;
 			this.playerBody.IgnoreGravity = true;
 		}
+		*/
 	}
 	
 	private void ExitHead(GameObject ceiling)
 	{
+		/*
 		if (ceiling.transform.tag == "Attractor")
 		{
 			this.headStucked = false;
 			this.playerBody.IgnoreGravity = false;
 		}
+		*/
 	}
 	
 	private void GetCheckpoints()

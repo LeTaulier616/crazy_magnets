@@ -103,6 +103,17 @@ public class CubeScript : MonoBehaviour
 		UpdateMouseWorld();
 		MouseDrag();
 		
+		if (this.selected == 0)
+		{
+			float posX = Camera.main.WorldToScreenPoint(this.transform.position).x;
+			if ((posX > Camera.main.GetScreenWidth() && this.body.LinearVelocity.X > 1f)
+				|| (posX < 0 && this.body.LinearVelocity.X < -1f))
+			{
+				FVector2 newVelocity = new FVector2(-this.body.LinearVelocity.X/3f, this.body.LinearVelocity.Y);
+				this.body.LinearVelocity = newVelocity;
+			}
+		}
+		
 		if(audio.isPlaying)
 		{
 			if(this.selected == 1 || this.selected == -1)
@@ -180,7 +191,7 @@ public class CubeScript : MonoBehaviour
 	
 	public void ResetPosition()
 	{
-		Debug.Log("There");
+		//Debug.Log("There");
 		this.body.SetTransform(new FVector2(startPosition.x, startPosition.y), 0.0f);
 	}
 	
