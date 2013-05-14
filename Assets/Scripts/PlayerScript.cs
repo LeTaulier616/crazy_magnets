@@ -225,10 +225,9 @@ public class PlayerScript : MonoBehaviour
 				Vector3 rayTest = new Vector3(this.grabTarget.x - transform.position.x, this.grabTarget.y - transform.position.y, this.grabTarget.z - transform.position.z);
 				rayTest = Vector3.Normalize(rayTest);
 				RaycastHit hit;
-				// TODO
-				if (Physics.Raycast(transform.position, rayTest, out hit, dist) && (hit.transform.tag != "Grab" && hit.transform.name != "HEAD_HITBOX"))
+				if (Physics.Raycast(transform.position, rayTest, out hit, dist) && hit.transform.tag != "Grab")
 				{
-					print(hit.transform.name);
+					// objet en travers
 					this.grabTarget = Vector3.zero;
 				}
 				else
@@ -267,7 +266,7 @@ public class PlayerScript : MonoBehaviour
 			
 			// gestion gravite inverse
 			this.localGravity = -1f;
-			this.playerBody.ApplyLinearImpulse(new FVector2(0, 9.8f * 2 * this.playerBody.Mass * this.playerBody.GravityScale * Time.fixedDeltaTime));
+			this.playerBody.ApplyForce(new FVector2(0, 9.8f * this.playerBody.Mass * this.playerBody.GravityScale));
 		}
 		else
 		{
@@ -410,6 +409,7 @@ public class PlayerScript : MonoBehaviour
 	public void CheckpointReached()
 	{
 		this.checkpointIndex++;
+		Debug.Log(checkpointIndex);
 	}
 	
 	public void Kill()
@@ -489,6 +489,10 @@ public class PlayerScript : MonoBehaviour
 			this.playerBody.IgnoreGravity = true;
 		}
 		*/
+		if (ceiling.transform.tag == "Grab")
+		{
+			this.grabTarget = Vector3.zero;
+		}
 	}
 	
 	private void StayHead(GameObject ceiling)
@@ -499,10 +503,6 @@ public class PlayerScript : MonoBehaviour
 			this.playerBody.IgnoreGravity = true;
 		}
 		*/
-		if (ceiling.transform.tag == "Grab" && this.grabTarget != Vector3.zero)
-		{
-			this.grabTarget = Vector3.zero;
-		}
 	}
 	
 	private void ExitHead(GameObject ceiling)
