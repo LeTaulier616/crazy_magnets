@@ -409,7 +409,6 @@ public class PlayerScript : MonoBehaviour
 	public void CheckpointReached()
 	{
 		this.checkpointIndex++;
-		Debug.Log(checkpointIndex);
 	}
 	
 	public void Kill()
