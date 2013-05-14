@@ -170,11 +170,8 @@ public class InterruptorReceiver : MonoBehaviour
 				
 			}
 			
-			if(audio != null)
-			{
 			audio.clip = GlobalVarScript.instance.DoorCloseSound;
 			audio.Play();
-			}
 		}
 		
 		if(gameObject.CompareTag("Attractor"))

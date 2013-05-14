@@ -25,7 +25,6 @@ public class Interruptor : MonoBehaviour
 	public Direction  pushDirection = Direction.BOTTOM;
 	public float      timeToExecute = 0.0f; // Time Between the Push   and the Activation
 	public float      timeToRevoke  = 0.0f; // Time between the Unpush and the Desactivation
-	public bool       isEnnemy      = false;
 	
 	// Engine Datas
 	private float     pushTime      = 0.0f;
@@ -154,12 +153,6 @@ public class Interruptor : MonoBehaviour
 				audio1.clip = interruptorReleaseSound;
 				audio1.Play();
 			}
-			
-			if(activator == Activator.TOUCH && (type == Type.ONOFF || type == Type.TIMER))
-			{
-				audio1.clip = buttonSound;
-				audio1.Play();
-			}
 		}
 		
 		if(resultat != activated)
@@ -201,9 +194,6 @@ public class Interruptor : MonoBehaviour
 				}	
 			}
 		}
-		
-		if(wasActivated && !activated)
-			launchAnimation();
 	}
 	
 	private bool OnCollisionEvent(Fixture fixtureA, Fixture fixtureB, Contact contact)
@@ -284,7 +274,7 @@ public class Interruptor : MonoBehaviour
 			return;
 		
 		if(!(this.activator == Activator.ELECTRIC_TOUCH && !isElectrified)
-			&& (Vector3.Distance(GameObject.FindGameObjectWithTag("PlayerObject").transform.position, gameObject.transform.position) < (isElectrified ? tmpPorteeElec : tmpPorteeNorm) || isEnnemy) )
+			&& Vector3.Distance(GameObject.FindGameObjectWithTag("PlayerObject").transform.position, gameObject.transform.position) < (isElectrified ? tmpPorteeElec : tmpPorteeNorm) )
 		{
 			if(this.activator == Activator.ELECTRIC_TOUCH)
 			{
@@ -306,7 +296,28 @@ public class Interruptor : MonoBehaviour
 	
 	public void MouseLeft()
 	{
-		TouchTap();
+		if(this.activator != Activator.TOUCH && this.activator != Activator.ELECTRIC_TOUCH)
+			return;
+		
+		if(!(this.activator == Activator.ELECTRIC_TOUCH && !isElectrified)
+			&& Vector3.Distance(GameObject.FindGameObjectWithTag("PlayerObject").transform.position, gameObject.transform.position) < (isElectrified ? tmpPorteeElec : tmpPorteeNorm) )
+		{
+			if(this.activator == Activator.ELECTRIC_TOUCH)
+			{
+				GlobalVarScript.instance.player.SendMessageUpwards("SetSparkPoint", this.transform.position, SendMessageOptions.DontRequireReceiver);
+				GlobalVarScript.instance.player.SendMessageUpwards("Discharge", SendMessageOptions.DontRequireReceiver);
+			}
+			
+			if(activated && type == Type.ONOFF)
+			{
+				setOff();
+			}
+			else if(!activated)
+			{
+				setOn();
+				Debug.Log("Here");
+			}
+		}
 	}
 	
 	private void setOn()
@@ -340,11 +351,6 @@ public class Interruptor : MonoBehaviour
 		unpushTime   = 0.0f;
 		isPushed     = false;
 		
-		Debug.Log("Set Off");
-	}
-	
-	private void launchAnimation()
-	{		
 		if(animation != null || this.GetComponentInChildren<Animation>() != null)
 		{
 			if(activator == Activator.TOUCH)
@@ -361,5 +367,7 @@ public class Interruptor : MonoBehaviour
 				this.GetComponentInChildren<Animation>().Play();
 			}
 		}
+		
+		Debug.Log("Set Off");
 	}
 }
