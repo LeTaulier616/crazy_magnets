@@ -58,13 +58,17 @@ public class Interruptor : MonoBehaviour
 		tmpPorteeNorm = GlobalVarScript.instance.ButtonRadius;
 		
 		unpushTime = timeToRevoke + 0.1f;
-			
-		body = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
+
+		FSBodyComponent bodyComponent = gameObject.GetComponent<FSBodyComponent>();
+		if (bodyComponent != null)
+		{
+			body = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
+
+			body.IsSensor = true;
 		
-		body.IsSensor = true;
-		
-		body.OnCollision  += OnCollisionEvent;
-		body.OnSeparation += OnSeparationEvent;
+			body.OnCollision  += OnCollisionEvent;
+			body.OnSeparation += OnSeparationEvent;
+		}
 				
 		interruptorSound = GlobalVarScript.instance.InterruptorSound;
 		interruptorReleaseSound = GlobalVarScript.instance.InterruptorReleaseSound;
