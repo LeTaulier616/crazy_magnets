@@ -167,6 +167,37 @@ public class ControlledState : State
 		this.target.transform.localPosition = new Vector3(2.5f, 2.5f, 0.0f);
 	}
 
+	public override void LateUpdateState(GameObject it)
+	{
+		//this.transform.localRotation = Quaternion.Euler(new Vector3(this.angle, lastDir == 1 ? 0 : 180, 0));
+		if (this.enemy.attraction == true)
+		{
+			this.enemy.angle += Time.deltaTime * 400f;
+			this.enemy.attraction = false;
+			if (this.enemy.angle > 180)
+			{
+				this.enemy.angle = 180;
+			}
+			
+			// gestion gravite inverse
+			this.enemy.localGravity = -1f;
+			this.enemy.playerBody.ApplyForce(new FVector2(0, 9.8f * this.enemy.playerBody.Mass * this.enemy.playerBody.GravityScale));
+		}
+		else
+		{
+			this.enemy.angle -= Time.deltaTime * 400f;
+			if (this.enemy.angle < 0)
+			{
+				this.enemy.angle = 0;
+			}
+			
+			// gestion gravite
+			this.enemy.localGravity = 1f;
+		}
+		this.enemy.transform.localRotation = Quaternion.Euler(new Vector3(this.enemy.angle, this.enemy.lastDir == 1 ? 0 : 180, 0));
+	}
+
+
 	public override void ExitState (GameObject it)
 	{
 		GlobalVarScript.instance.resetCamera();
@@ -234,6 +265,12 @@ public class EnemyScript : StateMachine
 	[HideInInspector]
 	public bool		isWalking;
 	[HideInInspector]
+	public bool	attraction;
+	[HideInInspector]
+	public float	angle;
+	[HideInInspector]
+	public float	localGravity;
+	[HideInInspector]
 	public bool		onGround;
 	[HideInInspector]
 	public int		lastDir = 0;
@@ -261,6 +298,9 @@ public class EnemyScript : StateMachine
 		playerBody.Mass = 1f;
 		
 		this.isWalking  = false;
+		this.attraction = false;
+		this.angle = 0;
+		this.localGravity = 1;
 		this.onGround   = true;
 		this.headStucked = false;
 		this.onPFM      = false;
@@ -404,7 +444,7 @@ public class EnemyScript : StateMachine
 	public void Jump()
 	{
 		playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0f);
-		playerBody.ApplyLinearImpulse(new FVector2(0, jumpForce));
+		playerBody.ApplyLinearImpulse(new FVector2(0, jumpForce * this.localGravity));
 		this.onGround = false;
 		this.onPFM = false;
 		this.bodyPFM = null;
@@ -491,5 +531,14 @@ public class EnemyScript : StateMachine
 			this.headStucked = false;
 			this.playerBody.IgnoreGravity = false;
 		}
+	}
+
+	public void Attract(float force)
+	{
+		if (this.angle < 180)
+		{
+			playerBody.ApplyForce(new FVector2(0, force));
+		}
+		this.attraction = true;
 	}
 }

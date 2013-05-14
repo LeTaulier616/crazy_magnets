@@ -19,6 +19,10 @@ public class State
 	{
 	}
 
+	virtual public void LateUpdateState(GameObject it)
+	{
+	}
+
 	virtual public void ExitState(GameObject it)
 	{
 	}
@@ -37,6 +41,12 @@ public class StateMachine : MonoBehaviour
 	{
 		if (this.curState != null)
 			this.curState.UpdateState(this.gameObject);
+	}
+
+	void LateUpdate()
+	{
+		if (this.curState != null)
+			this.curState.LateUpdateState(this.gameObject);
 	}
 
 	public void SwitchState(State state)
