@@ -225,9 +225,10 @@ public class PlayerScript : MonoBehaviour
 				Vector3 rayTest = new Vector3(this.grabTarget.x - transform.position.x, this.grabTarget.y - transform.position.y, this.grabTarget.z - transform.position.z);
 				rayTest = Vector3.Normalize(rayTest);
 				RaycastHit hit;
-				if (Physics.Raycast(transform.position, rayTest, out hit, dist) && hit.transform.tag != "Grab")
+				// TODO
+				if (Physics.Raycast(transform.position, rayTest, out hit, dist) && (hit.transform.tag != "Grab" && hit.transform.name != "HEAD_HITBOX"))
 				{
-					// objet en travers
+					print(hit.transform.name);
 					this.grabTarget = Vector3.zero;
 				}
 				else
