@@ -1,0 +1,133 @@
+fileFormatVersion: 2
+guid: dd5a544b67c92e249b2cca9f149f1ecb
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: minienemy_Ankle_L1_jnt
+    100004: minienemy_Ankle_L2_jnt
+    100006: minienemy_Ankle_R1_jnt
+    100008: minienemy_Ankle_R2_jnt
+    100010: minienemy_GEO
+    100012: minienemy_Hip_L1_jnt
+    100014: minienemy_Hip_L2_jnt
+    100016: minienemy_Hip_R1_jnt
+    100018: minienemy_Hip_R2_jnt
+    100020: minienemy_Knee_L1_jnt
+    100022: minienemy_Knee_L2_jnt
+    100024: minienemy_Knee_R1_jnt
+    100026: minienemy_Knee_R2_jnt
+    100028: minienemy_Leg_L1_ikhl
+    100030: minienemy_Leg_L2_ikhl
+    100032: minienemy_Leg_R1_ikhl
+    100034: minienemy_Leg_R2_ikhl
+    100036: minienemy_LegIK_L1_ctrl
+    100038: minienemy_LegIK_L1_GRP
+    100040: minienemy_LegIK_L2_ctrl
+    100042: minienemy_LegIK_L2_GRP
+    100044: minienemy_LegIK_R1_ctrl
+    100046: minienemy_LegIK_R1_GRP
+    100048: minienemy_LegIK_R2_ctrl
+    100050: minienemy_LegIK_R2_GRP
+    100052: minienemy_mini_ennemy
+    100054: minienemy_RIG
+    100056: minienemy_Root_C_GRP
+    100058: minienemy_Root_C_jnt
+    100060: minienemy_Root_ctrl
+    100062: minienemy_SKELETON
+    100064: minienemy_Toe_L1_jnt
+    100066: minienemy_Toe_L2_jnt
+    100068: minienemy_Toe_R1_jnt
+    100070: minienemy_Toe_R2_jnt
+    100072: minienemy_Ultimate_C_ctrl
+    400000: //RootNode
+    400002: minienemy_Ankle_L1_jnt
+    400004: minienemy_Ankle_L2_jnt
+    400006: minienemy_Ankle_R1_jnt
+    400008: minienemy_Ankle_R2_jnt
+    400010: minienemy_GEO
+    400012: minienemy_Hip_L1_jnt
+    400014: minienemy_Hip_L2_jnt
+    400016: minienemy_Hip_R1_jnt
+    400018: minienemy_Hip_R2_jnt
+    400020: minienemy_Knee_L1_jnt
+    400022: minienemy_Knee_L2_jnt
+    400024: minienemy_Knee_R1_jnt
+    400026: minienemy_Knee_R2_jnt
+    400028: minienemy_Leg_L1_ikhl
+    400030: minienemy_Leg_L2_ikhl
+    400032: minienemy_Leg_R1_ikhl
+    400034: minienemy_Leg_R2_ikhl
+    400036: minienemy_LegIK_L1_ctrl
+    400038: minienemy_LegIK_L1_GRP
+    400040: minienemy_LegIK_L2_ctrl
+    400042: minienemy_LegIK_L2_GRP
+    400044: minienemy_LegIK_R1_ctrl
+    400046: minienemy_LegIK_R1_GRP
+    400048: minienemy_LegIK_R2_ctrl
+    400050: minienemy_LegIK_R2_GRP
+    400052: minienemy_mini_ennemy
+    400054: minienemy_RIG
+    400056: minienemy_Root_C_GRP
+    400058: minienemy_Root_C_jnt
+    400060: minienemy_Root_ctrl
+    400062: minienemy_SKELETON
+    400064: minienemy_Toe_L1_jnt
+    400066: minienemy_Toe_L2_jnt
+    400068: minienemy_Toe_R1_jnt
+    400070: minienemy_Toe_R2_jnt
+    400072: minienemy_Ultimate_C_ctrl
+    4300000: minienemy_mini_ennemy
+    9500000: //RootNode
+    11100000: //RootNode
+    13700000: minienemy_mini_ennemy
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .75
+    meshCompression: 0
+    addColliders: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 1
+  userData: 
