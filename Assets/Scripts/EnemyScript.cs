@@ -21,6 +21,9 @@ public class PatrolState : State
 			this.hasLeftWayPoint = true;
 		if (this.rightWayPoint != null)
 			this.hasRightWayPoint = true;
+		GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
+		if(playerMesh != null)
+			playerMesh.animation.CrossFade("run", 0.5f);
 	}
 
 	override public void UpdateState(GameObject it)
@@ -52,6 +55,15 @@ public class PursuitState : State
 {
 	public float speed;
 	public float playerDist;
+	public bool	 stopped;
+
+	public override void EnterState (GameObject it)
+	{
+		GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
+		if(playerMesh != null)
+			playerMesh.animation.CrossFade("run", 0.5f);
+		this.stopped = false;
+	}
 
 	override public void UpdateState(GameObject it)
 	{
@@ -69,11 +81,25 @@ public class PursuitState : State
 
 		if (it.GetComponent<EnemyScript>().CanMove())
 		{
+			if (this.stopped == true)
+			{
+				GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
+				if(playerMesh != null)
+					playerMesh.animation.CrossFade("run", 0.5f);
+				this.stopped = false;
+			}
 			Body body = it.GetComponent<FSBodyComponent>().PhysicsBody;
 			body.LinearVelocity = new FVector2(it.transform.right.x * this.speed, 0f);
 		}
 		else
 		{
+			if (this.stopped == false)
+			{
+				GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
+				if(playerMesh != null)
+					playerMesh.animation.CrossFade("idle", 0.5f);
+				this.stopped = true;
+			}
 			Body body = it.GetComponent<FSBodyComponent>().PhysicsBody;
 			body.LinearVelocity = new FVector2(0f, 0f);
 		}
@@ -472,6 +498,8 @@ public class EnemyScript : StateMachine
 	{
 		//Debug.Log("There");
 		this.playerBody.SetTransform(new FVector2(startPosition.x, startPosition.y), 0.0f);
+		KillzoneScript killer = this.GetComponent<KillzoneScript>();
+		killer.Enable();
 		this.SwitchState(this.patrol);
 	}
 	
