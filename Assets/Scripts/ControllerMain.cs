@@ -367,6 +367,12 @@ public class ControllerMain : MonoBehaviour
 		return ret;
 	}
 	
+	// DEBUG
+	public void activeSlide()
+	{
+		this.slide = true;
+	}
+	
 	public bool isSliding()
 	{
 		return this.slide;

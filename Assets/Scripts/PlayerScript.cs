@@ -77,7 +77,7 @@ public class PlayerScript : MonoBehaviour
 		this.bodyPFM    = null;
 		walkVelocity    = FVector2.Zero;
 		this.grabTarget = Vector3.zero;
-		this.lastDir = 0;
+		this.lastDir = 1;
 		this.tap = false;
 		this.attraction = false;
 		this.angle = 0;
@@ -181,9 +181,9 @@ public class PlayerScript : MonoBehaviour
 		/* Appliquer la bonne vélocité suivant les données récoltées */
 		ApplyLinearVelocity();
 
-		if(this.onGround && (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Space)))
+		if(Input.GetKeyDown(KeyCode.Space))
 		{
-			Jump();
+			this.controllerMain.activeSlide();
 		}
 		if(Input.GetKeyDown(KeyCode.Z) || keyinputed)
 		{
@@ -193,8 +193,7 @@ public class PlayerScript : MonoBehaviour
 		
 		if (this.controllerMain.isSliding() || this.tap)
 		{
-			this.controllerMain.resetSlide();
-			this.tap = false;
+			StartCoroutine(ResetTouch());
 			if (this.onGround)
 			{
 				Jump ();
@@ -218,20 +217,28 @@ public class PlayerScript : MonoBehaviour
 			}
 		}
 		
-		if (this.grabTarget != Vector3.zero && Vector3.Distance(this.transform.position, grabTarget) < grabRange)
+		if (this.grabTarget != Vector3.zero)
 		{
-			float dist = Vector3.Distance(transform.position, this.grabTarget);
-			Vector3 rayTest = new Vector3(this.grabTarget.x - transform.position.x, this.grabTarget.y - transform.position.y, this.grabTarget.z - transform.position.z);
-			rayTest = Vector3.Normalize(rayTest);
-			RaycastHit hit;
-			if (Physics.Raycast(transform.position, rayTest, out hit, dist) && hit.transform.tag != "Grab")
+			if (Vector3.Distance(this.transform.position, grabTarget) < grabRange)
 			{
-				// objet en travers : ne rien faire
+				float dist = Vector3.Distance(transform.position, this.grabTarget);
+				Vector3 rayTest = new Vector3(this.grabTarget.x - transform.position.x, this.grabTarget.y - transform.position.y, this.grabTarget.z - transform.position.z);
+				rayTest = Vector3.Normalize(rayTest);
+				RaycastHit hit;
+				if (Physics.Raycast(transform.position, rayTest, out hit, dist) && hit.transform.tag != "Grab")
+				{
+					// objet en travers
+					this.grabTarget = Vector3.zero;
+				}
+				else
+				{
+					FVector2 grabForce = new FVector2(rayTest.x, rayTest.y);
+					playerBody.ApplyLinearImpulse(new FVector2(grabForce.X * 25f, grabForce.Y));
+				}
 			}
 			else
 			{
-				FVector2 grabForce = new FVector2(rayTest.x, rayTest.y);
-				playerBody.ApplyLinearImpulse(new FVector2(grabForce.X * 25f, grabForce.Y));
+				this.grabTarget = Vector3.zero;
 			}
 		}
 		
@@ -351,13 +358,13 @@ public class PlayerScript : MonoBehaviour
 		if (this.grabTarget == Vector3.zero)
 		{
 			this.grabTarget = target;
-			this.playerBody.ResetDynamics();
+			//this.playerBody.ResetDynamics();
 		}
 	}
 	
 	public void ReleaseTouch()
 	{
-		this.grabTarget = Vector3.zero;
+		//this.grabTarget = Vector3.zero;
 	}
 
 	public bool IsCharged()
@@ -481,6 +488,10 @@ public class PlayerScript : MonoBehaviour
 			this.playerBody.IgnoreGravity = true;
 		}
 		*/
+		if (ceiling.transform.tag == "Grab")
+		{
+			this.grabTarget = Vector3.zero;
+		}
 	}
 	
 	private void StayHead(GameObject ceiling)
@@ -544,5 +555,12 @@ public class PlayerScript : MonoBehaviour
 	public void Tap()
 	{
 		this.tap = true;
+	}
+	
+	IEnumerator ResetTouch()
+	{
+	    yield return new WaitForSeconds(0.2f);
+		this.controllerMain.resetSlide();
+		this.tap = false;
 	}
 }

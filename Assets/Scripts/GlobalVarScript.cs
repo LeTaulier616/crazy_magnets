@@ -22,6 +22,24 @@ public class GlobalVarScript : MonoBehaviour
 	public float accelerationFactor;
 	public float decelerationFactor;
 	public float slipperyFactor;
+
+	public float smallEnemySpeed;
+	public float smallEnemyJumpForce;
+	public float smallEnemyDamping;
+	public float smallEnemyGravityScale;
+	public float smallEnemyPatrolSpeed;
+	public float smallEnemyPursuitSpeed;
+	public float smallEnemyLocateDistance;
+	public float smallEnemyAlertRange;
+
+	public float bigEnemySpeed;
+	public float bigEnemyJumpForce;
+	public float bigEnemyDamping;
+	public float bigEnemyGravityScale;
+	public float bigEnemyPatrolSpeed;
+	public float bigEnemyPursuitSpeed;
+	public float bigEnemyLocateDistance;
+	public float bigEnemyAlertRange;
 	
 	public Vector3 cameraFixedPos = Vector3.zero;
 	public int cameraFree = 0; // 0 : forcee sur la target; 1 : libre; 2 : libre avec controles joueur bloques
