@@ -181,9 +181,9 @@ public class PlayerScript : MonoBehaviour
 		/* Appliquer la bonne vélocité suivant les données récoltées */
 		ApplyLinearVelocity();
 
-		if(this.onGround && (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Space)))
+		if(Input.GetKeyDown(KeyCode.Space))
 		{
-			Jump();
+			this.controllerMain.activeSlide();
 		}
 		if(Input.GetKeyDown(KeyCode.Z) || keyinputed)
 		{
@@ -193,8 +193,7 @@ public class PlayerScript : MonoBehaviour
 		
 		if (this.controllerMain.isSliding() || this.tap)
 		{
-			this.controllerMain.resetSlide();
-			this.tap = false;
+			StartCoroutine(ResetTouch());
 			if (this.onGround)
 			{
 				Jump ();
@@ -557,5 +556,12 @@ public class PlayerScript : MonoBehaviour
 	public void Tap()
 	{
 		this.tap = true;
+	}
+	
+	IEnumerator ResetTouch()
+	{
+	    yield return new WaitForSeconds(0.2f);
+		this.controllerMain.resetSlide();
+		this.tap = false;
 	}
 }
