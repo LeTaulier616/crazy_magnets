@@ -29,7 +29,7 @@ public class ControllerMain : MonoBehaviour
 	
 	void Update ()
 	{
-		if (Input.touchCount > 0) 
+		if (Input.touchCount > 0)
 		{
 			foreach (Touch touch in Input.touches)
 			{

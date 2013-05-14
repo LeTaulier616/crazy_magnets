@@ -193,7 +193,16 @@ public class PlayerScript : MonoBehaviour
 		
 		if (this.controllerMain.isSliding() || this.tap)
 		{
-			StartCoroutine(ResetTouch());
+			if (this.playerBody.LinearVelocity.Y < 0)
+			{
+				StartCoroutine(ResetTouch());
+			}
+			else
+			{
+				this.controllerMain.resetSlide();
+				this.tap = false;
+			}
+			
 			if (this.onGround)
 			{
 				Jump ();
@@ -267,7 +276,7 @@ public class PlayerScript : MonoBehaviour
 			
 			// gestion gravite inverse
 			this.localGravity = -1f;
-			this.playerBody.ApplyLinearImpulse(new FVector2(0, 9.8f * 2 * this.playerBody.Mass * this.playerBody.GravityScale * Time.fixedDeltaTime));
+			this.playerBody.ApplyLinearImpulse(new FVector2(0, 9.8f * 2 * this.playerBody.Mass * this.playerBody.GravityScale * Time.deltaTime));
 		}
 		else
 		{
