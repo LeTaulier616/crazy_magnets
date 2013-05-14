@@ -236,6 +236,7 @@ public class EnemyScript : StateMachine
 	private bool	isControlled = false;
 	private Ray		ray;
 	private float	floorDist;
+	private Vector3	startPosition;
 	
 	public PatrolState		patrol;
 	public PursuitState		pursuit;
@@ -296,6 +297,8 @@ public class EnemyScript : StateMachine
 		playerBody = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
 		playerBody.FixedRotation = true;
 		playerBody.Mass = 1f;
+
+		this.startPosition = this.transform.position;
 		
 		this.isWalking  = false;
 		this.attraction = false;
@@ -459,6 +462,13 @@ public class EnemyScript : StateMachine
 		this.onPFM = false;
 		this.bodyPFM = null;
 		//GlobalVarScript.instance.blockCamera(Camera.main.transform.position);
+	}
+	
+	public void ResetPosition()
+	{
+		//Debug.Log("There");
+		this.playerBody.SetTransform(new FVector2(startPosition.x, startPosition.y), 0.0f);
+		this.SwitchState(this.patrol);
 	}
 	
 	public void CollisionGround(GameObject ground)

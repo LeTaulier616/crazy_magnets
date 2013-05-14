@@ -55,6 +55,11 @@ public class KillzoneScript : MonoBehaviour
 		{
 			bodyB.UserFSBodyComponent.gameObject.SendMessageUpwards("ResetPosition", SendMessageOptions.DontRequireReceiver);
 		}
+
+		else if (bodyB.UserTag == "Enemy")
+		{
+			bodyB.UserFSBodyComponent.gameObject.SendMessageUpwards("ResetPosition", SendMessageOptions.DontRequireReceiver);
+		}
 		
 		return true;
 	}
