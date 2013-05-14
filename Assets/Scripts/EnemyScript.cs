@@ -38,7 +38,7 @@ public class PatrolState : State
 			|| (it.transform.right.x > 0 && this.hasRightWayPoint && this.rightWayPoint.transform.position.x - it.transform.position.x < 0)
 			|| (it.transform.right.x < 0 && this.hasLeftWayPoint && this.leftWayPoint.transform.position.x - it.transform.position.x > 0))
 		{
-			it.GetComponent<EnemyScript>().mesh.transform.Rotate(it.transform.up, 180);
+			it.transform.Rotate(it.transform.up, 180);
 		}
 		else
 		{
@@ -64,7 +64,7 @@ public class PursuitState : State
 
 		if (((GlobalVarScript.instance.player.transform.position.x - it.transform.position.x) > 0) != (it.transform.right.x > 0))
 		{
-			it.GetComponent<EnemyScript>().mesh.transform.Rotate(it.transform.up, 180);
+			it.transform.Rotate(it.transform.up, 180);
 		}
 
 		if (it.GetComponent<EnemyScript>().CanMove())
@@ -219,7 +219,7 @@ public class EnemyScript : StateMachine
 	public GameObject	leftWayPoint = null;
 	public GameObject	rightWayPoint = null;
 
-	public GameObject	mesh;
+	public GameObject	playerMesh;
 	public Transform	target;
 
 	[HideInInspector]
@@ -290,8 +290,6 @@ public class EnemyScript : StateMachine
 	public  bool      onPFM   = false;
 	public  Body      bodyPFM = null;
 
-	private GameObject playerMesh;
-
 	void Start()
 	{
 		playerBody = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
@@ -340,7 +338,13 @@ public class EnemyScript : StateMachine
 		this.decelerationFactor = GlobalVarScript.instance.decelerationFactor;
 
 		//this.playerMesh = GlobalVarScript.instance.playerMesh;
-		this.playerMesh = null;
+		//this.playerMesh = null;
+		
+		if(playerMesh != null)
+		{
+			this.playerMesh.animation["run"].speed = 1.5f;
+			this.playerMesh.animation.Play("idle");
+		}
 
 		// end of control values
 
@@ -517,30 +521,30 @@ public class EnemyScript : StateMachine
 	}
 	
 	public void CollisionHead(GameObject ceiling)
-	{
+	{/*
 		if (ceiling.transform.tag == "Attractor")
 		{
 			this.headStucked = true;
 			this.playerBody.IgnoreGravity = true;
-		}
+		}*/
 	}
 	
 	public void StayHead(GameObject ceiling)
-	{
+	{/*
 		if (ceiling.transform.tag == "Attractor")
 		{
 			this.headStucked = true;
 			this.playerBody.IgnoreGravity = true;
-		}
+		}*/
 	}
 	
 	public void ExitHead(GameObject ceiling)
-	{
+	{/*
 		if (ceiling.transform.tag == "Attractor")
 		{
 			this.headStucked = false;
 			this.playerBody.IgnoreGravity = false;
-		}
+		}*/
 	}
 
 	public void Attract(float force)
