@@ -1,4 +1,4 @@
-using UnityEngine;
+using UnityEngine;GlobalVarScript.instance.maxTapTime
 using System.Collections;
 using System.Collections.Generic;
 
@@ -29,7 +29,7 @@ public class ControllerMain : MonoBehaviour
 	
 	void Update ()
 	{
-		if (Input.touchCount > 0)
+		if (Input.touchCount > 0) 
 		{
 			foreach (Touch touch in Input.touches)
 			{
