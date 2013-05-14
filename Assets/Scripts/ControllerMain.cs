@@ -29,7 +29,6 @@ public class ControllerMain : MonoBehaviour
 	
 	void Update ()
 	{
-		GlobalVarScript.instance.cameraFree = 2;
 		if (Input.touchCount > 0) 
 		{
 			foreach (Touch touch in Input.touches)

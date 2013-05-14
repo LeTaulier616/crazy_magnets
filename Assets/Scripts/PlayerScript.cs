@@ -266,7 +266,7 @@ public class PlayerScript : MonoBehaviour
 			
 			// gestion gravite inverse
 			this.localGravity = -1f;
-			this.playerBody.ApplyForce(new FVector2(0, 9.8f * this.playerBody.Mass * this.playerBody.GravityScale));
+			this.playerBody.ApplyLinearImpulse(new FVector2(0, 9.8f * 2 * this.playerBody.Mass * this.playerBody.GravityScale * Time.fixedDeltaTime));
 		}
 		else
 		{
@@ -488,10 +488,6 @@ public class PlayerScript : MonoBehaviour
 			this.playerBody.IgnoreGravity = true;
 		}
 		*/
-		if (ceiling.transform.tag == "Grab")
-		{
-			this.grabTarget = Vector3.zero;
-		}
 	}
 	
 	private void StayHead(GameObject ceiling)
@@ -502,6 +498,10 @@ public class PlayerScript : MonoBehaviour
 			this.playerBody.IgnoreGravity = true;
 		}
 		*/
+		if (ceiling.transform.tag == "Grab" && this.grabTarget != Vector3.zero)
+		{
+			this.grabTarget = Vector3.zero;
+		}
 	}
 	
 	private void ExitHead(GameObject ceiling)
