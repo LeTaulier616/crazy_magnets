@@ -109,12 +109,18 @@ public class MenuGesture : MonoBehaviour {
 			}
 			
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
 			if(menuScreen == ScreenMenu.PAUSE && nextScreen == ScreenMenu.NONE || menuScreen == ScreenMenu.NONE && nextScreen == ScreenMenu.PAUSE)
 			{
 				lerpValue = 1.0f;
 			}
 			
+<<<<<<< HEAD
+>>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
+=======
 >>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
 			if(lerpValue >= 1.0f && setHidden)
 			{
@@ -167,7 +173,12 @@ public class MenuGesture : MonoBehaviour {
 		if(loadMenus)
 			Application.LoadLevel("MENU");
 <<<<<<< HEAD
+<<<<<<< HEAD
 		else if(loadLevel || screen.loadLevel)
+=======
+		
+		else if(loadLevel ||screen.loadLevel)
+>>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
 =======
 		
 		else if(loadLevel ||screen.loadLevel)
