@@ -22,7 +22,19 @@ public class EndMenu : MenuScreen
 	{
 		next_button_go.transform.parent.gameObject.SetActive(true);
 		
+		time_level.GetComponent<UILabel>().text   = "" + Time.timeSinceLevelLoad;
+		
+		int screwGotten = GameObject.FindGameObjectWithTag("EndLevel").GetComponent<EndLevelScript>().boltCount;
+		screw_gotcha.GetComponent<UILabel>().text = screwGotten + "/3";
+		
+		int levelnumber = Datas.sharedDatas().datas.selectedLevel + Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld;
+		if(Datas.sharedDatas().datas.screwsGotchaByLevel[levelnumber] < screwGotten)
+			Datas.sharedDatas().datas.screwsGotchaByLevel[levelnumber] = screwGotten;
+		if(Datas.sharedDatas().datas.timeLevels < Time.timeSinceLevelLoad)
+			Datas.sharedDatas().datas.timeLevels = Time.timeSinceLevelLoad;
+		
 		exitScreen = false;
+		loadLevel  = false;
 	}
 	
 	public override void desactivateMenu()
@@ -49,6 +61,7 @@ public class EndMenu : MenuScreen
 		Debug.Log("Restart");
 		exitScreen = true;
 		screenToGo = MenuGesture.ScreenMenu.NONE;
+		loadLevel = true;
 	}
 	
 	void levels(GameObject go)

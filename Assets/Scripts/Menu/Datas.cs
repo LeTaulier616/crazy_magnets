@@ -80,7 +80,7 @@ public class Datas
 		datas.currentLevel  = 0;
 		
 		datas.lastWorld     = 0;
-		datas.lastLevel     = 0;
+		datas.lastLevel     = 5;
 		
 		datas.selectedLevel = 0;
 		datas.selectedWorld = 0;
@@ -114,13 +114,13 @@ public class Datas
 			datas.screwsGotcha[iii] = false;
 	}
 	
-	private void loadDatas()
+	public void loadDatas()
 	{
 		byte[] bytes = File.ReadAllBytes(path);
 		datas        = (DatasStruct)getStruct(bytes, datas);
 	}
 	
-	private void saveDatas()
+	public void saveDatas()
 	{
 		byte[] bytes = getBytes(datas);
 		File.WriteAllBytes(path, bytes);

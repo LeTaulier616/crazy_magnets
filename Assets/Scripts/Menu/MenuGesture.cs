@@ -33,6 +33,7 @@ public class MenuGesture : MonoBehaviour {
 		{
 			screen = GameObject.Find("Menus").GetComponent<MainMenu>();
 			menuScreen = ScreenMenu.MAIN;
+			Datas.sharedDatas().loadDatas();
 		}
 		else
 		{
@@ -84,6 +85,7 @@ public class MenuGesture : MonoBehaviour {
 				timer      = 0.0f;
 				lerpValue  = 0.0f;
 			}
+			
 			if(lerpValue >= 1.0f && setHidden)
 			{
 				switchScreen();
@@ -109,6 +111,8 @@ public class MenuGesture : MonoBehaviour {
 	{
 		Debug.Log("Screen Switch");
 		
+		Datas.sharedDatas().saveDatas();
+		
 		bool loadLevel = false;
 		bool loadMenus = false;
 		bool switchHUD = false;
@@ -126,7 +130,7 @@ public class MenuGesture : MonoBehaviour {
 		
 		if(loadMenus)
 			Application.LoadLevel("MENU");
-		else if(loadLevel)
+		else if(loadLevel || screen.loadLevel)
 			Application.LoadLevel(Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld + Datas.sharedDatas().datas.selectedLevel + 1);
 		
 		if(switchHUD || loadMenus || loadLevel)
