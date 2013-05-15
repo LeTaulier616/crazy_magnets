@@ -295,7 +295,8 @@ public class RoadData
 				default :
 					break;
 			}
-			if(this.currentPath < this.keyPoints.Count && this.keyPoints[currentPath].trajectoire != Trajectoire.LINE)
+			if(currentPath != -1)
+			if(this.currentPath < this.keyPoints.Count && this.keyPoints[this.currentPath].trajectoire != Trajectoire.LINE)
 			{
 				this.currentPosition = 
 				   this.circleCenter + 
@@ -322,11 +323,24 @@ public class RoadData
 			else if(this.endBehaviour == EndBehaviour.RESTART)
 			{
 				currentPosition = keyPoints[0].position;
-				currentPath = 0;
+				currentPath = -1;
 				currentAngle = 0.0f;
 				currentTime = 0.0f;
 				currentTraveled = 0.0f;
 				currentWait = 0.0f;
+				
+				/*reInit();
+				
+				currentPosition = keyPoints[0].position;
+				endOfRoad    = false;
+				vx = vy = va = 0.0f;
+				currentPath  = -1;
+				currentTime  = 0.0f;
+				currentTraveled = 0.0f;
+				lastTraveled = 0.0f;
+				pause = false;
+				stop = false;*/
+		
 				return;
 			}
 			else if(this.endBehaviour == EndBehaviour.LOOP)
