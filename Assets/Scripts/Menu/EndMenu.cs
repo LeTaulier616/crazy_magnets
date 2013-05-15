@@ -36,7 +36,11 @@ public class EndMenu : MenuScreen
 		exitScreen = false;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		loadLevel  = false;
+=======
+		loadLevel = false;
+>>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
 =======
 		loadLevel = false;
 >>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b

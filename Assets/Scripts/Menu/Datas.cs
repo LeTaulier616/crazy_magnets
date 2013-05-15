@@ -81,7 +81,11 @@ public class Datas
 		
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		datas.lastWorld     = 0;
+=======
+		datas.lastWorld     = 5;
+>>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
 =======
 		datas.lastWorld     = 5;
 >>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
