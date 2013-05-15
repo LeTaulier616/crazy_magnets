@@ -22,8 +22,9 @@ public class PatrolState : State
 		if (this.rightWayPoint != null)
 			this.hasRightWayPoint = true;
 		GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
+		
 		if(playerMesh != null)
-			playerMesh.animation.CrossFade("run", 0.5f);
+			playerMesh.animation.CrossFade("patrol", 0.5f);
 	}
 
 	override public void UpdateState(GameObject it)
@@ -61,7 +62,7 @@ public class PursuitState : State
 	{
 		GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
 		if(playerMesh != null)
-			playerMesh.animation.CrossFade("run", 0.5f);
+			playerMesh.animation.CrossFade("patrol", 0.5f);
 		this.stopped = false;
 	}
 
@@ -85,7 +86,7 @@ public class PursuitState : State
 			{
 				GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
 				if(playerMesh != null)
-					playerMesh.animation.CrossFade("run", 0.5f);
+					playerMesh.animation.CrossFade("patrol", 0.5f);
 				this.stopped = false;
 			}
 			Body body = it.GetComponent<FSBodyComponent>().PhysicsBody;
@@ -365,13 +366,13 @@ public class EnemyScript : StateMachine
 
 		//this.playerMesh = GlobalVarScript.instance.playerMesh;
 		//this.playerMesh = null;
-		
+		/*
 		if(playerMesh != null)
 		{
-			this.playerMesh.animation["run"].speed = 1.5f;
+			this.playerMesh.animation["patrol"].speed = 1.5f;
 			this.playerMesh.animation.Play("idle");
 		}
-
+*/
 		// end of control values
 
 		this.patrol = new PatrolState();
@@ -404,12 +405,14 @@ public class EnemyScript : StateMachine
 		this.ray.direction = this.transform.right + Vector3.down;
 		RaycastHit hit = new RaycastHit();
 		bool ret = (Physics.Raycast(this.ray, out hit, 20.0f, LayerMask.NameToLayer("World")) && Mathf.Approximately(hit.distance, this.floorDist));
-	/*	if (!ret)
+		
+		if (type == EnemyType.Small)
 		{
 			Debug.DrawRay(this.ray.origin, this.ray.direction);
 			Debug.Log("origin: " + this.ray.origin.x + " ; " + this.ray.origin.y);
 			Debug.Log("dist is: " + hit.distance + " instead of: " + this.floorDist);
-		}*/
+		}
+
 		return ret;
 	}
 	
@@ -448,7 +451,7 @@ public class EnemyScript : StateMachine
 			walkVelocity = new FVector2(speedX, 0);
 			
 			if(playerMesh != null)
-				playerMesh.animation.CrossFade("run", 0.5f);
+				playerMesh.animation.CrossFade("patrol", 0.5f);
 		}
 		else
 		{

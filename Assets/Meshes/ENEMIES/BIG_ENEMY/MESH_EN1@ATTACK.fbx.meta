@@ -155,7 +155,7 @@ ModelImporter:
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
-    animationWrapMode: 0
+    animationWrapMode: 1
     clipAnimations: []
     isReadable: 1
   meshes:
