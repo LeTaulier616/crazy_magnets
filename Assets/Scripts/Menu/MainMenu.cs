@@ -1,69 +1,67 @@
 using UnityEngine;
 using System.Collections;
 
-public class MainMenu : MonoBehaviour {
+public class MainMenu : MenuScreen {
 	
-	public GameObject TitleScreen;
-	public GameObject LevelSelectScreen;
-	public GameObject Background;
-	
-	
-	// Use this for initialization
+	public GameObject newgame_button_go;
+	public GameObject continue_button_go;
+	public GameObject options_button_go;
+	public GameObject levels_button_go;
+
 	void Start () 
 	{
-		TitleScreen.SetActiveRecursively(false);
-		Background.SetActiveRecursively(false);
-		LevelSelectScreen.SetActiveRecursively(false);
+   		UIEventListener.Get(newgame_button_go).onClick  = newgame;
+  	 	UIEventListener.Get(continue_button_go).onClick = continuegame;
+   		UIEventListener.Get(options_button_go).onClick  = options;
+  	 	UIEventListener.Get(levels_button_go).onClick   = levels;
+	}
+	
+	public override void activateMenu()
+	{
+		newgame_button_go.transform.parent.gameObject.SetActive(true);
 		
-		TitleScreen.SetActiveRecursively(true);
-		Background.SetActiveRecursively(true);
-		LevelSelectScreen.SetActiveRecursively(false);
+		newgame_button_go.SetActive(Datas.sharedDatas().datas.isNewGame);
+		continue_button_go.SetActive(!Datas.sharedDatas().datas.isNewGame);
+		
+		exitScreen = false;
 	}
 	
-	// Update is called once per frame
-	void Update () 
+	public override void desactivateMenu()
 	{
-		if(Input.GetKeyDown(KeyCode.Escape))
-		{
-			Application.Quit();
-		}
+		newgame_button_go.transform.parent.gameObject.SetActive(false);
 	}
-	
-	public void ToLevelSelectScreen()
+
+	void newgame(GameObject go)
 	{
-		TitleScreen.SetActiveRecursively(false);
-		LevelSelectScreen.SetActiveRecursively(true);
+		Debug.Log("New Game");
+		Datas.sharedDatas().datas.selectedLevel = 0;
+		Datas.sharedDatas().datas.selectedWorld = 0;
+		Datas.sharedDatas().datas.isNewGame = false;
+		exitScreen = true;
+		screenToGo = MenuGesture.ScreenMenu.NONE;
 	}
-	
-	public void BackToMainMenu()
+
+	void continuegame(GameObject go)
 	{
-		TitleScreen.SetActiveRecursively(true);
-		Background.SetActiveRecursively(true);
-		LevelSelectScreen.SetActiveRecursively(false);
+		Debug.Log("Continue");
+		Datas.sharedDatas().datas.selectedLevel = Datas.sharedDatas().datas.currentLevel;
+		Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
+		exitScreen = true;
+		screenToGo = MenuGesture.ScreenMenu.NONE;
 	}
-	
-	public void ToLevel1()
+
+	void options(GameObject go)
 	{
-		Application.LoadLevel(1);
+		Debug.Log("Options");
+		exitScreen = true;
+		screenToGo = MenuGesture.ScreenMenu.OPTIONS;
 	}
-	
-	public void ToLevel2()
+
+	void levels(GameObject go)
 	{
-		Application.LoadLevel(2);
+		Debug.Log("Levels Selection");
+		exitScreen = true;
+		screenToGo = MenuGesture.ScreenMenu.WORLDS;
 	}
-	
-	public void ToLevel3()
-	{
-		Application.LoadLevel(3);
-	}
-	
-	public void ToLevel4()
-	{
-		Application.LoadLevel(4);
-	}
-	
-	public void ToLevel5()
-	{
-		Application.LoadLevel(5);
-	}
+
 }
