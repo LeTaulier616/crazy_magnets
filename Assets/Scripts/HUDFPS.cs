@@ -27,7 +27,7 @@ public class HUDFPS : MonoBehaviour
 	void Start()
 	{
 		FPSLabel = GetComponent<UILabel>();
-	    timeleft = updateInterval;  
+	    timeleft = updateInterval;
 	}
 	 
 	void Update()

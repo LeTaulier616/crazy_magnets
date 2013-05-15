@@ -14,7 +14,7 @@ public class MenuGesture : MonoBehaviour {
 		ENDLEVEL
 	};
 	
-	private ScreenMenu menuScreen = ScreenMenu.NONE;
+	private static ScreenMenu menuScreen = ScreenMenu.MAIN;
 	private ScreenMenu nextScreen = ScreenMenu.NONE;
 	private ScreenMenu lastScreen = ScreenMenu.NONE;
 	
@@ -29,15 +29,19 @@ public class MenuGesture : MonoBehaviour {
 	
 	void Start()
 	{
-		screen = GameObject.Find("Menus").GetComponent<MainMenu>();
-		menuScreen = ScreenMenu.MAIN;
+		if(menuScreen == ScreenMenu.MAIN)
+		{
+			screen = GameObject.Find("Menus").GetComponent<MainMenu>();
+			menuScreen = ScreenMenu.MAIN;
+		}
+		else
+		{
+			screen = GameObject.Find("Menus").GetComponent<Interface>();
+			menuScreen = ScreenMenu.NONE;
+		}
 		screen.activateMenu();
 		setVisible = true;
 		timer = 0.0f;
-		
-		object[] allObjects = FindObjectsOfTypeAll(typeof(GameObject)) ;
-		foreach(object thisObject in allObjects)
-			DontDestroyOnLoad((GameObject) thisObject);
 	}
 	
 	void FixedUpdate()
@@ -84,6 +88,8 @@ public class MenuGesture : MonoBehaviour {
 			{
 				switchScreen();
 				lerpValue = 0.0f;
+				if(screenIsMenuScreen(lastScreen) != screenIsMenuScreen(menuScreen))
+					return;
 			}
 		}
 		
@@ -102,17 +108,34 @@ public class MenuGesture : MonoBehaviour {
 	private void switchScreen()
 	{
 		Debug.Log("Screen Switch");
+		
 		bool loadLevel = false;
+		bool loadMenus = false;
+		bool switchHUD = false;
+		
 		screen.desactivateMenu();
-		if(menuScreen == ScreenMenu.PAUSE && nextScreen == ScreenMenu.PAUSE)
-			nextScreen = ScreenMenu.NONE;
-		else if(nextScreen == ScreenMenu.NONE)
+		
+		if(!screenIsMenuScreen(nextScreen) && screenIsMenuScreen(menuScreen))
+			loadMenus = true;
+		if(screenIsMenuScreen(nextScreen) && !screenIsMenuScreen(menuScreen))
 			loadLevel = true;
+		if(screenIsMenuScreen(nextScreen) != screenIsMenuScreen(menuScreen))
+			switchHUD = true;
+		
 		menuScreen = nextScreen;
+		
+		if(loadMenus)
+			Application.LoadLevel("MENU");
+		else if(loadLevel)
+			Application.LoadLevel(Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld + Datas.sharedDatas().datas.selectedLevel + 1);
+		
+		if(switchHUD || loadMenus || loadLevel)
+			return;
+		
 		switch(menuScreen)
 		{
 			case ScreenMenu.NONE :
-				screen = null;
+				screen = GameObject.Find("Menus").GetComponent<Interface>();
 			break;
 			case ScreenMenu.MAIN :
 				screen = GameObject.Find("Menus").GetComponent<MainMenu>();
@@ -133,8 +156,10 @@ public class MenuGesture : MonoBehaviour {
 				screen = GameObject.Find("Menus").GetComponent<PauseMenu>();
 			break;
 		}
+		
 		if(screen != null)
 		{
+			Debug.Log("Set Alpha to 0");
 			screen.activateMenu();
 			foreach(UIWidget widget in GameObject.Find("Anchor").GetComponentsInChildren<UIWidget>())
 	        {
@@ -148,7 +173,10 @@ public class MenuGesture : MonoBehaviour {
 			setVisible = true;
 			timer = 0.0f;
 		}
-		if(loadLevel)
-			Application.LoadLevelAsync(Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld + Datas.sharedDatas().datas.selectedLevel + 1);
+	}
+	
+	private bool screenIsMenuScreen(ScreenMenu m_screen)
+	{
+		return (m_screen == ScreenMenu.NONE || m_screen == ScreenMenu.PAUSE || m_screen == ScreenMenu.ENDLEVEL);
 	}
 }
