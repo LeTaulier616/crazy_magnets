@@ -21,6 +21,10 @@ public class PatrolState : State
 			this.hasLeftWayPoint = true;
 		if (this.rightWayPoint != null)
 			this.hasRightWayPoint = true;
+		GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
+		
+		if(playerMesh != null)
+			playerMesh.animation.CrossFade("patrol", 0.5f);
 	}
 
 	override public void UpdateState(GameObject it)
@@ -38,7 +42,7 @@ public class PatrolState : State
 			|| (it.transform.right.x > 0 && this.hasRightWayPoint && this.rightWayPoint.transform.position.x - it.transform.position.x < 0)
 			|| (it.transform.right.x < 0 && this.hasLeftWayPoint && this.leftWayPoint.transform.position.x - it.transform.position.x > 0))
 		{
-			it.GetComponent<EnemyScript>().mesh.transform.Rotate(it.transform.up, 180);
+			it.transform.Rotate(it.transform.up, 180);
 		}
 		else
 		{
@@ -52,6 +56,15 @@ public class PursuitState : State
 {
 	public float speed;
 	public float playerDist;
+	public bool	 stopped;
+
+	public override void EnterState (GameObject it)
+	{
+		GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
+		if(playerMesh != null)
+			playerMesh.animation.CrossFade("patrol", 0.5f);
+		this.stopped = false;
+	}
 
 	override public void UpdateState(GameObject it)
 	{
@@ -64,16 +77,30 @@ public class PursuitState : State
 
 		if (((GlobalVarScript.instance.player.transform.position.x - it.transform.position.x) > 0) != (it.transform.right.x > 0))
 		{
-			it.GetComponent<EnemyScript>().mesh.transform.Rotate(it.transform.up, 180);
+			it.transform.Rotate(it.transform.up, 180);
 		}
 
 		if (it.GetComponent<EnemyScript>().CanMove())
 		{
+			if (this.stopped == true)
+			{
+				GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
+				if(playerMesh != null)
+					playerMesh.animation.CrossFade("patrol", 0.5f);
+				this.stopped = false;
+			}
 			Body body = it.GetComponent<FSBodyComponent>().PhysicsBody;
 			body.LinearVelocity = new FVector2(it.transform.right.x * this.speed, 0f);
 		}
 		else
 		{
+			if (this.stopped == false)
+			{
+				GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
+				if(playerMesh != null)
+					playerMesh.animation.CrossFade("idle", 0.5f);
+				this.stopped = true;
+			}
 			Body body = it.GetComponent<FSBodyComponent>().PhysicsBody;
 			body.LinearVelocity = new FVector2(0f, 0f);
 		}
@@ -219,7 +246,7 @@ public class EnemyScript : StateMachine
 	public GameObject	leftWayPoint = null;
 	public GameObject	rightWayPoint = null;
 
-	public GameObject	mesh;
+	public GameObject	playerMesh;
 	public Transform	target;
 
 	[HideInInspector]
@@ -236,6 +263,7 @@ public class EnemyScript : StateMachine
 	private bool	isControlled = false;
 	private Ray		ray;
 	private float	floorDist;
+	private Vector3	startPosition;
 	
 	public PatrolState		patrol;
 	public PursuitState		pursuit;
@@ -289,13 +317,13 @@ public class EnemyScript : StateMachine
 	public  bool      onPFM   = false;
 	public  Body      bodyPFM = null;
 
-	private GameObject playerMesh;
-
 	void Start()
 	{
 		playerBody = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
 		playerBody.FixedRotation = true;
 		playerBody.Mass = 1f;
+
+		this.startPosition = this.transform.position;
 		
 		this.isWalking  = false;
 		this.attraction = false;
@@ -337,8 +365,14 @@ public class EnemyScript : StateMachine
 		this.decelerationFactor = GlobalVarScript.instance.decelerationFactor;
 
 		//this.playerMesh = GlobalVarScript.instance.playerMesh;
-		this.playerMesh = null;
-
+		//this.playerMesh = null;
+		/*
+		if(playerMesh != null)
+		{
+			this.playerMesh.animation["patrol"].speed = 1.5f;
+			this.playerMesh.animation.Play("idle");
+		}
+*/
 		// end of control values
 
 		this.patrol = new PatrolState();
@@ -371,12 +405,14 @@ public class EnemyScript : StateMachine
 		this.ray.direction = this.transform.right + Vector3.down;
 		RaycastHit hit = new RaycastHit();
 		bool ret = (Physics.Raycast(this.ray, out hit, 20.0f, LayerMask.NameToLayer("World")) && Mathf.Approximately(hit.distance, this.floorDist));
-	/*	if (!ret)
+		
+		if (type == EnemyType.Small)
 		{
 			Debug.DrawRay(this.ray.origin, this.ray.direction);
 			Debug.Log("origin: " + this.ray.origin.x + " ; " + this.ray.origin.y);
 			Debug.Log("dist is: " + hit.distance + " instead of: " + this.floorDist);
-		}*/
+		}
+
 		return ret;
 	}
 	
@@ -415,7 +451,7 @@ public class EnemyScript : StateMachine
 			walkVelocity = new FVector2(speedX, 0);
 			
 			if(playerMesh != null)
-				playerMesh.animation.CrossFade("run", 0.5f);
+				playerMesh.animation.CrossFade("patrol", 0.5f);
 		}
 		else
 		{
@@ -459,6 +495,15 @@ public class EnemyScript : StateMachine
 		this.onPFM = false;
 		this.bodyPFM = null;
 		//GlobalVarScript.instance.blockCamera(Camera.main.transform.position);
+	}
+	
+	public void ResetPosition()
+	{
+		//Debug.Log("There");
+		this.playerBody.SetTransform(new FVector2(startPosition.x, startPosition.y), 0.0f);
+		KillzoneScript killer = this.GetComponent<KillzoneScript>();
+		killer.Enable();
+		this.SwitchState(this.patrol);
 	}
 	
 	public void CollisionGround(GameObject ground)
@@ -507,30 +552,30 @@ public class EnemyScript : StateMachine
 	}
 	
 	public void CollisionHead(GameObject ceiling)
-	{
+	{/*
 		if (ceiling.transform.tag == "Attractor")
 		{
 			this.headStucked = true;
 			this.playerBody.IgnoreGravity = true;
-		}
+		}*/
 	}
 	
 	public void StayHead(GameObject ceiling)
-	{
+	{/*
 		if (ceiling.transform.tag == "Attractor")
 		{
 			this.headStucked = true;
 			this.playerBody.IgnoreGravity = true;
-		}
+		}*/
 	}
 	
 	public void ExitHead(GameObject ceiling)
-	{
+	{/*
 		if (ceiling.transform.tag == "Attractor")
 		{
 			this.headStucked = false;
 			this.playerBody.IgnoreGravity = false;
-		}
+		}*/
 	}
 
 	public void Attract(float force)

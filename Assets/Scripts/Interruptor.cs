@@ -46,6 +46,11 @@ public class Interruptor : MonoBehaviour
 	private AudioClip buttonSound;
 	private AudioClip electricButtonSound;
 	
+	private AudioClip clockSound1;
+	private AudioClip clockSound2;
+	private AudioClip clockSound3;
+	private AudioClip clockSound4;
+	
 	private AudioSource audio1;
 	private AudioSource audio2;
 	
@@ -58,18 +63,27 @@ public class Interruptor : MonoBehaviour
 		tmpPorteeNorm = GlobalVarScript.instance.ButtonRadius;
 		
 		unpushTime = timeToRevoke + 0.1f;
-			
-		body = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
+
+		FSBodyComponent bodyComponent = gameObject.GetComponent<FSBodyComponent>();
+		if (bodyComponent != null)
+		{
+			body = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
+
+			body.IsSensor = true;
 		
-		body.IsSensor = true;
-		
-		body.OnCollision  += OnCollisionEvent;
-		body.OnSeparation += OnSeparationEvent;
+			body.OnCollision  += OnCollisionEvent;
+			body.OnSeparation += OnSeparationEvent;
+		}
 				
 		interruptorSound = GlobalVarScript.instance.InterruptorSound;
 		interruptorReleaseSound = GlobalVarScript.instance.InterruptorReleaseSound;
 		buttonSound = GlobalVarScript.instance.ButtonSound;
 		electricButtonSound = GlobalVarScript.instance.ElectricButtonSound;
+		
+		clockSound1 = GlobalVarScript.instance.ClockSounds[0];
+		clockSound2 = GlobalVarScript.instance.ClockSounds[1];
+		clockSound3 = GlobalVarScript.instance.ClockSounds[2];
+		clockSound4 = GlobalVarScript.instance.ClockSounds[3];
 		
 		SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
 		SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
@@ -92,6 +106,37 @@ public class Interruptor : MonoBehaviour
 		unpushTime = (!isPushed                       ? unpushTime + Time.deltaTime : unpushTime);
 		
 		bool wasActivated = activated;
+		
+		if(activated && type == Type.TIMER)
+		{
+			if(unpushTime / timeToRevoke >= 0.75f)
+			{
+				audio2.clip = clockSound4;
+			}
+			
+			else if(unpushTime / timeToRevoke >= 0.5f)
+			{
+				audio2.clip = clockSound3;
+			}
+			
+			else if(unpushTime / timeToRevoke >= 0.25f)
+			{
+				audio2.clip = clockSound2;
+			}
+			
+			else if(unpushTime / timeToRevoke >= 0.0f)
+			{
+				audio2.clip = clockSound1;
+			}
+			
+			if(!audio2.isPlaying)
+				audio2.Play();			
+		}
+		
+		else
+		{
+			audio2.Stop();
+		}
 		
 		if(!activated && isPushed && pushTime >= timeToExecute)
 			activated = true;

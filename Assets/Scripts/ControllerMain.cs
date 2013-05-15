@@ -28,7 +28,7 @@ public class ControllerMain : MonoBehaviour
 	}
 	
 	void Update ()
-	{		
+	{
 		if (Input.touchCount > 0) 
 		{
 			foreach (Touch touch in Input.touches)
@@ -126,13 +126,13 @@ public class ControllerMain : MonoBehaviour
 					}
 				}
 
-				// intérieur de l'écran
+				// intérieur de l'écran : active seulement si on a le controle du joueur
 				switch (touch.phase) 
 				{
 					case TouchPhase.Began:
 						Ray ray = Camera.mainCamera.ScreenPointToRay (touch.position);
 						RaycastHit hitInfo;
-						if (Physics.Raycast(ray, out hitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
+						if (GlobalVarScript.instance.cameraFree != 2 && Physics.Raycast(ray, out hitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
 						{
 							//Debug.Log(hitInfo.collider.gameObject.name);
 							// si on pointe un objet on l'attache à l'objet touch
@@ -147,7 +147,7 @@ public class ControllerMain : MonoBehaviour
 					
 					case TouchPhase.Stationary:
 					case TouchPhase.Moved:
-						if (touchObj.selectedObject != null)
+						if (GlobalVarScript.instance.cameraFree != 2 && touchObj.selectedObject != null)
 						{
 							Ray cRay = Camera.mainCamera.ScreenPointToRay (touch.position);
 							RaycastHit cHitInfo;
@@ -211,7 +211,7 @@ public class ControllerMain : MonoBehaviour
 			{
 				Ray ray = Camera.mainCamera.ScreenPointToRay (Input.mousePosition);
 				RaycastHit hitInfo;
-				if (Physics.Raycast(ray, out hitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
+				if (GlobalVarScript.instance.cameraFree != 2 && Physics.Raycast(ray, out hitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
 				{
 					//Debug.Log(hitInfo.collider.gameObject.name);
 					// si on pointe un objet on l'attache à l'objet touch
@@ -225,7 +225,7 @@ public class ControllerMain : MonoBehaviour
 			}
 			else if (Input.GetMouseButton(0))
 			{
-				if (mouseObject != null && mouseObject.selectedObject != null)
+				if (GlobalVarScript.instance.cameraFree != 2 && mouseObject != null && mouseObject.selectedObject != null)
 				{
 					Ray cRay = Camera.mainCamera.ScreenPointToRay (Input.mousePosition);
 					RaycastHit cHitInfo;
