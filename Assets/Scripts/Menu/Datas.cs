@@ -79,7 +79,11 @@ public class Datas
 		datas.currentWorld  = 0;
 		datas.currentLevel  = 0;
 		
+<<<<<<< HEAD
 		datas.lastWorld     = 0;
+=======
+		datas.lastWorld     = 5;
+>>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
 		datas.lastLevel     = 5;
 		
 		datas.selectedLevel = 0;

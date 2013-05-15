@@ -269,7 +269,7 @@ public class PlayerScript : MonoBehaviour
 				}
 				else
 				{
-					FVector2 grabForce = new FVector2(rayTest.x, rayTest.y) * 9.8f * this.playerBody.Mass * this.playerBody.GravityScale * Time.deltaTime;
+					FVector2 grabForce = new FVector2(rayTest.x, rayTest.y) * 13.0f * this.playerBody.Mass * this.playerBody.GravityScale * Time.deltaTime;
 					playerBody.ApplyLinearImpulse(new FVector2(grabForce.X * 25f, grabForce.Y));
 				}
 			}

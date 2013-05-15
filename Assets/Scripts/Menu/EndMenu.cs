@@ -34,7 +34,11 @@ public class EndMenu : MenuScreen
 			Datas.sharedDatas().datas.timeLevels = Time.timeSinceLevelLoad;
 		
 		exitScreen = false;
+<<<<<<< HEAD
 		loadLevel  = false;
+=======
+		loadLevel = false;
+>>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
 	}
 	
 	public override void desactivateMenu()
@@ -60,6 +64,7 @@ public class EndMenu : MenuScreen
 	{
 		Debug.Log("Restart");
 		exitScreen = true;
+		loadLevel = true;
 		screenToGo = MenuGesture.ScreenMenu.NONE;
 		loadLevel = true;
 	}
