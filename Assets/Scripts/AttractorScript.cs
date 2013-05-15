@@ -16,6 +16,8 @@ public class AttractorScript : MonoBehaviour
 	
 	private GameObject player;
 	
+	private ParticleSystem particles;
+	
 	
 	void Start ()
 	{
@@ -36,8 +38,11 @@ public class AttractorScript : MonoBehaviour
 		{
 			SendMessage("ConstantParams", Color.red, SendMessageOptions.DontRequireReceiver);
 			SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
+					
+			particles = this.GetComponentInChildren<ParticleSystem>();
+			particles.transform.position = this.transform.position - new Vector3(0.0f, Range, 0.0f);
+			particles.transform.localScale = new Vector3(this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
 		}
-
 	}
 	
 	void Update ()
@@ -109,6 +114,8 @@ public class AttractorScript : MonoBehaviour
 		if(type == "attract")
 		{
 			SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
+			particles = this.GetComponentInChildren<ParticleSystem>();
+			particles.Play(true);
 		}
 	}
 	
@@ -117,6 +124,7 @@ public class AttractorScript : MonoBehaviour
 		if(type == "attract")
 		{
 			SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
+			particles.Stop(true);
 		}
 	}
 }
