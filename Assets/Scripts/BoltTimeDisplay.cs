@@ -30,7 +30,7 @@ public class BoltTimeDisplay : MonoBehaviour {
 	
 	}
 	
-	string FormatTime(float time)
+	public static string FormatTime(float time)
 	{
 		string formatTime = ""; 
 		
@@ -42,7 +42,7 @@ public class BoltTimeDisplay : MonoBehaviour {
 		string txtSeconds = Seconds < 10 ? "0" + Seconds : "" + Seconds;
 		string txtDecisecond = Decisecond < 10 ? "0" + Decisecond : "" + Decisecond;
 		
-		formatTime = txtMinutes + "' " + txtSeconds + "'' " + txtDecisecond + "''' ";
+		formatTime = txtMinutes + "' " + txtSeconds + "'' " + txtDecisecond + "'''";
 		
 		return formatTime;
 	}
