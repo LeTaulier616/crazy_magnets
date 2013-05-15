@@ -49,6 +49,7 @@ public class KillzoneScript : MonoBehaviour
 	private bool OnCollisionEvent(Fixture fixtureA, Fixture fixtureB, Contact contact)
 	{
 		Body bodyB = fixtureB.Body;
+
 		if(bodyB.UserTag == "PlayerObject")
 		{
 			bodyB.UserFSBodyComponent.gameObject.SendMessageUpwards("Kill", SendMessageOptions.DontRequireReceiver);

@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
+using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Common;
 using FarseerPhysics.Dynamics.Contacts;
 
 public class PlayerScript : MonoBehaviour
@@ -19,6 +21,7 @@ public class PlayerScript : MonoBehaviour
 	private ControllerMain controllerMain;
 	
 	public Body      playerBody;
+	
 	private bool isAlive;
 	private bool canResurrect;
 	private bool      isWalking;
@@ -32,7 +35,7 @@ public class PlayerScript : MonoBehaviour
 	public bool      onGround;
 	private bool	headStucked;
 	private Vector3   grabTarget;
-	private Transform target; // cible de la camera
+	private UnityEngine.Transform target; // cible de la camera
 	private int lastDir;
 	private bool tap;
 	
@@ -63,6 +66,31 @@ public class PlayerScript : MonoBehaviour
 		controllerMain = GetComponent<ControllerMain>() as ControllerMain;
 		
 		playerBody = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
+		
+		//PolygonShape shape = new PolygonShape(CreateCapsule(2f, 1f, 8), 1f);
+		CircleShape circleHead = new CircleShape(0.5f, 1f);
+		circleHead.Position = new FVector2(0f, 0.5f);
+		
+		CircleShape circleFoots = new CircleShape(0.5f, 1f);
+		circleFoots.Position = new FVector2(0f, -0.5f);
+		
+		Vertices vertices = new Vertices();
+		vertices.Add(new FVector2(-0.49f, -0.49f));
+		vertices.Add(new FVector2(0.49f, -0.5f));
+		vertices.Add(new FVector2(0.49f, 0.5f));
+		vertices.Add(new FVector2(-0.49f, 0.5f));
+		PolygonShape shape = new PolygonShape(vertices, 1f);
+		
+		Fixture fixHead = this.playerBody.CreateFixture(circleHead);
+		fixHead.Friction = 0;
+		fixHead.Restitution = 0;
+		Fixture fixFoots = this.playerBody.CreateFixture(circleFoots);
+		fixFoots.Friction = 0;
+		fixFoots.Restitution = 0;
+		Fixture fix = this.playerBody.CreateFixture(shape);
+		fix.Friction = 0;
+		fix.Restitution = 0;
+		
 		playerBody.FixedRotation = true;
 		playerBody.Mass = 1f;
 		
@@ -193,7 +221,16 @@ public class PlayerScript : MonoBehaviour
 		
 		if (this.controllerMain.isSliding() || this.tap)
 		{
-			StartCoroutine(ResetTouch());
+			if (this.playerBody.LinearVelocity.Y < 0)
+			{
+				StartCoroutine(ResetTouch());
+			}
+			else
+			{
+				this.controllerMain.resetSlide();
+				this.tap = false;
+			}
+			
 			if (this.onGround)
 			{
 				Jump ();
@@ -223,16 +260,16 @@ public class PlayerScript : MonoBehaviour
 			{
 				float dist = Vector3.Distance(transform.position, this.grabTarget);
 				Vector3 rayTest = new Vector3(this.grabTarget.x - transform.position.x, this.grabTarget.y - transform.position.y, this.grabTarget.z - transform.position.z);
-				rayTest = Vector3.Normalize(rayTest);
 				RaycastHit hit;
-				if (Physics.Raycast(transform.position, rayTest, out hit, dist) && hit.transform.tag != "Grab")
+				if (Physics.Raycast(transform.position, rayTest.normalized, out hit, dist) && hit.transform.tag != "Grab"
+					// cas particulier
+					&& hit.transform.name != "HEAD_HITBOX")
 				{
-					// objet en travers
 					this.grabTarget = Vector3.zero;
 				}
 				else
 				{
-					FVector2 grabForce = new FVector2(rayTest.x, rayTest.y);
+					FVector2 grabForce = new FVector2(rayTest.x, rayTest.y) * 9.8f * this.playerBody.Mass * this.playerBody.GravityScale * Time.deltaTime;
 					playerBody.ApplyLinearImpulse(new FVector2(grabForce.X * 25f, grabForce.Y));
 				}
 			}
@@ -266,7 +303,7 @@ public class PlayerScript : MonoBehaviour
 			
 			// gestion gravite inverse
 			this.localGravity = -1f;
-			this.playerBody.ApplyForce(new FVector2(0, 9.8f * this.playerBody.Mass * this.playerBody.GravityScale));
+			this.playerBody.ApplyLinearImpulse(new FVector2(0, 9.8f * 2 * this.playerBody.Mass * this.playerBody.GravityScale * Time.deltaTime));
 		}
 		else
 		{
@@ -489,10 +526,6 @@ public class PlayerScript : MonoBehaviour
 			this.playerBody.IgnoreGravity = true;
 		}
 		*/
-		if (ceiling.transform.tag == "Grab")
-		{
-			this.grabTarget = Vector3.zero;
-		}
 	}
 	
 	private void StayHead(GameObject ceiling)
@@ -503,6 +536,10 @@ public class PlayerScript : MonoBehaviour
 			this.playerBody.IgnoreGravity = true;
 		}
 		*/
+		if (this.grabTarget != Vector3.zero)
+		{
+			this.grabTarget = Vector3.zero;
+		}
 	}
 	
 	private void ExitHead(GameObject ceiling)
@@ -520,7 +557,7 @@ public class PlayerScript : MonoBehaviour
 	{
 		GameObject checkPointParent = GameObject.FindGameObjectWithTag("CheckPoint");
 		
-		foreach(Transform child in checkPointParent.transform)
+		foreach(UnityEngine.Transform child in checkPointParent.transform)
 		{
 			checkpoints.Add(child.position);
 		}
