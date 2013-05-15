@@ -108,26 +108,11 @@ public class MenuGesture : MonoBehaviour {
 				lerpValue  = 0.0f;
 			}
 			
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
-=======
->>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
 			if(menuScreen == ScreenMenu.PAUSE && nextScreen == ScreenMenu.NONE || menuScreen == ScreenMenu.NONE && nextScreen == ScreenMenu.PAUSE)
 			{
 				lerpValue = 1.0f;
 			}
 			
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
-=======
->>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
-=======
->>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
 			if(lerpValue >= 1.0f && setHidden)
 			{
 				switchScreen();
@@ -178,22 +163,7 @@ public class MenuGesture : MonoBehaviour {
 		
 		if(loadMenus)
 			Application.LoadLevel("MENU");
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		else if(loadLevel || screen.loadLevel)
-=======
-		
 		else if(loadLevel ||screen.loadLevel)
->>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
-=======
-		
-		else if(loadLevel ||screen.loadLevel)
->>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
-=======
-		
-		else if(loadLevel ||screen.loadLevel)
->>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
 			Application.LoadLevel(Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld + Datas.sharedDatas().datas.selectedLevel + 1);
 		
 		if(switchHUD || loadMenus || loadLevel)

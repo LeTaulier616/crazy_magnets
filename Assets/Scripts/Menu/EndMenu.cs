@@ -30,23 +30,11 @@ public class EndMenu : MenuScreen
 		int levelnumber = Datas.sharedDatas().datas.selectedLevel + Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld;
 		if(Datas.sharedDatas().datas.screwsGotchaByLevel[levelnumber] < screwGotten)
 			Datas.sharedDatas().datas.screwsGotchaByLevel[levelnumber] = screwGotten;
-		if(Datas.sharedDatas().datas.timeLevels < Time.timeSinceLevelLoad)
-			Datas.sharedDatas().datas.timeLevels = Time.timeSinceLevelLoad;
+		if(Datas.sharedDatas().datas.timeLevels[levelnumber] < Time.timeSinceLevelLoad)
+			Datas.sharedDatas().datas.timeLevels[levelnumber] = Time.timeSinceLevelLoad;
 		
 		exitScreen = false;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 		loadLevel  = false;
-=======
-		loadLevel = false;
->>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
-=======
-		loadLevel = false;
->>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
-=======
-		loadLevel = false;
->>>>>>> ef8088e3be74715c827bdf78ee76c720a2d5f30b
 	}
 	
 	public override void desactivateMenu()
