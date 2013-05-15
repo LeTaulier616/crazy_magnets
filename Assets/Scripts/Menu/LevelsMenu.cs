@@ -33,7 +33,7 @@ public class LevelsMenu : MenuScreen {
 	
 	public override void desactivateMenu()
 	{
-		
+		back_button_go.transform.parent.gameObject.SetActive(false);
 	}
 	
 	private void levelClicked(GameObject go)

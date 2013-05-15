@@ -3,31 +3,40 @@ using System.Collections;
 
 public class PauseMenu : MenuScreen {
 	
-	public GameObject   back_button_go;
 	public GameObject   pause_button_go;
 	public GameObject   resume_button_go;
-	public GameObject   level_button_go;
+	public GameObject   next_button_go;
 	public GameObject   quit_button_go;
+	public GameObject   restart_button_go;
 	
 	void Start () 
 	{
-		UIEventListener.Get(back_button_go).onClick   = goback;
-		UIEventListener.Get(pause_button_go).onClick  = pauseonoff;
-		UIEventListener.Get(resume_button_go).onClick = resume;
-		UIEventListener.Get(level_button_go).onClick  = levels;
-		UIEventListener.Get(quit_button_go).onClick   = quitgame;
+		UIEventListener.Get(pause_button_go).onClick   = pauseonoff;
+		UIEventListener.Get(resume_button_go).onClick  = resume;
+		UIEventListener.Get(next_button_go).onClick    = nextCheckPoint;
+		UIEventListener.Get(quit_button_go).onClick    = quitgame;
+		UIEventListener.Get(restart_button_go).onClick = restartLevel;
 	}
 	
 	public override void activateMenu()
 	{
-		back_button_go.transform.parent.gameObject.SetActive(true);
+		resume_button_go.transform.parent.gameObject.SetActive(true);
+		
+		foreach(UIWidget widget in GameObject.Find("Anchor").GetComponentsInChildren<UIWidget>())
+        {
+			if(widget.name != "Menu_Background")
+			{
+				widget.alpha   = 0.0f;
+				widget.color   = new Color(0.0f,0.0f,0.0f,0.0f);
+			}
+		}
 		
 		exitScreen = false;
 	}
 	
 	public override void desactivateMenu()
 	{
-		back_button_go.transform.parent.gameObject.SetActive(false);
+		resume_button_go.transform.parent.gameObject.SetActive(false);
 	}
 	
 	private void pauseonoff(GameObject go)
@@ -44,11 +53,16 @@ public class PauseMenu : MenuScreen {
 		screenToGo = MenuGesture.ScreenMenu.NONE;
 	}
 	
-	private void levels(GameObject go)
+	private void nextCheckPoint(GameObject go)
 	{
-		Debug.Log("Levels");
+		Debug.Log("Next CheckPoint");
+	}
+	
+	private void restartLevel(GameObject go)
+	{
+		Debug.Log("Restart Level");
 		exitScreen = true;
-		screenToGo = MenuGesture.ScreenMenu.WORLDS;
+		screenToGo = MenuGesture.ScreenMenu.NONE;
 	}
 	
 	private void quitgame(GameObject go)
@@ -56,12 +70,5 @@ public class PauseMenu : MenuScreen {
 		Debug.Log("Quit Game");
 		exitScreen = true;
 		screenToGo = MenuGesture.ScreenMenu.MAIN;
-	}
-	
-	private void goback(GameObject go)
-	{
-		Debug.Log("Go Back");
-		exitScreen = true;
-		screenToGo = MenuGesture.ScreenMenu.NONE;
 	}
 }
