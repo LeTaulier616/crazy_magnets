@@ -135,7 +135,8 @@ public class Interruptor : MonoBehaviour
 		
 		else
 		{
-			audio2.Stop();
+			if(audio2 != null)
+				audio2.Stop();
 		}
 		
 		if(!activated && isPushed && pushTime >= timeToExecute)

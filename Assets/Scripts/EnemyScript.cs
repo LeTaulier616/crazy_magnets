@@ -97,8 +97,8 @@ public class PursuitState : State
 			if (this.stopped == false)
 			{
 				GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
-				if(playerMesh != null)
-					playerMesh.animation.CrossFade("idle", 0.5f);
+		//		if(playerMesh != null)
+		//			playerMesh.animation.CrossFade("idle", 0.5f);
 				this.stopped = true;
 			}
 			Body body = it.GetComponent<FSBodyComponent>().PhysicsBody;
@@ -366,7 +366,7 @@ public class EnemyScript : StateMachine
 
 		//this.playerMesh = GlobalVarScript.instance.playerMesh;
 		//this.playerMesh = null;
-		/*
+/*
 		if(playerMesh != null)
 		{
 			this.playerMesh.animation["patrol"].speed = 1.5f;
@@ -390,8 +390,10 @@ public class EnemyScript : StateMachine
 		this.controlled.target = this.target;
 
 		this.idle = new State();
-		
-		this.ray = new Ray(this.transform.position + new Vector3(0f, 0.1f, .0f), this.transform.right + Vector3.down);
+
+		Vector3 direction = this.transform.right * this.collider.bounds.size.x - this.transform.up * this.collider.bounds.size.y;
+		direction.Normalize();
+		this.ray = new Ray(this.transform.position + new Vector3(0f, 0.1f, .0f), direction);
 		RaycastHit hit = new RaycastHit();
 		Physics.Raycast(this.ray, out hit);
 		this.floorDist = hit.distance;
@@ -402,18 +404,24 @@ public class EnemyScript : StateMachine
 	public bool CanMove()
 	{
 		this.ray.origin = new Vector3(this.transform.position.x, this.ray.origin.y, this.ray.origin.z);
-		this.ray.direction = this.transform.right + Vector3.down;
+		if (Mathf.Sign(this.ray.direction.x) != Mathf.Sign(this.transform.right.x))
+			this.ray.direction = new Vector3(-this.ray.direction.x, this.ray.direction.y, this.ray.direction.z);
 		RaycastHit hit = new RaycastHit();
-		bool ret = (Physics.Raycast(this.ray, out hit, 20.0f, LayerMask.NameToLayer("World")) && Mathf.Approximately(hit.distance, this.floorDist));
-		
-		if (type == EnemyType.Small)
-		{
-			Debug.DrawRay(this.ray.origin, this.ray.direction);
-			Debug.Log("origin: " + this.ray.origin.x + " ; " + this.ray.origin.y);
-			Debug.Log("dist is: " + hit.distance + " instead of: " + this.floorDist);
-		}
+		bool ret = (Physics.Raycast(this.ray, out hit, 20.0f, LayerMask.NameToLayer("World")) && floatCompare(hit.distance, this.floorDist));
+
+		Debug.DrawRay(this.ray.origin, this.ray.direction);
+		if (!ret)
+			Debug.Log("distance is: " + hit.distance + " instead of: " + this.floorDist);
 
 		return ret;
+	}
+
+	private bool floatCompare(float a, float b)
+	{
+		a = Mathf.Floor(a * 1000);
+		b = Mathf.Floor(b * 1000);
+		//return (Mathf.Abs(a - b) < Mathf.Epsilon);
+		return Mathf.Approximately(a, b);
 	}
 	
 	public void Control()
