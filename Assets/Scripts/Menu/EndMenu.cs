@@ -22,14 +22,14 @@ public class EndMenu : MenuScreen
 	{
 		next_button_go.transform.parent.gameObject.SetActive(true);
 		
-		int screwGotten = GameObject.FindGameObjectWithTag("EndLevel").GetComponent<EndLevelScript>().boltCount;
-		screw_gotcha.GetComponent<UILabel>().text = screwGotten + "/3";
-		
 		int levelnumber = Datas.sharedDatas().datas.selectedLevel + Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld;
-		
 		Datas.sharedDatas().datas.timeLevels[levelnumber] = Time.timeSinceLevelLoad;
 		string timeString = BoltTimeDisplay.FormatTime(Datas.sharedDatas().datas.timeLevels[levelnumber]);
 		time_level.GetComponent<UILabel>().text   = timeString;
+		
+		int screwGotten = GameObject.FindGameObjectWithTag("EndLevel").GetComponent<EndLevelScript>().boltCount;
+		Datas.sharedDatas().datas.screwsGotchaByLevel[levelnumber] = screwGotten;
+		screw_gotcha.GetComponent<UILabel>().text = Datas.sharedDatas().datas.screwsGotchaByLevel[levelnumber] + "/3";
 		
 		if(Datas.sharedDatas().datas.screwsGotchaByLevel[levelnumber] < screwGotten)
 			Datas.sharedDatas().datas.screwsGotchaByLevel[levelnumber] = screwGotten;
@@ -43,6 +43,12 @@ public class EndMenu : MenuScreen
 		{
 			nextLevelWorld = 0;
 			nextLevelLevel = 0;
+			Datas.sharedDatas().datas.currentWorld  = 0;
+			Datas.sharedDatas().datas.currentLevel  = 0;
+			Datas.sharedDatas().datas.selectedWorld = 0;
+			Datas.sharedDatas().datas.selectedLevel = 0;
+			Datas.sharedDatas().datas.isNewGame     = true;
+			
 			exitScreen     = true;
 			screenToGo     = MenuGesture.ScreenMenu.MAIN;
 			loadLevel      = false;
