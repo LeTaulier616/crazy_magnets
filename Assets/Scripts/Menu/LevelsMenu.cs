@@ -26,9 +26,23 @@ public class LevelsMenu : MenuScreen {
 			
 			levels_buttons_off[iii].SetActive(!levelIsUnlocked);
 			levels_buttons_go[iii].SetActive(levelIsUnlocked);
+			
+			if(levelIsUnlocked)
+			{
+				levels_buttons_go[iii].transform.FindChild("Label").GetComponent<UILabel>().text  = "Level" + (iii+1);
+				int levelNumber = iii + Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld;
+				string timeString = BoltTimeDisplay.FormatTime(Datas.sharedDatas().datas.timeLevels[levelNumber]);
+				levels_buttons_go[iii].transform.FindChild("Time").GetComponent<UILabel>().text  = timeString;
+				levels_buttons_go[iii].transform.FindChild("Screw").GetComponent<UILabel>().text = Datas.sharedDatas().datas.screwsGotchaByLevel[levelNumber] + "/3";
+			}
+			else
+			{
+				levels_buttons_off[iii].transform.FindChild("Label").GetComponent<UILabel>().text  = "Level" + (iii+1);
+			}
 		}
 		
 		exitScreen = false;
+		loadLevel = false;
 	}
 	
 	public override void desactivateMenu()
@@ -45,6 +59,7 @@ public class LevelsMenu : MenuScreen {
 				exitScreen = true;
 				screenToGo = MenuGesture.ScreenMenu.NONE;
 				Datas.sharedDatas().datas.selectedLevel = iii;
+				loadLevel = true;
 			}
 	}
 	

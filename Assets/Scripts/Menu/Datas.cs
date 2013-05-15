@@ -26,6 +26,9 @@ public class Datas
 				System.IO.Directory.CreateDirectory(directory);
 		    }
 			shared_datas = new Datas();
+			if(System.IO.File.Exists(path))
+				shared_datas.loadDatas();
+			Debug.Log(path);
 		}
 		return shared_datas;
 	}
@@ -53,14 +56,14 @@ public class Datas
 		public int sfxVolume;
 		public int bgmVolume;
 		
-		public bool   isNewGame;
+		public bool    isNewGame;
 		
-		public int[]  timeLevels;
-		public int[]  screwsGotchaByLevel;
-		public bool[] screwsGotcha;
-		
-		public bool[] lockedLevels;
-		public bool[] lockedWorlds;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)] // Max length of array
+		public float[] timeLevels;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)] // Max length of array
+		public int[]   screwsGotchaByLevel;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)] // Max length of array
+		public bool[]  screwsGotcha;
 	};
 	
 	public DatasStruct datas;
@@ -79,7 +82,7 @@ public class Datas
 		datas.currentWorld  = 0;
 		datas.currentLevel  = 0;
 		
-		datas.lastWorld     = 5;
+		datas.lastWorld     = 0;
 		datas.lastLevel     = 5;
 		
 		datas.selectedLevel = 0;
@@ -91,17 +94,7 @@ public class Datas
 		
 		datas.isNewGame     = true;
 		
-		datas.lockedWorlds    = new bool[MyDefines.kNbWorlds];
-		datas.lockedWorlds[0] = false;
-		for(int iii = 1; iii < MyDefines.kNbWorlds; ++iii)
-			datas.lockedWorlds[iii] = true;
-		
-		datas.lockedLevels    = new bool[MyDefines.kNbLevels];
-		datas.lockedLevels[0] = false;
-		for(int iii = 1; iii < MyDefines.kNbLevels; ++iii)
-			datas.lockedLevels[iii] = true;
-		
-		datas.timeLevels = new int[MyDefines.kNbLevels];
+		datas.timeLevels = new float[MyDefines.kNbLevels];
 		for(int iii = 0; iii < MyDefines.kNbLevels; ++iii)
 			datas.timeLevels[iii] = 0;
 		
@@ -114,15 +107,16 @@ public class Datas
 			datas.screwsGotcha[iii] = false;
 	}
 	
-	private void loadDatas()
+	public void loadDatas()
 	{
 		byte[] bytes = File.ReadAllBytes(path);
-		datas        = (DatasStruct)getStruct(bytes, datas);
+		object d = DeserializeMsg<DatasStruct>(bytes);
+		datas = (DatasStruct)d;
 	}
 	
-	private void saveDatas()
+	public void saveDatas()
 	{
-		byte[] bytes = getBytes(datas);
+		byte[] bytes = SerializeMessage<DatasStruct>(datas);
 		File.WriteAllBytes(path, bytes);
 	}
 	
@@ -150,10 +144,10 @@ public class Datas
 	}
 	
 	// Methode 2
-	public static Byte[] SerializeMessage<T>(T msg) where T : struct
+	public static byte[] SerializeMessage<T>(T msg) where T : struct
 	{
 		int objsize = Marshal.SizeOf(typeof(T));
-		Byte[] ret = new Byte[objsize];
+		byte[] ret = new byte[objsize];
 		IntPtr buff = Marshal.AllocHGlobal(objsize);
 		Marshal.StructureToPtr(msg, buff, true);
 		Marshal.Copy(buff, ret, 0, objsize);
@@ -161,7 +155,7 @@ public class Datas
 		return ret;
 	}
 	
-	public static T DeserializeMsg<T>(Byte[] data) where T : struct
+	public static T DeserializeMsg<T>(byte[] data) where T : struct
 	{
 		int objsize = Marshal.SizeOf(typeof(T));
 		IntPtr buff = Marshal.AllocHGlobal(objsize);

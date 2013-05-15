@@ -34,6 +34,7 @@ public class PauseMenu : MenuScreen {
 		}
 		
 		exitScreen = false;
+		loadLevel  = false;
 	}
 	
 	public override void desactivateMenu()
@@ -71,6 +72,7 @@ public class PauseMenu : MenuScreen {
 		exitScreen = true;
 		loadLevel = true;
 		screenToGo = MenuGesture.ScreenMenu.NONE;
+		loadLevel  = true;
 	}
 	
 	private void quitgame(GameObject go)

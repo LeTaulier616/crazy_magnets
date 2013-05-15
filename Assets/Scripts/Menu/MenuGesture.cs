@@ -61,7 +61,7 @@ public class MenuGesture : MonoBehaviour {
 		
 		float lerpValue = Mathf.Lerp(0,lerpMaxValue,timer);
 		
-		if(menuScreen == ScreenMenu.PAUSE && nextScreen == ScreenMenu.NONE || menuScreen == ScreenMenu.NONE && nextScreen == ScreenMenu.PAUSE)
+		if(screenIsMenuScreen(menuScreen) && screenIsMenuScreen(nextScreen))
 		{
 			lerpValue = 1.0f;
 		}	
@@ -70,31 +70,28 @@ public class MenuGesture : MonoBehaviour {
         {
 			if(widget.name != "Menu_Background" || lastScreen == ScreenMenu.NONE || nextScreen == ScreenMenu.NONE)
 			{
-				if(menuScreen == ScreenMenu.PAUSE && nextScreen == ScreenMenu.NONE)
+				if(setVisible)
 				{
-					if(setVisible)
-					{
-						widget.alpha   = lerpValue;
-						widget.color   = new Color(lerpValue,lerpValue,lerpValue,lerpValue);
-					}
-					else if(setHidden)
-					{
-						widget.alpha   = 1.0f - lerpValue;
-						widget.color   = new Color(1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue);
-					}
+					widget.alpha   = lerpValue;
+					widget.color   = new Color(lerpValue,lerpValue,lerpValue,lerpValue);
 				}
-
-				else
+				else if(setHidden)
 				{
-					widget.alpha = 1.0f;
-					widget.color   = new Color(1.0f,1.0f,1.0f,1.0f);
+					widget.alpha   = 1.0f - lerpValue;
+					widget.color   = new Color(1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue);
 				}
-				if(widget.GetComponent<TweenColor>())
-					widget.GetComponent<TweenColor>().enabled = false;
 			}
+
+			else
+			{
+				widget.alpha = 1.0f;
+				widget.color   = new Color(1.0f,1.0f,1.0f,1.0f);
+			}
+			if(widget.GetComponent<TweenColor>())
+				widget.GetComponent<TweenColor>().enabled = false;
         }
 		
-		if(screen != null && screen.exitScreen) 
+		if(screen.exitScreen) 
 		{
 			if(!setHidden)
 			{
@@ -107,7 +104,7 @@ public class MenuGesture : MonoBehaviour {
 				lerpValue  = 0.0f;
 			}
 			
-			if(menuScreen == ScreenMenu.PAUSE && nextScreen == ScreenMenu.NONE || menuScreen == ScreenMenu.NONE && nextScreen == ScreenMenu.PAUSE)
+			if(screenIsMenuScreen(menuScreen) && screenIsMenuScreen(nextScreen))
 			{
 				lerpValue = 1.0f;
 			}
@@ -126,12 +123,6 @@ public class MenuGesture : MonoBehaviour {
 			button.isEnabled = !(setVisible || setHidden);
 		}
 		
-		if(menuScreen == ScreenMenu.PAUSE && nextScreen == ScreenMenu.NONE || menuScreen == ScreenMenu.NONE && nextScreen == ScreenMenu.PAUSE)
-		{
-			setVisible = false;
-			setHidden = false;
-		}
-		
 		if(lerpValue >= 1.0f)
 		{
 			setVisible = false;
@@ -143,16 +134,17 @@ public class MenuGesture : MonoBehaviour {
 	{
 		Debug.Log("Screen Switch");
 		
+		Datas.sharedDatas().saveDatas();
+		
 		bool loadLevel = false;
 		bool loadMenus = false;
 		bool switchHUD = false;
 		
 		screen.desactivateMenu();
 		
+		loadLevel = screen.loadLevel;
 		if(!screenIsMenuScreen(nextScreen) && screenIsMenuScreen(menuScreen))
 			loadMenus = true;
-		if(screenIsMenuScreen(nextScreen) && !screenIsMenuScreen(menuScreen))
-			loadLevel = true;
 		if(screenIsMenuScreen(nextScreen) != screenIsMenuScreen(menuScreen))
 			switchHUD = true;
 		
@@ -160,8 +152,7 @@ public class MenuGesture : MonoBehaviour {
 		
 		if(loadMenus)
 			Application.LoadLevel("MENU");
-		
-		else if(loadLevel ||screen.loadLevel)
+		else if(loadLevel)
 			Application.LoadLevel(Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld + Datas.sharedDatas().datas.selectedLevel + 1);
 		
 		if(switchHUD || loadMenus || loadLevel)
@@ -192,22 +183,18 @@ public class MenuGesture : MonoBehaviour {
 			break;
 		}
 		
-		if(screen != null)
-		{
-			Debug.Log("Set Alpha to 0");
-			screen.activateMenu();
-			foreach(UIWidget widget in GameObject.Find("Anchor").GetComponentsInChildren<UIWidget>())
-	        {
-				if(widget.name != "Menu_Background")
-				{
-					widget.alpha   = 0.0f;
-					widget.color   = new Color(0.0f,0.0f,0.0f,0.0f);
-				}
+		screen.activateMenu();
+		foreach(UIWidget widget in GameObject.Find("Anchor").GetComponentsInChildren<UIWidget>())
+        {
+			if(widget.name != "Menu_Background")
+			{
+				widget.alpha   = 0.0f;
+				widget.color   = new Color(0.0f,0.0f,0.0f,0.0f);
 			}
-			setHidden = false;
-			setVisible = true;
-			timer = 0.0f;
 		}
+		setHidden = false;
+		setVisible = true;
+		timer = 0.0f;
 	}
 	
 	private bool screenIsMenuScreen(ScreenMenu m_screen)

@@ -22,8 +22,47 @@ public class EndMenu : MenuScreen
 	{
 		next_button_go.transform.parent.gameObject.SetActive(true);
 		
-		exitScreen = false;
-		loadLevel = false;
+		int screwGotten = GameObject.FindGameObjectWithTag("EndLevel").GetComponent<EndLevelScript>().boltCount;
+		screw_gotcha.GetComponent<UILabel>().text = screwGotten + "/3";
+		
+		int levelnumber = Datas.sharedDatas().datas.selectedLevel + Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld;
+		
+		Datas.sharedDatas().datas.timeLevels[levelnumber] = Time.timeSinceLevelLoad;
+		string timeString = BoltTimeDisplay.FormatTime(Datas.sharedDatas().datas.timeLevels[levelnumber]);
+		time_level.GetComponent<UILabel>().text   = timeString;
+		
+		if(Datas.sharedDatas().datas.screwsGotchaByLevel[levelnumber] < screwGotten)
+			Datas.sharedDatas().datas.screwsGotchaByLevel[levelnumber] = screwGotten;
+		if(Datas.sharedDatas().datas.timeLevels[levelnumber] < Time.timeSinceLevelLoad)
+			Datas.sharedDatas().datas.timeLevels[levelnumber] = Time.timeSinceLevelLoad;
+		
+		int nextLevelLevel = (Datas.sharedDatas().datas.currentLevel+1)%MyDefines.kLevelsByWorld;
+		int nextLevelWorld = Datas.sharedDatas().datas.currentWorld + (nextLevelLevel == 0 ? 1 : 0);
+		
+		if((nextLevelWorld >= MyDefines.kNbWorlds && nextLevelLevel >= MyDefines.kNbLevels) || MyDefines.kNbLevelsAvailable <= levelnumber+1)
+		{
+			nextLevelWorld = 0;
+			nextLevelLevel = 0;
+			exitScreen     = true;
+			screenToGo     = MenuGesture.ScreenMenu.MAIN;
+			loadLevel      = false;
+			Debug.Log("Quit");
+		}
+		else
+		{
+			// Unlock Level
+			if(Datas.sharedDatas().datas.lastWorld == nextLevelWorld)
+				Datas.sharedDatas().datas.lastLevel = Mathf.Max(nextLevelLevel, Datas.sharedDatas().datas.lastLevel);
+			else if(Datas.sharedDatas().datas.lastWorld < nextLevelWorld)
+				Datas.sharedDatas().datas.lastLevel = nextLevelWorld;
+			Datas.sharedDatas().datas.lastWorld     = Mathf.Max(nextLevelWorld, Datas.sharedDatas().datas.lastWorld);
+			// Set Level to Launch From Continue Button in the Main Menu
+			Datas.sharedDatas().datas.currentLevel  = nextLevelLevel;
+			Datas.sharedDatas().datas.currentWorld  = nextLevelWorld;
+			
+			exitScreen = false;
+			loadLevel  = false;
+		}
 	}
 	
 	public override void desactivateMenu()
@@ -36,13 +75,9 @@ public class EndMenu : MenuScreen
 		Debug.Log("Next Level");
 		exitScreen = true;
 		screenToGo = MenuGesture.ScreenMenu.NONE;
-		if(Datas.sharedDatas().datas.selectedLevel < MyDefines.kLevelsByWorld-1)
-			Datas.sharedDatas().datas.selectedLevel++;
-		else
-		{
-			Datas.sharedDatas().datas.selectedLevel = 0;
-			Datas.sharedDatas().datas.selectedWorld++;
-		}
+		Datas.sharedDatas().datas.selectedLevel = Datas.sharedDatas().datas.currentLevel;
+		Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
+		loadLevel = true;
 	}
 	
 	void restartlevel(GameObject go)
@@ -51,6 +86,7 @@ public class EndMenu : MenuScreen
 		exitScreen = true;
 		loadLevel = true;
 		screenToGo = MenuGesture.ScreenMenu.NONE;
+		loadLevel = true;
 	}
 	
 	void levels(GameObject go)
@@ -65,5 +101,7 @@ public class EndMenu : MenuScreen
 		Debug.Log("Quit");
 		exitScreen = true;
 		screenToGo = MenuGesture.ScreenMenu.MAIN;
+		Datas.sharedDatas().datas.selectedLevel = Datas.sharedDatas().datas.currentLevel;
+		Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
 	}
 }
