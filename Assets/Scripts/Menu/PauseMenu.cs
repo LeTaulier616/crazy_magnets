@@ -20,6 +20,8 @@ public class PauseMenu : MenuScreen {
 	
 	public override void activateMenu()
 	{
+		//Time.timeScale = 0.0f;
+		
 		resume_button_go.transform.parent.gameObject.SetActive(true);
 		
 		foreach(UIWidget widget in GameObject.Find("Anchor").GetComponentsInChildren<UIWidget>())
@@ -37,6 +39,8 @@ public class PauseMenu : MenuScreen {
 	public override void desactivateMenu()
 	{
 		resume_button_go.transform.parent.gameObject.SetActive(false);
+	
+		//Time.timeScale = 1.0f;
 	}
 	
 	private void pauseonoff(GameObject go)
@@ -56,12 +60,16 @@ public class PauseMenu : MenuScreen {
 	private void nextCheckPoint(GameObject go)
 	{
 		Debug.Log("Next CheckPoint");
+		exitScreen = true;
+		screenToGo = MenuGesture.ScreenMenu.NONE;
+		GlobalVarScript.instance.player.SendMessage("ToNextCheckPoint", SendMessageOptions.DontRequireReceiver);
 	}
 	
 	private void restartLevel(GameObject go)
 	{
 		Debug.Log("Restart Level");
 		exitScreen = true;
+		loadLevel = true;
 		screenToGo = MenuGesture.ScreenMenu.NONE;
 	}
 	

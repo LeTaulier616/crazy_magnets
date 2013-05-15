@@ -23,6 +23,7 @@ public class EndMenu : MenuScreen
 		next_button_go.transform.parent.gameObject.SetActive(true);
 		
 		exitScreen = false;
+		loadLevel = false;
 	}
 	
 	public override void desactivateMenu()
@@ -48,6 +49,7 @@ public class EndMenu : MenuScreen
 	{
 		Debug.Log("Restart");
 		exitScreen = true;
+		loadLevel = true;
 		screenToGo = MenuGesture.ScreenMenu.NONE;
 	}
 	

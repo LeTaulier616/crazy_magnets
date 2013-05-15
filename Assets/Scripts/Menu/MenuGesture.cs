@@ -14,7 +14,9 @@ public class MenuGesture : MonoBehaviour {
 		ENDLEVEL
 	};
 	
-	private static ScreenMenu menuScreen = ScreenMenu.MAIN;
+	private static ScreenMenu menuScreen;
+
+	
 	private ScreenMenu nextScreen = ScreenMenu.NONE;
 	private ScreenMenu lastScreen = ScreenMenu.NONE;
 	
@@ -29,39 +31,59 @@ public class MenuGesture : MonoBehaviour {
 	
 	void Start()
 	{
+		if(Application.loadedLevel == 0)
+			menuScreen = ScreenMenu.MAIN;
+	
+		else 
+			menuScreen = ScreenMenu.NONE;
+		
 		if(menuScreen == ScreenMenu.MAIN)
 		{
-			screen = GameObject.Find("Menus").GetComponent<MainMenu>();
+			screen = this.GetComponent<MainMenu>();
 			menuScreen = ScreenMenu.MAIN;
 		}
+		
 		else
 		{
-			screen = GameObject.Find("Menus").GetComponent<Interface>();
+			screen = this.GetComponent<Interface>();
 			menuScreen = ScreenMenu.NONE;
 		}
+		
 		screen.activateMenu();
 		setVisible = true;
 		timer = 0.0f;
 	}
 	
-	void FixedUpdate()
+	void Update()
 	{
+		
 		timer += Time.deltaTime/(lerpMaxValue*lerpSpeed);
+		
 		float lerpValue = Mathf.Lerp(0,lerpMaxValue,timer);
+		
+		if(menuScreen == ScreenMenu.PAUSE && nextScreen == ScreenMenu.NONE || menuScreen == ScreenMenu.NONE && nextScreen == ScreenMenu.PAUSE)
+		{
+			lerpValue = 1.0f;
+		}	
+			
 		foreach(UIWidget widget in GameObject.Find("Anchor").GetComponentsInChildren<UIWidget>())
         {
 			if(widget.name != "Menu_Background" || lastScreen == ScreenMenu.NONE || nextScreen == ScreenMenu.NONE)
 			{
-				if(setVisible)
+				if(menuScreen == ScreenMenu.PAUSE && nextScreen == ScreenMenu.NONE)
 				{
-					widget.alpha   = lerpValue;
-					widget.color   = new Color(lerpValue,lerpValue,lerpValue,lerpValue);
+					if(setVisible)
+					{
+						widget.alpha   = lerpValue;
+						widget.color   = new Color(lerpValue,lerpValue,lerpValue,lerpValue);
+					}
+					else if(setHidden)
+					{
+						widget.alpha   = 1.0f - lerpValue;
+						widget.color   = new Color(1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue);
+					}
 				}
-				else if(setHidden)
-				{
-					widget.alpha   = 1.0f - lerpValue;
-					widget.color   = new Color(1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue);
-				}
+
 				else
 				{
 					widget.alpha = 1.0f;
@@ -84,6 +106,12 @@ public class MenuGesture : MonoBehaviour {
 				timer      = 0.0f;
 				lerpValue  = 0.0f;
 			}
+			
+			if(menuScreen == ScreenMenu.PAUSE && nextScreen == ScreenMenu.NONE || menuScreen == ScreenMenu.NONE && nextScreen == ScreenMenu.PAUSE)
+			{
+				lerpValue = 1.0f;
+			}
+			
 			if(lerpValue >= 1.0f && setHidden)
 			{
 				switchScreen();
@@ -96,6 +124,12 @@ public class MenuGesture : MonoBehaviour {
 		foreach(UIButton button in GameObject.Find("Anchor").GetComponentsInChildren<UIButton>())
         {
 			button.isEnabled = !(setVisible || setHidden);
+		}
+		
+		if(menuScreen == ScreenMenu.PAUSE && nextScreen == ScreenMenu.NONE || menuScreen == ScreenMenu.NONE && nextScreen == ScreenMenu.PAUSE)
+		{
+			setVisible = false;
+			setHidden = false;
 		}
 		
 		if(lerpValue >= 1.0f)
@@ -126,7 +160,8 @@ public class MenuGesture : MonoBehaviour {
 		
 		if(loadMenus)
 			Application.LoadLevel("MENU");
-		else if(loadLevel)
+		
+		else if(loadLevel ||screen.loadLevel)
 			Application.LoadLevel(Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld + Datas.sharedDatas().datas.selectedLevel + 1);
 		
 		if(switchHUD || loadMenus || loadLevel)
