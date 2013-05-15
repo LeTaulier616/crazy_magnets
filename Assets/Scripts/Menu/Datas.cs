@@ -58,11 +58,11 @@ public class Datas
 		
 		public bool    isNewGame;
 		
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)] // Max length of array
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)] // Max length of array
 		public float[] timeLevels;
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)] // Max length of array
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)] // Max length of array
 		public int[]   screwsGotchaByLevel;
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)] // Max length of array
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)] // Max length of array
 		public bool[]  screwsGotcha;
 	};
 	

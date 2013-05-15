@@ -7,6 +7,7 @@ public class EndMenu : MenuScreen
 	public GameObject restart_button_go;
 	public GameObject levels_button_go;
 	public GameObject quit_button_go;
+	public GameObject endgame_button_go;
 	public GameObject time_level;
 	public GameObject screw_gotcha;
 	
@@ -16,6 +17,7 @@ public class EndMenu : MenuScreen
   	 	UIEventListener.Get(restart_button_go).onClick = restartlevel;
   	 	UIEventListener.Get(levels_button_go).onClick  = levels;
    		UIEventListener.Get(quit_button_go).onClick    = quitgame;
+		UIEventListener.Get(endgame_button_go).onClick = endGame;
 	}
 	
 	public override void activateMenu()
@@ -39,7 +41,7 @@ public class EndMenu : MenuScreen
 		int nextLevelLevel = (Datas.sharedDatas().datas.currentLevel+1)%MyDefines.kLevelsByWorld;
 		int nextLevelWorld = Datas.sharedDatas().datas.currentWorld + (nextLevelLevel == 0 ? 1 : 0);
 		
-		if((nextLevelWorld >= MyDefines.kNbWorlds && nextLevelLevel >= MyDefines.kNbLevels) || MyDefines.kNbLevelsAvailable <= levelnumber+1)
+		if((nextLevelWorld >= MyDefines.kNbWorlds && nextLevelLevel >= MyDefines.kNbLevels) || MyDefines.kNbLevelsAvailable <= levelnumber)
 		{
 			nextLevelWorld = 0;
 			nextLevelLevel = 0;
@@ -49,10 +51,8 @@ public class EndMenu : MenuScreen
 			Datas.sharedDatas().datas.selectedLevel = 0;
 			Datas.sharedDatas().datas.isNewGame     = true;
 			
-			exitScreen     = true;
-			screenToGo     = MenuGesture.ScreenMenu.MAIN;
-			loadLevel      = false;
-			Debug.Log("Quit");
+			endgame_button_go.SetActive(true);
+			next_button_go.SetActive(false);
 		}
 		else
 		{
@@ -66,9 +66,12 @@ public class EndMenu : MenuScreen
 			Datas.sharedDatas().datas.currentLevel  = nextLevelLevel;
 			Datas.sharedDatas().datas.currentWorld  = nextLevelWorld;
 			
-			exitScreen = false;
-			loadLevel  = false;
+			endgame_button_go.SetActive(false);
+			next_button_go.SetActive(true);
 		}
+			
+		exitScreen = false;
+		loadLevel  = false;
 	}
 	
 	public override void desactivateMenu()
@@ -84,6 +87,14 @@ public class EndMenu : MenuScreen
 		Datas.sharedDatas().datas.selectedLevel = Datas.sharedDatas().datas.currentLevel;
 		Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
 		loadLevel = true;
+	}
+	
+	void endGame(GameObject go)
+	{	
+		exitScreen     = true;
+		screenToGo     = MenuGesture.ScreenMenu.MAIN;
+		loadLevel      = false;
+		Debug.Log("Quit");
 	}
 	
 	void restartlevel(GameObject go)

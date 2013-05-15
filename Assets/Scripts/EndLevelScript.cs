@@ -13,7 +13,8 @@ public class EndLevelScript : MonoBehaviour
 	{
 		if (other.transform.tag == "Player")
 		{
-			Camera.mainCamera.BroadcastMessage("EndLevel");
+			GameObject.Find("Menus").GetComponent<Interface>().exitScreen = true;
+			GameObject.Find("Menus").GetComponent<Interface>().screenToGo = MenuGesture.ScreenMenu.ENDLEVEL;
 		}
 	}
 }
