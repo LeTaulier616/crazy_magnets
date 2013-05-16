@@ -73,6 +73,7 @@ public class RoadEditor : Editor
 			this.target_.fixedSize = (bool)EditorGUILayout.Toggle("Fixed Path Size : ", this.target_.fixedSize);
 			GUI.enabled = this.target_.fixedSize;
 			this.target_.pathSize = (float)EditorGUILayout.FloatField("Path Size : ", this.target_.pathSize);
+			this.target_.resetAtEnd = (bool)EditorGUILayout.FloatField("Reset At End : ", this.target_.resetAtEnd);
 			GUI.enabled = oldEnable;
 		EditorGUILayout.EndVertical();
 		EditorGUILayout.Space();
