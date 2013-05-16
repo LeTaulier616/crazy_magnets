@@ -62,8 +62,6 @@ public class FollowRoad : MonoBehaviour {
 	
 	void FixedUpdate () 
 	{
-		if(roadRecto.resetAtEnd && roadRecto.endOfRoad == true)
-			activated = false;
 		if(pause || !activated)
 			return;
 		
@@ -96,6 +94,19 @@ public class FollowRoad : MonoBehaviour {
 				roadRecto.reInit();
 				back = false;
 			}
+		}
+		
+		if(roadRecto.resetAtEnd && roadRecto.endOfRoad)
+		{
+			stopRoad();
+			playerScript.onGround = false;
+			playerScript.onPFM    = false;
+			playerScript.bodyPFM  = null;
+			jointConnected        = false;
+			cube                  = null;
+			cubeBody              = null;
+			cubejointConnected    = false;
+			playerScript.Bump(1);
 		}
 		
 		if(jointConnected)

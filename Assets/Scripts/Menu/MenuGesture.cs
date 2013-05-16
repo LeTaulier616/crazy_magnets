@@ -89,7 +89,7 @@ public class MenuGesture : MonoBehaviour {
 				widget.GetComponent<TweenColor>().enabled = false;
         }
 		
-		if(screen.exitScreen) 
+		if(screen != null && screen.exitScreen) 
 		{
 			if(!setHidden)
 			{
