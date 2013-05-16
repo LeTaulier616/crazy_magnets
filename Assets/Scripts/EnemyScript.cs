@@ -31,7 +31,7 @@ public class PatrolState : State
 	{
 		Ray sight = new Ray(it.transform.position, it.transform.right);
 		RaycastHit hit = new RaycastHit();
-		if (Physics.Raycast(sight, out hit, this.playerDist, LayerMask.NameToLayer("World")) && hit.transform.tag == "PlayerObject")
+		if (Physics.Raycast(sight, out hit, this.playerDist) && hit.transform.tag == "Player")
 		{
 			PursuitState pursuit = it.GetComponent<EnemyScript>().pursuit;
 			this.machine.SwitchState(pursuit);
@@ -413,7 +413,7 @@ public class EnemyScript : StateMachine
 		if (Mathf.Sign(this.ray.direction.x) != Mathf.Sign(this.transform.right.x))
 			this.ray.direction = new Vector3(-this.ray.direction.x, this.ray.direction.y, this.ray.direction.z);
 		RaycastHit hit = new RaycastHit();
-		bool ret = (Physics.Raycast(this.ray, out hit, 20.0f, LayerMask.NameToLayer("World")) && floatCompare(hit.distance, this.floorDist));
+		bool ret = (Physics.Raycast(this.ray, out hit, 20.0f) && hit.collider.tag == "Ground" && floatCompare(hit.distance, this.floorDist));
 
 		Debug.DrawRay(this.ray.origin, this.ray.direction);
 		if (!ret)
