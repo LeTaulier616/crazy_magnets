@@ -6,6 +6,7 @@ using FarseerPhysics.Dynamics.Contacts;
 
 public class PatrolState : State
 {
+	public EnemyScript enemy;
 	public float speed;
 	public float playerDist;
 
@@ -54,6 +55,7 @@ public class PatrolState : State
 
 public class PursuitState : State
 {
+	public EnemyScript enemy;
 	public float speed;
 	public float playerDist;
 	public bool	 stopped;
@@ -80,6 +82,12 @@ public class PursuitState : State
 			it.transform.Rotate(it.transform.up, 180);
 		}
 
+		if (Vector3.Distance(GlobalVarScript.instance.player.transform.position, it.transform.position) < 3f)
+		{
+			AttackState attack = it.GetComponent<EnemyScript>().attack;
+			this.machine.SwitchState(attack);
+		}
+
 		if (it.GetComponent<EnemyScript>().CanMove())
 		{
 			if (this.stopped == true)
@@ -104,6 +112,31 @@ public class PursuitState : State
 			Body body = it.GetComponent<FSBodyComponent>().PhysicsBody;
 			body.LinearVelocity = new FVector2(0f, 0f);
 		}
+	}
+}
+
+public class AttackState : State
+{
+	public EnemyScript enemy;
+	public GameObject player;
+
+	public override void EnterState (GameObject it)
+	{
+		this.enemy = it.gameObject.GetComponent<EnemyScript>();
+		this.player = GlobalVarScript.instance.player;
+		GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
+//		if(playerMesh != null)
+//			playerMesh.animation.CrossFade("attack", 0.5f);
+	}
+
+	public override void UpdateState (GameObject it)
+	{
+		//wait animation
+		if (Vector3.Distance(it.transform.position, this.player.transform.position) < 4f)
+		{
+			this.player.SendMessageUpwards("Kill", SendMessageOptions.DontRequireReceiver);
+		}
+		this.machine.SwitchState(this.enemy.patrol);
 	}
 }
 
@@ -267,6 +300,7 @@ public class EnemyScript : StateMachine
 	
 	public PatrolState		patrol;
 	public PursuitState		pursuit;
+	public AttackState		attack;
 	public ControlledState	controlled;
 	public State			idle;
 
@@ -384,7 +418,9 @@ public class EnemyScript : StateMachine
 		this.pursuit = new PursuitState();
 		this.pursuit.speed = this.pursuitSpeed;
 		this.pursuit.playerDist = this.alertRange;
-
+		
+		this.attack = new AttackState();
+		
 		this.controlled = new ControlledState();
 		this.controlled.speed = this.patrolingSpeed;
 		this.controlled.target = this.target;
