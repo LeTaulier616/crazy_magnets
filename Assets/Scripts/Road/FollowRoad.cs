@@ -158,6 +158,10 @@ public class FollowRoad : MonoBehaviour {
 	{
 		pause     = false;
 		activated = true;
+		if(back)
+			roadVerso.playRoad();
+		else
+			roadRecto.playRoad();
 	}
 	
 	public void stopRoad()
@@ -191,6 +195,7 @@ public class FollowRoad : MonoBehaviour {
 					if(roadRecto.activation == Activation.PLAYER)
 					{
 						playRoad();
+						Debug.Log("Play Road");
 					}
 				}
 			}

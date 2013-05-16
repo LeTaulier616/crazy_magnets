@@ -63,7 +63,8 @@ public enum KeyType {
 	NOTYPE,
 	WAITTIME,
 	WAITMANUAL,
-	DOSOMETHING
+	DOSOMETHING,
+	WAITPLAYER,
 };
 
 // KeyPoints of the Road

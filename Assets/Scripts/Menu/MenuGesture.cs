@@ -14,8 +14,7 @@ public class MenuGesture : MonoBehaviour {
 		ENDLEVEL
 	};
 	
-	private static ScreenMenu menuScreen;
-
+	public static ScreenMenu menuScreen;
 	
 	private ScreenMenu nextScreen = ScreenMenu.NONE;
 	private ScreenMenu lastScreen = ScreenMenu.NONE;
