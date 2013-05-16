@@ -31,7 +31,8 @@ public class MenuGesture : MonoBehaviour {
 	
 	void Start()
 	{
-		if(Application.loadedLevel == 0)
+		Debug.Log(Application.loadedLevelName);
+		if(Application.loadedLevelName == "MENU")
 			menuScreen = ScreenMenu.MAIN;
 		else 
 			menuScreen = ScreenMenu.NONE;
@@ -89,7 +90,7 @@ public class MenuGesture : MonoBehaviour {
 				widget.GetComponent<TweenColor>().enabled = false;
         }
 		
-		if(screen != null && screen.exitScreen) 
+		if(screen.exitScreen) 
 		{
 			if(!setHidden)
 			{
