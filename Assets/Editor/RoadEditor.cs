@@ -58,9 +58,6 @@ public class RoadEditor : Editor
 	
 	void TransformArray()
 	{
-		//bool xchanged = false;
-		//bool ychanged = false;
-		
 		bool oldEnable = GUI.enabled;
 		EditorGUILayout.Space();
 		EditorGUILayout.Space();

@@ -62,8 +62,6 @@ public class FollowRoad : MonoBehaviour {
 	
 	void FixedUpdate () 
 	{
-		if(roadRecto.resetAtEnd && roadRecto.endOfRoad == true)
-			activated = false;
 		if(pause || !activated)
 			return;
 		
@@ -96,6 +94,19 @@ public class FollowRoad : MonoBehaviour {
 				roadRecto.reInit();
 				back = false;
 			}
+		}
+		
+		if(roadRecto.resetAtEnd && roadRecto.endOfRoad)
+		{
+			stopRoad();
+			playerScript.onGround = false;
+			playerScript.onPFM    = false;
+			playerScript.bodyPFM  = null;
+			jointConnected        = false;
+			cube                  = null;
+			cubeBody              = null;
+			cubejointConnected    = false;
+			playerScript.Bump(1);
 		}
 		
 		if(jointConnected)
@@ -166,21 +177,9 @@ public class FollowRoad : MonoBehaviour {
 		{
 			FVector2 colNorm = contact.Manifold.LocalNormal;
 			if (Mathf.Abs(colNorm.X) > Mathf.Abs(colNorm.Y))
-			{
-			// X direction is dominant
-				//if (colNorm.X > 0)
-				    //direction = CollisionDirection.Right;
-				//else
-				    //direction = CollisionDirection.Left;
-			}
+			{}
 			else
 			{
-			// Y direction is dominant
-				//if (colNorm.Y > 0)
-				    //direction = CollisionDirection.Bottom;
-				//else
-				    //direction = CollisionDirection.Top;
-				// Check if the Player is on the PF (Collision is from the top of the PF) 
 				if (colNorm.Y > 0 || bodyB.UserFSBodyComponent.transform.position.y > this.transform.position.y)
 				{
 					playerScript.onGround = true;
@@ -201,21 +200,9 @@ public class FollowRoad : MonoBehaviour {
 		{
 			FVector2 colNorm = contact.Manifold.LocalNormal;
 			if (Mathf.Abs(colNorm.X) > Mathf.Abs(colNorm.Y))
-			{
-			// X direction is dominant
-				//if (colNorm.X > 0)
-				    //direction = CollisionDirection.Right;
-				//else
-				    //direction = CollisionDirection.Left;
-			}
+			{}
 			else
 			{
-			// Y direction is dominant
-				//if (colNorm.Y > 0)
-				    //direction = CollisionDirection.Bottom;
-				//else
-				    //direction = CollisionDirection.Top;
-				// Check if the Player is on the PF (Collision is from the top of the PF) 
 				if (colNorm.Y > 0)
 				{
 					cube = bodyB.UserFSBodyComponent.gameObject;

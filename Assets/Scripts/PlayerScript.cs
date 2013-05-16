@@ -410,7 +410,7 @@ public class PlayerScript : MonoBehaviour
 		Line.enabled = false;
 	}
 	
-	void Bump(float bumpForce)
+	public void Bump(float bumpForce)
 	{
 		playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0);
 		playerBody.ApplyLinearImpulse(new FVector2(0, bumpForce));
