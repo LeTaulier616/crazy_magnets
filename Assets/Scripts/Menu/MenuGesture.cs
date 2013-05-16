@@ -14,7 +14,9 @@ public class MenuGesture : MonoBehaviour {
 		ENDLEVEL
 	};
 	
-	private ScreenMenu menuScreen = ScreenMenu.NONE;
+	private static ScreenMenu menuScreen;
+
+	
 	private ScreenMenu nextScreen = ScreenMenu.NONE;
 	private ScreenMenu lastScreen = ScreenMenu.NONE;
 	
@@ -29,21 +31,41 @@ public class MenuGesture : MonoBehaviour {
 	
 	void Start()
 	{
-		screen = GameObject.Find("Menus").GetComponent<MainMenu>();
-		menuScreen = ScreenMenu.MAIN;
+		if(Application.loadedLevel == 0)
+			menuScreen = ScreenMenu.MAIN;
+	
+		else 
+			menuScreen = ScreenMenu.NONE;
+		
+		if(menuScreen == ScreenMenu.MAIN)
+		{
+			screen = this.GetComponent<MainMenu>();
+			menuScreen = ScreenMenu.MAIN;
+		}
+		
+		else
+		{
+			screen = this.GetComponent<Interface>();
+			menuScreen = ScreenMenu.NONE;
+		}
+		
 		screen.activateMenu();
 		setVisible = true;
 		timer = 0.0f;
-		
-		object[] allObjects = FindObjectsOfTypeAll(typeof(GameObject)) ;
-		foreach(object thisObject in allObjects)
-			DontDestroyOnLoad((GameObject) thisObject);
 	}
 	
-	void FixedUpdate()
+	void Update()
 	{
+		
 		timer += Time.deltaTime/(lerpMaxValue*lerpSpeed);
+		
 		float lerpValue = Mathf.Lerp(0,lerpMaxValue,timer);
+		
+		if(screenIsMenuScreen(menuScreen) && screenIsMenuScreen(nextScreen))
+		{
+			lerpValue = 1.0f;
+		}	
+			
 		foreach(UIWidget widget in GameObject.Find("Anchor").GetComponentsInChildren<UIWidget>())
         {
 			if(widget.name != "Menu_Background" || lastScreen == ScreenMenu.NONE || nextScreen == ScreenMenu.NONE)
@@ -58,17 +80,18 @@ public class MenuGesture : MonoBehaviour {
 					widget.alpha   = 1.0f - lerpValue;
 					widget.color   = new Color(1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue);
 				}
-				else
-				{
-					widget.alpha = 1.0f;
-					widget.color   = new Color(1.0f,1.0f,1.0f,1.0f);
-				}
-				if(widget.GetComponent<TweenColor>())
-					widget.GetComponent<TweenColor>().enabled = false;
 			}
+
+			else
+			{
+				widget.alpha = 1.0f;
+				widget.color   = new Color(1.0f,1.0f,1.0f,1.0f);
+			}
+			if(widget.GetComponent<TweenColor>())
+				widget.GetComponent<TweenColor>().enabled = false;
         }
 		
-		if(screen != null && screen.exitScreen) 
+		if(screen.exitScreen) 
 		{
 			if(!setHidden)
 			{
@@ -80,10 +103,18 @@ public class MenuGesture : MonoBehaviour {
 				timer      = 0.0f;
 				lerpValue  = 0.0f;
 			}
+			
+			if(screenIsMenuScreen(menuScreen) && screenIsMenuScreen(nextScreen))
+			{
+				lerpValue = 1.0f;
+			}
+			
 			if(lerpValue >= 1.0f && setHidden)
 			{
 				switchScreen();
 				lerpValue = 0.0f;
+				if(screenIsMenuScreen(lastScreen) != screenIsMenuScreen(menuScreen))
+					return;
 			}
 		}
 		
@@ -102,17 +133,35 @@ public class MenuGesture : MonoBehaviour {
 	private void switchScreen()
 	{
 		Debug.Log("Screen Switch");
+		
+		Datas.sharedDatas().saveDatas();
+		
 		bool loadLevel = false;
+		bool loadMenus = false;
+		bool switchHUD = false;
+		
 		screen.desactivateMenu();
-		if(menuScreen == ScreenMenu.PAUSE && nextScreen == ScreenMenu.PAUSE)
-			nextScreen = ScreenMenu.NONE;
-		else if(nextScreen == ScreenMenu.NONE)
-			loadLevel = true;
+		
+		loadLevel = screen.loadLevel;
+		if(!screenIsMenuScreen(nextScreen) && screenIsMenuScreen(menuScreen))
+			loadMenus = true;
+		if(screenIsMenuScreen(nextScreen) != screenIsMenuScreen(menuScreen))
+			switchHUD = true;
+		
 		menuScreen = nextScreen;
+		
+		if(loadMenus)
+			Application.LoadLevel("MENU");
+		else if(loadLevel)
+			Application.LoadLevel(Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld + Datas.sharedDatas().datas.selectedLevel + 1);
+		
+		if(switchHUD || loadMenus || loadLevel)
+			return;
+		
 		switch(menuScreen)
 		{
 			case ScreenMenu.NONE :
-				screen = null;
+				screen = GameObject.Find("Menus").GetComponent<Interface>();
 			break;
 			case ScreenMenu.MAIN :
 				screen = GameObject.Find("Menus").GetComponent<MainMenu>();
@@ -133,22 +182,23 @@ public class MenuGesture : MonoBehaviour {
 				screen = GameObject.Find("Menus").GetComponent<PauseMenu>();
 			break;
 		}
-		if(screen != null)
-		{
-			screen.activateMenu();
-			foreach(UIWidget widget in GameObject.Find("Anchor").GetComponentsInChildren<UIWidget>())
-	        {
-				if(widget.name != "Menu_Background")
-				{
-					widget.alpha   = 0.0f;
-					widget.color   = new Color(0.0f,0.0f,0.0f,0.0f);
-				}
+		
+		screen.activateMenu();
+		foreach(UIWidget widget in GameObject.Find("Anchor").GetComponentsInChildren<UIWidget>())
+        {
+			if(widget.name != "Menu_Background")
+			{
+				widget.alpha   = 0.0f;
+				widget.color   = new Color(0.0f,0.0f,0.0f,0.0f);
 			}
-			setHidden = false;
-			setVisible = true;
-			timer = 0.0f;
 		}
-		if(loadLevel)
-			Application.LoadLevelAsync(Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld + Datas.sharedDatas().datas.selectedLevel + 1);
+		setHidden = false;
+		setVisible = true;
+		timer = 0.0f;
+	}
+	
+	private bool screenIsMenuScreen(ScreenMenu m_screen)
+	{
+		return (m_screen == ScreenMenu.NONE || m_screen == ScreenMenu.PAUSE || m_screen == ScreenMenu.ENDLEVEL);
 	}
 }

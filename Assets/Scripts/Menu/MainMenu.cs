@@ -24,6 +24,7 @@ public class MainMenu : MenuScreen {
 		continue_button_go.SetActive(!Datas.sharedDatas().datas.isNewGame);
 		
 		exitScreen = false;
+		loadLevel = false;
 	}
 	
 	public override void desactivateMenu()
@@ -39,6 +40,7 @@ public class MainMenu : MenuScreen {
 		Datas.sharedDatas().datas.isNewGame = false;
 		exitScreen = true;
 		screenToGo = MenuGesture.ScreenMenu.NONE;
+		loadLevel = true;
 	}
 
 	void continuegame(GameObject go)
@@ -48,6 +50,7 @@ public class MainMenu : MenuScreen {
 		Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
 		exitScreen = true;
 		screenToGo = MenuGesture.ScreenMenu.NONE;
+		loadLevel = true;
 	}
 
 	void options(GameObject go)
