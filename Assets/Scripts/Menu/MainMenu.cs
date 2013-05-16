@@ -7,6 +7,7 @@ public class MainMenu : MenuScreen {
 	public GameObject continue_button_go;
 	public GameObject options_button_go;
 	public GameObject levels_button_go;
+	public GameObject datas_button_go;
 
 	void Start () 
 	{
@@ -14,6 +15,7 @@ public class MainMenu : MenuScreen {
   	 	UIEventListener.Get(continue_button_go).onClick = continuegame;
    		UIEventListener.Get(options_button_go).onClick  = options;
   	 	UIEventListener.Get(levels_button_go).onClick   = levels;
+  	 	UIEventListener.Get(datas_button_go).onClick    = resetDatas;
 	}
 	
 	public override void activateMenu()
@@ -22,6 +24,8 @@ public class MainMenu : MenuScreen {
 		
 		newgame_button_go.SetActive(Datas.sharedDatas().datas.isNewGame);
 		continue_button_go.SetActive(!Datas.sharedDatas().datas.isNewGame);
+		
+		datas_button_go.SetActive(MyDefines.developmentMode);
 		
 		exitScreen = false;
 		loadLevel = false;
@@ -66,5 +70,10 @@ public class MainMenu : MenuScreen {
 		exitScreen = true;
 		screenToGo = MenuGesture.ScreenMenu.WORLDS;
 	}
-
+	
+	void resetDatas(GameObject go)
+	{
+		Debug.Log("Reset Datas");
+		Datas.sharedDatas().reinitDatas();
+	}
 }
