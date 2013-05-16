@@ -70,6 +70,7 @@ public class RoadEditor : Editor
 			this.target_.endBehaviour = (EndBehaviour)EditorGUILayout.EnumPopup("End Behaviour : ", this.target_.endBehaviour);
 			this.target_.speed = (float)EditorGUILayout.FloatField("Speed : ", this.target_.speed);
 			this.target_.deplacement = (Deplacement)EditorGUILayout.EnumPopup("Deplacement : ", this.target_.deplacement);
+			this.target_.resetAtEnd = (bool)EditorGUILayout.Toggle("Reset At End : ", this.target_.resetAtEnd);
 			this.target_.fixedSize = (bool)EditorGUILayout.Toggle("Fixed Path Size : ", this.target_.fixedSize);
 			GUI.enabled = this.target_.fixedSize;
 			this.target_.pathSize = (float)EditorGUILayout.FloatField("Path Size : ", this.target_.pathSize);

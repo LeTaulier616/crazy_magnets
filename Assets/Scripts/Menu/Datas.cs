@@ -120,30 +120,6 @@ public class Datas
 		File.WriteAllBytes(path, bytes);
 	}
 	
-	// Methode 1
-	public static byte[] getBytes(object o)
-    {
-        int size = Marshal.SizeOf(o);
-        byte[] arr = new byte[size];
-        IntPtr ptr = Marshal.AllocHGlobal(size);
-        Marshal.StructureToPtr(o, ptr, true);
-        Marshal.Copy(ptr, arr, 0, size);
-        Marshal.FreeHGlobal(ptr);
-        return arr;
-    }
-
-	public static object getStruct(byte[] arr, object o)
-	{
-		//object str = new object();
-		int size = Marshal.SizeOf(o);
-		IntPtr ptr = Marshal.AllocHGlobal(size);
-		Marshal.Copy(arr, 0, ptr, size);
-		o = (object)Marshal.PtrToStructure(ptr, o.GetType());
-		Marshal.FreeHGlobal(ptr);
-		return o;
-	}
-	
-	// Methode 2
 	public static byte[] SerializeMessage<T>(T msg) where T : struct
 	{
 		int objsize = Marshal.SizeOf(typeof(T));

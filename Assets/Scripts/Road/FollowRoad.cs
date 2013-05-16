@@ -62,6 +62,8 @@ public class FollowRoad : MonoBehaviour {
 	
 	void FixedUpdate () 
 	{
+		if(roadRecto.resetAtEnd && roadRecto.endOfRoad == true)
+			activated = false;
 		if(pause || !activated)
 			return;
 		
@@ -132,7 +134,7 @@ public class FollowRoad : MonoBehaviour {
 			_keyPoints.Add(_tmpKey);
 		}
 		RoadData _road = new RoadData();
-		_road.initWithDatas(road.endBehaviour, road.deplacement, road.activating, _keyPoints, road.speed);
+		_road.initWithDatas(road.endBehaviour, road.deplacement, road.activating, _keyPoints, road.speed, road.resetAtEnd);
 		return _road;
 	}
 	
