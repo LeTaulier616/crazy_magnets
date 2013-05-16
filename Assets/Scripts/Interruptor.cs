@@ -349,9 +349,34 @@ public class Interruptor : MonoBehaviour
 		}
 	}
 	
+	
 	public void MouseLeft()
 	{
-		TouchTap();
+		if(Application.isEditor)
+		{
+				//TouchTap();
+			if(this.activator != Activator.TOUCH && this.activator != Activator.ELECTRIC_TOUCH)
+				return;
+			
+			if(!(this.activator == Activator.ELECTRIC_TOUCH && !isElectrified)
+				&& Vector3.Distance(GameObject.FindGameObjectWithTag("PlayerObject").transform.position, gameObject.transform.position) < (isElectrified ? tmpPorteeElec : tmpPorteeNorm) )
+			{
+				if(this.activator == Activator.ELECTRIC_TOUCH)
+				{
+					GlobalVarScript.instance.player.SendMessageUpwards("SetSparkPoint", this.transform.position, SendMessageOptions.DontRequireReceiver);
+					GlobalVarScript.instance.player.SendMessageUpwards("Discharge", SendMessageOptions.DontRequireReceiver);
+				}
+				
+				if(activated && type == Type.ONOFF)
+				{
+					setOff();
+				}
+				else if(!activated)
+				{
+					setOn();
+				}
+			}
+		}
 	}
 	
 	private void setOn()

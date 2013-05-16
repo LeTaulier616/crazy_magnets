@@ -143,7 +143,7 @@ public class PlayerScript : MonoBehaviour
 		this.checkpointIndex = 0;
 		
 		this.BroadcastMessage("ConstantParams", Color.cyan, SendMessageOptions.DontRequireReceiver);
-		this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
+		//this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
 		
 	}
 	
