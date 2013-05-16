@@ -332,6 +332,8 @@ public class RoadData
 				currentTime = 0.0f;
 				currentTraveled = 0.0f;
 				currentWait = 0.0f;
+				if(resetAtEnd)
+					endOfRoad = true;
 				return;
 			}
 			else if(this.endBehaviour == EndBehaviour.LOOP)
