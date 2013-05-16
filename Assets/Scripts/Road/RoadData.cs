@@ -5,13 +5,15 @@ using System.Reflection;
 
 public class RoadData 
 {
-	EndBehaviour      endBehaviour;
-	Deplacement       deplacement;
-	public Activation activation;
-	List<KeyPoint>    keyPoints;
+	public EndBehaviour endBehaviour;
+	Deplacement        deplacement;
+	public Activation  activation;
+	List<KeyPoint>     keyPoints;
 
 	public Vector3 currentPosition;
 	public bool    endOfRoad = false;
+	
+	public bool    resetAtEnd = false;
 	
 	Vector3 circleCenter;
 	Vector3 startPosition;
@@ -43,7 +45,7 @@ public class RoadData
 		stop = false;
 	}
 	
-	public void initWithDatas(EndBehaviour _endBehaviour, Deplacement _deplacement, Activation _activation, List<KeyPoint> _keyPoints, float _speedTmp)
+	public void initWithDatas(EndBehaviour _endBehaviour, Deplacement _deplacement, Activation _activation, List<KeyPoint> _keyPoints, float _speedTmp, bool _resetAtEnd)
 	{
 		endBehaviour = _endBehaviour;
 		deplacement  = _deplacement;
@@ -53,6 +55,8 @@ public class RoadData
 		speedTmp     = _speedTmp;
 		totalTime    = _speedTmp;
 		pathLength   = getPathLength();
+		
+		resetAtEnd   = _resetAtEnd;
 		
 		reInit();
 	}
@@ -70,7 +74,7 @@ public class RoadData
 			_keyPoints.Add(_tmpKey);
 		}
 		RoadData _roadReverse = new RoadData();
-		_roadReverse.initWithDatas(endBehaviour, deplacement, activation, _keyPoints, speedTmp);
+		_roadReverse.initWithDatas(endBehaviour, deplacement, activation, _keyPoints, speedTmp, resetAtEnd);
 		return _roadReverse;
 	}
 	
@@ -328,19 +332,6 @@ public class RoadData
 				currentTime = 0.0f;
 				currentTraveled = 0.0f;
 				currentWait = 0.0f;
-				
-				/*reInit();
-				
-				currentPosition = keyPoints[0].position;
-				endOfRoad    = false;
-				vx = vy = va = 0.0f;
-				currentPath  = -1;
-				currentTime  = 0.0f;
-				currentTraveled = 0.0f;
-				lastTraveled = 0.0f;
-				pause = false;
-				stop = false;*/
-		
 				return;
 			}
 			else if(this.endBehaviour == EndBehaviour.LOOP)
@@ -350,6 +341,7 @@ public class RoadData
 			}
 			else
 			{
+				this.stop = true;
 				return;
 			}
 		}
