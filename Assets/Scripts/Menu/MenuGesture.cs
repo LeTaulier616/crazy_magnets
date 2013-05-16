@@ -31,9 +31,9 @@ public class MenuGesture : MonoBehaviour {
 	
 	void Start()
 	{
-		if(Application.loadedLevel == 0)
+		Debug.Log(Application.loadedLevelName);
+		if(Application.loadedLevelName == "MENU")
 			menuScreen = ScreenMenu.MAIN;
-	
 		else 
 			menuScreen = ScreenMenu.NONE;
 		
@@ -54,9 +54,8 @@ public class MenuGesture : MonoBehaviour {
 		timer = 0.0f;
 	}
 	
-	void Update()
+	void LateUpdate()
 	{
-		
 		timer += Time.deltaTime/(lerpMaxValue*lerpSpeed);
 		
 		float lerpValue = Mathf.Lerp(0,lerpMaxValue,timer);
@@ -64,7 +63,7 @@ public class MenuGesture : MonoBehaviour {
 		if(screenIsMenuScreen(menuScreen) && screenIsMenuScreen(nextScreen))
 		{
 			lerpValue = 1.0f;
-		}	
+		}
 			
 		foreach(UIWidget widget in GameObject.Find("Anchor").GetComponentsInChildren<UIWidget>())
         {
@@ -184,14 +183,6 @@ public class MenuGesture : MonoBehaviour {
 		}
 		
 		screen.activateMenu();
-		foreach(UIWidget widget in GameObject.Find("Anchor").GetComponentsInChildren<UIWidget>())
-        {
-			if(widget.name != "Menu_Background")
-			{
-				widget.alpha   = 0.0f;
-				widget.color   = new Color(0.0f,0.0f,0.0f,0.0f);
-			}
-		}
 		setHidden = false;
 		setVisible = true;
 		timer = 0.0f;
