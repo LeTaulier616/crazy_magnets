@@ -22,7 +22,7 @@ public class PlayerScript : MonoBehaviour
 	
 	public Body      playerBody;
 	
-	private bool isAlive;
+	public bool isAlive;
 	private bool canResurrect;
 	private bool      isWalking;
 	private bool      isCharged;
@@ -135,6 +135,7 @@ public class PlayerScript : MonoBehaviour
 				this.playerBody.Position = new FVector2(lastCheckpoint.x, lastCheckpoint.y);
 				this.transform.position = lastCheckpoint;
 				this.playerBody.BodyType = BodyType.Dynamic;
+				this.playerBody.Enabled = true;
 				this.playerBody.ResetDynamics();
 				this.playerBody.Mass = 1f;
 				GlobalVarScript.instance.resetCamera();
@@ -429,6 +430,7 @@ public class PlayerScript : MonoBehaviour
 	{
 		this.isAlive = false;
 		this.playerBody.BodyType = BodyType.Static;
+		this.playerBody.Enabled = false;
 		Invoke("AbleResurrection", 2f);
 		// TODO
 		if(playerMesh != null)

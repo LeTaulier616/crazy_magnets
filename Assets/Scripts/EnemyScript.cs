@@ -32,7 +32,7 @@ public class PatrolState : State
 	{
 		Ray sight = new Ray(it.transform.position, it.transform.right);
 		RaycastHit hit = new RaycastHit();
-		if (Physics.Raycast(sight, out hit, this.playerDist) && hit.transform.tag == "Player")
+		if (Physics.Raycast(sight, out hit, this.playerDist) && hit.transform.tag == "Player" && GlobalVarScript.instance.player.GetComponent<PlayerScript>().isAlive)
 		{
 			PursuitState pursuit = it.GetComponent<EnemyScript>().pursuit;
 			this.machine.SwitchState(pursuit);
@@ -82,7 +82,7 @@ public class PursuitState : State
 			it.transform.Rotate(it.transform.up, 180);
 		}
 
-		if (Vector3.Distance(GlobalVarScript.instance.player.transform.position, it.transform.position) < 3f)
+		if (Vector3.Distance(GlobalVarScript.instance.player.transform.position, it.transform.position) < 2f)
 		{
 			AttackState attack = it.GetComponent<EnemyScript>().attack;
 			this.machine.SwitchState(attack);
@@ -132,7 +132,7 @@ public class AttackState : State
 	public override void UpdateState (GameObject it)
 	{
 		//wait animation
-		if (Vector3.Distance(it.transform.position, this.player.transform.position) < 4f)
+		if (Vector3.Distance(it.transform.position, this.player.transform.position) < 3f)
 		{
 			this.player.SendMessageUpwards("Kill", SendMessageOptions.DontRequireReceiver);
 		}
@@ -449,7 +449,7 @@ public class EnemyScript : StateMachine
 		if (Mathf.Sign(this.ray.direction.x) != Mathf.Sign(this.transform.right.x))
 			this.ray.direction = new Vector3(-this.ray.direction.x, this.ray.direction.y, this.ray.direction.z);
 		RaycastHit hit = new RaycastHit();
-		bool ret = (Physics.Raycast(this.ray, out hit, 20.0f) && hit.collider.tag == "Ground" && floatCompare(hit.distance, this.floorDist));
+		bool ret = (Physics.Raycast(this.ray, out hit, 20.0f, LayerMask.NameToLayer("World")) && floatCompare(hit.distance, this.floorDist));
 
 		Debug.DrawRay(this.ray.origin, this.ray.direction);
 		if (!ret)
