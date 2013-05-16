@@ -155,6 +155,7 @@ public class ControlledState : State
 		button.activator = Interruptor.Activator.TOUCH;
 		KillzoneScript killer = it.gameObject.GetComponent<KillzoneScript>();
 		killer.Disable();
+		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.BodyType = BodyType.Static;
 		
 		this.enemy = it.gameObject.GetComponent<EnemyScript>();
 		keyinputed = false;
@@ -260,6 +261,7 @@ public class ControlledState : State
 
 	public override void ExitState (GameObject it)
 	{
+		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.BodyType = BodyType.Dynamic;
 		GlobalVarScript.instance.resetCamera();
 	}
 }
