@@ -29,7 +29,7 @@ public class LevelsMenu : MenuScreen {
 			
 			if(levelIsUnlocked)
 			{
-				levels_buttons_go[iii].transform.FindChild("Label").GetComponent<UILabel>().text  = "Level" + (iii+1);
+				levels_buttons_go[iii].transform.FindChild("Label").GetComponent<UILabel>().text  = "Level " + (iii+1);
 				int levelNumber = iii + Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld;
 				string timeString = BoltTimeDisplay.FormatTime(Datas.sharedDatas().datas.timeLevels[levelNumber]);
 				levels_buttons_go[iii].transform.FindChild("Time").GetComponent<UILabel>().text  = timeString;
@@ -37,7 +37,7 @@ public class LevelsMenu : MenuScreen {
 			}
 			else
 			{
-				levels_buttons_off[iii].transform.FindChild("Label").GetComponent<UILabel>().text  = "Level" + (iii+1);
+				levels_buttons_off[iii].transform.FindChild("Label").GetComponent<UILabel>().text  = "Level " + (iii+1);
 			}
 		}
 		
