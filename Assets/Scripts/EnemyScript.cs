@@ -391,7 +391,13 @@ public class EnemyScript : StateMachine
 
 		this.idle = new State();
 
-		Vector3 direction = this.transform.right * this.collider.bounds.size.x - this.transform.up * this.collider.bounds.size.y;
+		FSCapsuleShape capsule = this.GetComponent<FSCapsuleShape>();
+		Vector3 size;
+		if (capsule.direction == FSCapsuleShape.Diretion.Y)
+			size = new Vector3(2f * capsule.radius, capsule.length, 0f);
+		else
+			size = new Vector3(capsule.length, 2f * capsule.radius, 0f);
+		Vector3 direction = this.transform.right * size.x - this.transform.up * size.y;
 		direction.Normalize();
 		this.ray = new Ray(this.transform.position + new Vector3(0f, 0.1f, .0f), direction);
 		RaycastHit hit = new RaycastHit();
