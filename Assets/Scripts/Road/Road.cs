@@ -14,10 +14,11 @@ public class Road : MonoBehaviour
 	public Transform[]      p;
 	
 	// Road Datas
-	public bool  fixedSize = false;
-	public float pathSize  = 10.0f;
-    public bool  loop      = false; // Si la plateforme boucle à l'infini ou pas
-	public float speed     = 1.0f; // Vitesse de déplacemnt de a plateforme
+	public bool  fixedSize  = false;
+	public float pathSize   = 10.0f;
+    public bool  loop       = false; // Si la plateforme boucle à l'infini ou pas
+	public float speed      = 1.0f; // Vitesse de déplacemnt de a plateforme
+	public bool  resetAtEnd = false;
 	
 	// Type d'activation
     public bool playerActivation,
