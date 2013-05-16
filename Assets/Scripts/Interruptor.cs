@@ -80,11 +80,11 @@ public class Interruptor : MonoBehaviour
 		buttonSound = GlobalVarScript.instance.ButtonSound;
 		electricButtonSound = GlobalVarScript.instance.ElectricButtonSound;
 		
-		clockSound1 = GlobalVarScript.instance.ClockSounds[0];
-		clockSound2 = GlobalVarScript.instance.ClockSounds[1];
-		clockSound3 = GlobalVarScript.instance.ClockSounds[2];
-		clockSound4 = GlobalVarScript.instance.ClockSounds[3];
-		
+			clockSound1 = GlobalVarScript.instance.ClockSounds[0];
+			clockSound2 = GlobalVarScript.instance.ClockSounds[1];
+			clockSound3 = GlobalVarScript.instance.ClockSounds[2];
+			clockSound4 = GlobalVarScript.instance.ClockSounds[3];
+
 		SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
 		SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
 		
@@ -109,28 +109,31 @@ public class Interruptor : MonoBehaviour
 		
 		if(activated && type == Type.TIMER)
 		{
-			if(unpushTime / timeToRevoke >= 0.75f)
+			if (audio2 != null)
 			{
-				audio2.clip = clockSound4;
+				if(unpushTime / timeToRevoke >= 0.75f)
+				{
+					audio2.clip = clockSound4;
+				}
+				
+				else if(unpushTime / timeToRevoke >= 0.5f)
+				{
+					audio2.clip = clockSound3;
+				}
+				
+				else if(unpushTime / timeToRevoke >= 0.25f)
+				{
+					audio2.clip = clockSound2;
+				}
+				
+				else if(unpushTime / timeToRevoke >= 0.0f)
+				{
+					audio2.clip = clockSound1;
+				}
+				
+				if(!audio2.isPlaying)
+					audio2.Play();
 			}
-			
-			else if(unpushTime / timeToRevoke >= 0.5f)
-			{
-				audio2.clip = clockSound3;
-			}
-			
-			else if(unpushTime / timeToRevoke >= 0.25f)
-			{
-				audio2.clip = clockSound2;
-			}
-			
-			else if(unpushTime / timeToRevoke >= 0.0f)
-			{
-				audio2.clip = clockSound1;
-			}
-			
-			if(!audio2.isPlaying)
-				audio2.Play();			
 		}
 		
 		else

@@ -466,8 +466,8 @@ public class EnemyScript : StateMachine
 			if (this.onGround)
 			{
 				walkVelocity = new FVector2(playerBody.LinearVelocity.X * DecelerationCurve.Evaluate((Time.time - AccelerationTime) * decelerationFactor * frictionFactor), 0);
-				if(playerMesh != null)
-					playerMesh.animation.CrossFade("idle", 0.5f);
+			//	if(playerMesh != null)
+			//		playerMesh.animation.CrossFade("idle", 0.5f);
 			}
 			
 			else
