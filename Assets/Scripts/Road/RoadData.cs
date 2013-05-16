@@ -503,6 +503,11 @@ public class RoadData
 				this.pauseRoad();
 			break;
 			
+			case KeyType.WAITPLAYER :
+				this.pauseRoad();
+				Debug.Log("Pause Road");
+			break;
+			
 			case KeyType.DOSOMETHING :
 				typeof(Road)
             		.GetMethod(this.keyPoints[this.currentPath].functionName, BindingFlags.Instance |BindingFlags.NonPublic | BindingFlags.Public)
@@ -517,8 +522,11 @@ public class RoadData
 	
 	public void updateWaitPause()
 	{
-		this.currentWait += Time.deltaTime;
-		if(this.currentWait >= this.keyPoints[this.currentPath].wait)
-			this.playRoad();
+		if(this.keyPoints[this.currentPath].keyType == KeyType.WAITTIME)
+		{
+			this.currentWait += Time.deltaTime;
+			if(this.currentWait >= this.keyPoints[this.currentPath].wait)
+				this.playRoad();
+		}
 	}
 }

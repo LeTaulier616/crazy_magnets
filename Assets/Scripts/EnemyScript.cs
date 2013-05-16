@@ -6,6 +6,7 @@ using FarseerPhysics.Dynamics.Contacts;
 
 public class PatrolState : State
 {
+	public EnemyScript enemy;
 	public float speed;
 	public float playerDist;
 
@@ -31,7 +32,7 @@ public class PatrolState : State
 	{
 		Ray sight = new Ray(it.transform.position, it.transform.right);
 		RaycastHit hit = new RaycastHit();
-		if (Physics.Raycast(sight, out hit, this.playerDist, LayerMask.NameToLayer("World")) && hit.transform.tag == "PlayerObject")
+		if (Physics.Raycast(sight, out hit, this.playerDist) && hit.transform.tag == "Player" && GlobalVarScript.instance.player.GetComponent<PlayerScript>().isAlive)
 		{
 			PursuitState pursuit = it.GetComponent<EnemyScript>().pursuit;
 			this.machine.SwitchState(pursuit);
@@ -54,6 +55,7 @@ public class PatrolState : State
 
 public class PursuitState : State
 {
+	public EnemyScript enemy;
 	public float speed;
 	public float playerDist;
 	public bool	 stopped;
@@ -80,6 +82,12 @@ public class PursuitState : State
 			it.transform.Rotate(it.transform.up, 180);
 		}
 
+		if (Vector3.Distance(GlobalVarScript.instance.player.transform.position, it.transform.position) < 2f)
+		{
+			AttackState attack = it.GetComponent<EnemyScript>().attack;
+			this.machine.SwitchState(attack);
+		}
+
 		if (it.GetComponent<EnemyScript>().CanMove())
 		{
 			if (this.stopped == true)
@@ -97,13 +105,38 @@ public class PursuitState : State
 			if (this.stopped == false)
 			{
 				GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
-				if(playerMesh != null)
-					playerMesh.animation.CrossFade("idle", 0.5f);
+		//		if(playerMesh != null)
+		//			playerMesh.animation.CrossFade("idle", 0.5f);
 				this.stopped = true;
 			}
 			Body body = it.GetComponent<FSBodyComponent>().PhysicsBody;
 			body.LinearVelocity = new FVector2(0f, 0f);
 		}
+	}
+}
+
+public class AttackState : State
+{
+	public EnemyScript enemy;
+	public GameObject player;
+
+	public override void EnterState (GameObject it)
+	{
+		this.enemy = it.gameObject.GetComponent<EnemyScript>();
+		this.player = GlobalVarScript.instance.player;
+		GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
+//		if(playerMesh != null)
+//			playerMesh.animation.CrossFade("attack", 0.5f);
+	}
+
+	public override void UpdateState (GameObject it)
+	{
+		//wait animation
+		if (Vector3.Distance(it.transform.position, this.player.transform.position) < 3f)
+		{
+			this.player.SendMessageUpwards("Kill", SendMessageOptions.DontRequireReceiver);
+		}
+		this.machine.SwitchState(this.enemy.patrol);
 	}
 }
 
@@ -122,6 +155,7 @@ public class ControlledState : State
 		button.activator = Interruptor.Activator.TOUCH;
 		KillzoneScript killer = it.gameObject.GetComponent<KillzoneScript>();
 		killer.Disable();
+		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.BodyType = BodyType.Static;
 		
 		this.enemy = it.gameObject.GetComponent<EnemyScript>();
 		keyinputed = false;
@@ -227,6 +261,7 @@ public class ControlledState : State
 
 	public override void ExitState (GameObject it)
 	{
+		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.BodyType = BodyType.Dynamic;
 		GlobalVarScript.instance.resetCamera();
 	}
 }
@@ -267,6 +302,7 @@ public class EnemyScript : StateMachine
 	
 	public PatrolState		patrol;
 	public PursuitState		pursuit;
+	public AttackState		attack;
 	public ControlledState	controlled;
 	public State			idle;
 
@@ -366,7 +402,7 @@ public class EnemyScript : StateMachine
 
 		//this.playerMesh = GlobalVarScript.instance.playerMesh;
 		//this.playerMesh = null;
-		/*
+/*
 		if(playerMesh != null)
 		{
 			this.playerMesh.animation["patrol"].speed = 1.5f;
@@ -384,14 +420,24 @@ public class EnemyScript : StateMachine
 		this.pursuit = new PursuitState();
 		this.pursuit.speed = this.pursuitSpeed;
 		this.pursuit.playerDist = this.alertRange;
-
+		
+		this.attack = new AttackState();
+		
 		this.controlled = new ControlledState();
 		this.controlled.speed = this.patrolingSpeed;
 		this.controlled.target = this.target;
 
 		this.idle = new State();
-		
-		this.ray = new Ray(this.transform.position + new Vector3(0f, 0.1f, .0f), this.transform.right + Vector3.down);
+
+		FSCapsuleShape capsule = this.GetComponent<FSCapsuleShape>();
+		Vector3 size;
+		if (capsule.direction == FSCapsuleShape.Diretion.Y)
+			size = new Vector3(2f * capsule.radius, capsule.length, 0f);
+		else
+			size = new Vector3(capsule.length, 2f * capsule.radius, 0f);
+		Vector3 direction = this.transform.right * size.x - this.transform.up * size.y;
+		direction.Normalize();
+		this.ray = new Ray(this.transform.position + new Vector3(0f, 0.1f, .0f), direction);
 		RaycastHit hit = new RaycastHit();
 		Physics.Raycast(this.ray, out hit);
 		this.floorDist = hit.distance;
@@ -402,18 +448,24 @@ public class EnemyScript : StateMachine
 	public bool CanMove()
 	{
 		this.ray.origin = new Vector3(this.transform.position.x, this.ray.origin.y, this.ray.origin.z);
-		this.ray.direction = this.transform.right + Vector3.down;
+		if (Mathf.Sign(this.ray.direction.x) != Mathf.Sign(this.transform.right.x))
+			this.ray.direction = new Vector3(-this.ray.direction.x, this.ray.direction.y, this.ray.direction.z);
 		RaycastHit hit = new RaycastHit();
-		bool ret = (Physics.Raycast(this.ray, out hit, 20.0f, LayerMask.NameToLayer("World")) && Mathf.Approximately(hit.distance, this.floorDist));
-		
-		if (type == EnemyType.Small)
-		{
-			Debug.DrawRay(this.ray.origin, this.ray.direction);
-			Debug.Log("origin: " + this.ray.origin.x + " ; " + this.ray.origin.y);
-			Debug.Log("dist is: " + hit.distance + " instead of: " + this.floorDist);
-		}
+		bool ret = (Physics.Raycast(this.ray, out hit, 20.0f, LayerMask.NameToLayer("World")) && floatCompare(hit.distance, this.floorDist));
+
+		Debug.DrawRay(this.ray.origin, this.ray.direction);
+		if (!ret)
+			Debug.Log("distance is: " + hit.distance + " instead of: " + this.floorDist);
 
 		return ret;
+	}
+
+	private bool floatCompare(float a, float b)
+	{
+		a = Mathf.Floor(a * 1000);
+		b = Mathf.Floor(b * 1000);
+		//return (Mathf.Abs(a - b) < Mathf.Epsilon);
+		return Mathf.Approximately(a, b);
 	}
 	
 	public void Control()
@@ -458,8 +510,8 @@ public class EnemyScript : StateMachine
 			if (this.onGround)
 			{
 				walkVelocity = new FVector2(playerBody.LinearVelocity.X * DecelerationCurve.Evaluate((Time.time - AccelerationTime) * decelerationFactor * frictionFactor), 0);
-				if(playerMesh != null)
-					playerMesh.animation.CrossFade("idle", 0.5f);
+			//	if(playerMesh != null)
+			//		playerMesh.animation.CrossFade("idle", 0.5f);
 			}
 			
 			else
