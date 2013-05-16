@@ -60,7 +60,9 @@ public class PlayerScript : MonoBehaviour
 	private GameObject playerMesh;
 	
 	private int checkpointIndex;
-
+	
+	private bool canJump;
+	
 	void Start ()
 	{
 		controllerMain = GetComponent<ControllerMain>() as ControllerMain;
@@ -121,6 +123,11 @@ public class PlayerScript : MonoBehaviour
 		this.BroadcastMessage("ConstantParams", Color.cyan, SendMessageOptions.DontRequireReceiver);
 		//this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
 		
+		if(Application.loadedLevelName != "CM_Level_0")
+			this.canJump = true;
+		
+		else
+			this.canJump = false;
 	}
 	
 	bool keyinputed = false;
@@ -350,12 +357,15 @@ public class PlayerScript : MonoBehaviour
 	
 	private void Jump()
 	{
-		playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0f);
-		playerBody.ApplyLinearImpulse(new FVector2(0, jumpForce * this.localGravity));
-		this.onGround = false;
-		this.onPFM = false;
-		this.bodyPFM = null;
-		GlobalVarScript.instance.blockCamera(Camera.main.transform.position);
+		if(canJump)
+		{
+			playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0f);
+			playerBody.ApplyLinearImpulse(new FVector2(0, jumpForce * this.localGravity));
+			this.onGround = false;
+			this.onPFM = false;
+			this.bodyPFM = null;
+			GlobalVarScript.instance.blockCamera(Camera.main.transform.position);	
+		}
 	}			
 	
 	public void Attract(float force)
