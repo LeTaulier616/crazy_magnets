@@ -24,7 +24,7 @@ public class PlayerScript : MonoBehaviour
 	
 	public bool isAlive;
 	private bool canResurrect;
-	private bool      isWalking;
+	public bool      isWalking;
 	private bool      isCharged;
 	private bool attraction;
 	private float angle;
@@ -365,6 +365,11 @@ public class PlayerScript : MonoBehaviour
 			this.onPFM = false;
 			this.bodyPFM = null;
 			GlobalVarScript.instance.blockCamera(Camera.main.transform.position);	
+			
+			if(Application.loadedLevelName == "CM_Level_0")
+			{
+				GameObject.Find("TUTORIAL").GetComponent<Tutorial>().jumpCount++;
+			}
 		}
 	}			
 	
