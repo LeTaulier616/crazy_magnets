@@ -14,8 +14,7 @@ public class MenuGesture : MonoBehaviour {
 		ENDLEVEL
 	};
 	
-	private static ScreenMenu menuScreen;
-
+	public static ScreenMenu menuScreen;
 	
 	private ScreenMenu nextScreen = ScreenMenu.NONE;
 	private ScreenMenu lastScreen = ScreenMenu.NONE;
@@ -31,10 +30,17 @@ public class MenuGesture : MonoBehaviour {
 	
 	void Start()
 	{
-		if(Application.loadedLevel == 0)
+		Debug.Log(Application.loadedLevelName);
+		if(Application.loadedLevelName == "MENU")
 			menuScreen = ScreenMenu.MAIN;
 		else 
+		{
 			menuScreen = ScreenMenu.NONE;
+			Datas.sharedDatas().datas.currentLevel  = Application.loadedLevel-1;
+			Datas.sharedDatas().datas.currentWorld  = ((Application.loadedLevel-1) - (Application.loadedLevel-1)%MyDefines.kLevelsByWorld)/MyDefines.kLevelsByWorld;
+			Datas.sharedDatas().datas.selectedLevel = Datas.sharedDatas().datas.currentLevel;
+			Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
+		}
 		
 		if(menuScreen == ScreenMenu.MAIN)
 		{

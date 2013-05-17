@@ -9,4 +9,6 @@ public static class MyDefines
 	public static int kNbScrewsByLevel   = 3;
 	public static int kNbScrews          = kNbScrewsByLevel * kNbLevels;
 	public static int kNbLevelsAvailable = 5;
+	
+	public static bool developmentMode   = true;
 }

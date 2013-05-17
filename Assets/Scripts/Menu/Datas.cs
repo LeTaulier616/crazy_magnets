@@ -77,7 +77,7 @@ public class Datas
 		reinitDatas();
 	}
 	
-	private void reinitDatas()
+	public void reinitDatas()
 	{
 		datas.currentWorld  = 0;
 		datas.currentLevel  = 0;

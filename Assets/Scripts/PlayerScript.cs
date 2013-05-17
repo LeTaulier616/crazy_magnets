@@ -22,7 +22,7 @@ public class PlayerScript : MonoBehaviour
 	
 	public Body      playerBody;
 	
-	private bool isAlive;
+	public bool isAlive;
 	private bool canResurrect;
 	private bool      isWalking;
 	private bool      isCharged;
@@ -60,36 +60,14 @@ public class PlayerScript : MonoBehaviour
 	private GameObject playerMesh;
 	
 	private int checkpointIndex;
-
+	
+	public bool canJump;
+	
 	void Start ()
 	{
 		controllerMain = GetComponent<ControllerMain>() as ControllerMain;
 		
 		playerBody = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
-		
-		//PolygonShape shape = new PolygonShape(CreateCapsule(2f, 1f, 8), 1f);
-		CircleShape circleHead = new CircleShape(0.5f, 1f);
-		circleHead.Position = new FVector2(0f, 0.5f);
-		
-		CircleShape circleFoots = new CircleShape(0.5f, 1f);
-		circleFoots.Position = new FVector2(0f, -0.5f);
-		
-		Vertices vertices = new Vertices();
-		vertices.Add(new FVector2(-0.49f, -0.49f));
-		vertices.Add(new FVector2(0.49f, -0.5f));
-		vertices.Add(new FVector2(0.49f, 0.5f));
-		vertices.Add(new FVector2(-0.49f, 0.5f));
-		PolygonShape shape = new PolygonShape(vertices, 1f);
-		
-		Fixture fixHead = this.playerBody.CreateFixture(circleHead);
-		fixHead.Friction = 0;
-		fixHead.Restitution = 0;
-		Fixture fixFoots = this.playerBody.CreateFixture(circleFoots);
-		fixFoots.Friction = 0;
-		fixFoots.Restitution = 0;
-		Fixture fix = this.playerBody.CreateFixture(shape);
-		fix.Friction = 0;
-		fix.Restitution = 0;
 		
 		playerBody.FixedRotation = true;
 		playerBody.Mass = 1f;
@@ -145,6 +123,11 @@ public class PlayerScript : MonoBehaviour
 		this.BroadcastMessage("ConstantParams", Color.cyan, SendMessageOptions.DontRequireReceiver);
 		//this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
 		
+		if(Application.loadedLevelName != "CM_Level_0")
+			this.canJump = true;
+		
+		else
+			this.canJump = false;
 	}
 	
 	bool keyinputed = false;
@@ -159,6 +142,7 @@ public class PlayerScript : MonoBehaviour
 				this.playerBody.Position = new FVector2(lastCheckpoint.x, lastCheckpoint.y);
 				this.transform.position = lastCheckpoint;
 				this.playerBody.BodyType = BodyType.Dynamic;
+				this.playerBody.Enabled = true;
 				this.playerBody.ResetDynamics();
 				this.playerBody.Mass = 1f;
 				GlobalVarScript.instance.resetCamera();
@@ -373,12 +357,15 @@ public class PlayerScript : MonoBehaviour
 	
 	private void Jump()
 	{
-		playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0f);
-		playerBody.ApplyLinearImpulse(new FVector2(0, jumpForce * this.localGravity));
-		this.onGround = false;
-		this.onPFM = false;
-		this.bodyPFM = null;
-		GlobalVarScript.instance.blockCamera(Camera.main.transform.position);
+		if(canJump)
+		{
+			playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0f);
+			playerBody.ApplyLinearImpulse(new FVector2(0, jumpForce * this.localGravity));
+			this.onGround = false;
+			this.onPFM = false;
+			this.bodyPFM = null;
+			GlobalVarScript.instance.blockCamera(Camera.main.transform.position);	
+		}
 	}			
 	
 	public void Attract(float force)
@@ -433,7 +420,7 @@ public class PlayerScript : MonoBehaviour
 		Line.enabled = false;
 	}
 	
-	void Bump(float bumpForce)
+	public void Bump(float bumpForce)
 	{
 		playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0);
 		playerBody.ApplyLinearImpulse(new FVector2(0, bumpForce));
@@ -453,6 +440,7 @@ public class PlayerScript : MonoBehaviour
 	{
 		this.isAlive = false;
 		this.playerBody.BodyType = BodyType.Static;
+		this.playerBody.Enabled = false;
 		Invoke("AbleResurrection", 2f);
 		// TODO
 		if(playerMesh != null)
@@ -493,7 +481,7 @@ public class PlayerScript : MonoBehaviour
 				}
 			}
 			
-			if (GlobalVarScript.instance.cameraTarget.GetInstanceID() == this.target.GetInstanceID())
+			if (GlobalVarScript.instance.cameraTarget.GetInstanceID() == this.target.GetInstanceID() && Application.loadedLevelName != "CM_Level_0")
 			{
 				// reset la camera uniquement si elle est fixee au joueur
 				GlobalVarScript.instance.resetCamera();

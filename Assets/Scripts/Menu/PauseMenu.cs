@@ -35,6 +35,8 @@ public class PauseMenu : MenuScreen {
 		
 		exitScreen = false;
 		loadLevel  = false;
+		
+		Time.timeScale = 0.000000001f;
 	}
 	
 	public override void desactivateMenu()
@@ -42,6 +44,7 @@ public class PauseMenu : MenuScreen {
 		resume_button_go.transform.parent.gameObject.SetActive(false);
 	
 		//Time.timeScale = 1.0f;
+		Time.timeScale = 1.0f;
 	}
 	
 	private void pauseonoff(GameObject go)

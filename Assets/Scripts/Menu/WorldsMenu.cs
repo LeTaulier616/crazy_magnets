@@ -22,13 +22,13 @@ public class WorldsMenu : MenuScreen {
 		{
 			world_buttons_go[iii].SetActive(iii <= Datas.sharedDatas().datas.lastWorld);
 			if(iii <= Datas.sharedDatas().datas.lastWorld)
-				world_buttons_go[iii].transform.FindChild("Label").GetComponent<UILabel>().text  = "World" + (iii+1);
+				world_buttons_go[iii].transform.FindChild("Label").GetComponent<UILabel>().text  = "World " + (iii+1);
 		}
 		for(int iii = 0; iii < world_buttons_off.Length; ++iii)
 		{
 			world_buttons_off[iii].SetActive(iii > Datas.sharedDatas().datas.lastWorld);
 			if(iii > Datas.sharedDatas().datas.lastWorld)
-				world_buttons_off[iii].transform.FindChild("Label").GetComponent<UILabel>().text  = "World" + (iii+1);
+				world_buttons_off[iii].transform.FindChild("Label").GetComponent<UILabel>().text  = "World " + (iii+1);
 		}
 		
 		exitScreen = false;
