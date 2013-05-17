@@ -61,7 +61,7 @@ public class PlayerScript : MonoBehaviour
 	
 	private int checkpointIndex;
 	
-	private bool canJump;
+	public bool canJump;
 	
 	void Start ()
 	{
@@ -481,7 +481,7 @@ public class PlayerScript : MonoBehaviour
 				}
 			}
 			
-			if (GlobalVarScript.instance.cameraTarget.GetInstanceID() == this.target.GetInstanceID())
+			if (GlobalVarScript.instance.cameraTarget.GetInstanceID() == this.target.GetInstanceID() && Application.loadedLevelName != "CM_Level_0")
 			{
 				// reset la camera uniquement si elle est fixee au joueur
 				GlobalVarScript.instance.resetCamera();
