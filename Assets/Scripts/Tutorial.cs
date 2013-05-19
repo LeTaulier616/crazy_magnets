@@ -5,6 +5,10 @@ public class Tutorial : MonoBehaviour {
 	
 	public GameObject ControlLabel;
 	public GameObject JumpLabel;
+	public GameObject MagnetismLabel;
+	public GameObject EndLabel;
+	
+	public GameObject CubePrefab;
 	
 	public Texture RedControlTexture;
 	public Texture GreenControlTexture;
@@ -21,18 +25,23 @@ public class Tutorial : MonoBehaviour {
 	private bool checkDistance;
 	private float walkDistance;
 	
-	private bool checkJumps;
+	public bool checkJumps;
 	public int jumpCount;
 	
 	private Vector3 playerPosition;
 	
+	public static Tutorial instance;
+	
 	// Use this for initialization
-	void Start () 
+	void Awake () 
 	{
+		instance = this;
 		player = GlobalVarScript.instance.player;
 		
 		playerController = player.GetComponent<ControllerMain>();
 		playerScript = player.GetComponent<PlayerScript>();
+		
+		playerScript.canJump = false;
 				
 		showBorders = false;
 		checkDistance = false;
@@ -60,7 +69,7 @@ public class Tutorial : MonoBehaviour {
 				walkDistance += Vector3.Distance(playerPosition, player.transform.position);
 			}
 			
-			if(walkDistance >= 200.0f)
+			if(walkDistance >= 1000.0f)
 			{
 				checkDistance = false;
 				playerScript.canJump = true;
@@ -70,9 +79,10 @@ public class Tutorial : MonoBehaviour {
 		
 		if(checkJumps)
 		{
-			if(jumpCount >= 3)
+			if(jumpCount >= 5 && playerScript.onGround)
 			{
-				Debug.Log("3 Jumps !");
+				checkJumps = false;
+				ShowMagnetismControls();
 			}
 		}
 		
@@ -97,6 +107,21 @@ public class Tutorial : MonoBehaviour {
 		Invoke("ToggleControls", 3.0f);
 		Invoke("ToggleJumpLabel", 3.0f);
 		Invoke("ToggleJumpCheck", 3.0f);
+	}
+	
+	void ShowMagnetismControls()
+	{
+		ToggleControls();
+		ToggleBorders();
+		ToggleMagnetismLabel();
+		
+		GameObject cubeInstance = Instantiate(CubePrefab,
+			playerScript.transform.position + playerScript.playerMesh.transform.forward * 5.0f,
+			Quaternion.identity) as GameObject;
+		
+		Invoke("ToggleControls", 3.0f);
+		Invoke("ToggleMagnetismLabel", 3.0f);
+		Invoke("EndTutorial", 15.0f);
 	}
 	
 	void ToggleBorders()
@@ -135,6 +160,15 @@ public class Tutorial : MonoBehaviour {
 			JumpLabel.SetActive(true);
 	}
 	
+	void ToggleMagnetismLabel()
+	{
+		if(MagnetismLabel.activeSelf)
+			MagnetismLabel.SetActive(false);
+		
+		else
+			MagnetismLabel.SetActive(true);
+	}
+	
 	void ToggleDistanceCheck()
 	{
 		if(checkDistance)
@@ -151,6 +185,12 @@ public class Tutorial : MonoBehaviour {
 		
 		else
 			checkJumps = true;
+	}
+	
+	void EndTutorial()
+	{
+		EndLabel.SetActive(true);
+		ToggleControls();
 	}
 	
 	void OnGUI()
