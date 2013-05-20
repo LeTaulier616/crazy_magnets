@@ -264,7 +264,12 @@ public class FollowRoad : MonoBehaviour {
 			playerScript.onPFM    = false;
 			playerScript.bodyPFM  = null;
 			jointConnected        = false;
-			Debug.Log("End Player on PFM");
+		}
+		else if(col.tag == "Bloc" && col.name != "Hitbox")
+		{
+			cube               = null;
+			cubeBody           = null;
+			cubejointConnected = false;
 		}
 	}
 }
