@@ -159,7 +159,7 @@ public class MenuGesture : MonoBehaviour {
 		else if(loadLevel)
 			Application.LoadLevel(Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld + Datas.sharedDatas().datas.selectedLevel + 1);
 		else if(loadTuto)
-			Application.LoadLevel("TUTO");
+			Application.LoadLevel("CM_Level_0");
 		
 		if(switchHUD || loadMenus || loadLevel)
 			return;
