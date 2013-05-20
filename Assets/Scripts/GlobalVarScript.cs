@@ -92,6 +92,14 @@ public class GlobalVarScript : MonoBehaviour
 	public int MechSoundsSize = 1;
 	public AudioClip[] MechSounds;
 	
+	public bool BigSoundsExpand = true;
+	public int BigSoundsSize = 1;
+	public AudioClip[] BigSounds;
+	
+	public bool SmallSoundsExpand = true;
+	public int SmallSoundsSize = 1;
+	public AudioClip[] SmallSounds;
+	
 	public static GlobalVarScript instance;
 	
 	void Awake()
