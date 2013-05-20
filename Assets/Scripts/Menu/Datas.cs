@@ -56,7 +56,8 @@ public class Datas
 		public int sfxVolume;
 		public int bgmVolume;
 		
-		public bool    isNewGame;
+		public bool isNewGame;
+		public bool tutoDone;
 		
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)] // Max length of array
 		public float[] timeLevels;

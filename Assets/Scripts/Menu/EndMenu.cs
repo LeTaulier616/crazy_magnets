@@ -41,7 +41,18 @@ public class EndMenu : MenuScreen
 		int nextLevelLevel = (Datas.sharedDatas().datas.currentLevel+1)%MyDefines.kLevelsByWorld;
 		int nextLevelWorld = Datas.sharedDatas().datas.currentWorld + (nextLevelLevel == 0 ? 1 : 0);
 		
-		if((nextLevelWorld >= MyDefines.kNbWorlds && nextLevelLevel >= MyDefines.kNbLevels) || MyDefines.kNbLevelsAvailable <= levelnumber)
+		if(Application.loadedLevelName == "TUTO")
+		{
+			nextLevelWorld = 0;
+			nextLevelLevel = 0;
+			Datas.sharedDatas().datas.currentWorld  = 0;
+			Datas.sharedDatas().datas.currentLevel  = 0;
+			Datas.sharedDatas().datas.selectedWorld = 0;
+			Datas.sharedDatas().datas.selectedLevel = 0;
+			Datas.sharedDatas().datas.isNewGame     = false;
+			Datas.sharedDatas().datas.tutoDone      = true;
+		}
+		else if((nextLevelWorld >= MyDefines.kNbWorlds && nextLevelLevel >= MyDefines.kNbLevels) || MyDefines.kNbLevelsAvailable <= levelnumber)
 		{
 			nextLevelWorld = 0;
 			nextLevelLevel = 0;
