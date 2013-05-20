@@ -62,6 +62,8 @@ public class FSCapsuleShape : MonoBehaviour
 		Fixture fix = this.body.CreateFixture(shape);
 		fix.Friction = 0;
 		fix.Restitution = 0;
+		
+		this.body.Mass = 1f;
 	}
 
 	void OnDrawGizmos()
