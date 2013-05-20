@@ -263,7 +263,7 @@ public class PlayerScript : MonoBehaviour
 			this.playerBody.GravityScale = GlobalVarScript.instance.playerGravityScale;
 			
 			RaycastHit hit;
-			if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.down, out hit, 4.5f) && GlobalVarScript.instance.groundTags.Contains(transform.tag))
+			if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.down, out hit, 4.5f) && GlobalVarScript.instance.groundTags.Contains(hit.transform.tag))
 			{
 				Camera.main.SendMessage("ResetFall", SendMessageOptions.DontRequireReceiver);
 			}

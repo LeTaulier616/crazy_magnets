@@ -162,7 +162,7 @@ public class Interruptor : MonoBehaviour
 				targets[trg].GetComponent<InterruptorReceiver>().OnActivate();
 			}
 			
-			if(!audio1.isPlaying)
+			if(audio1 != null && !audio1.isPlaying)
 			{
 				if(activator == Activator.TOUCH)
 				{
@@ -204,7 +204,7 @@ public class Interruptor : MonoBehaviour
 				audio1.Play();
 			}
 			
-			if(activator == Activator.TOUCH && (type == Type.ONOFF || type == Type.TIMER))
+			if(activator == Activator.TOUCH && (type == Type.ONOFF || type == Type.TIMER) && audio1 != null)
 			{
 				audio1.clip = buttonSound;
 				audio1.Play();
