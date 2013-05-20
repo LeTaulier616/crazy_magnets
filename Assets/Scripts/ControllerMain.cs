@@ -176,6 +176,7 @@ public class ControllerMain : MonoBehaviour
 								{
 									touchObj.selectedObject.SendMessageUpwards("Move", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
 								}
+							
 								else if (cHitInfo.transform.gameObject.tag == "Grab")
 								{
 									touchObj.selectedObject = cHitInfo.transform.gameObject;

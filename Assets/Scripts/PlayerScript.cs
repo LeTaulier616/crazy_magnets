@@ -28,6 +28,7 @@ public class PlayerScript : MonoBehaviour
 	public bool      isJumping;
 	public bool      isFalling;
 	private bool     isCharged;
+	private bool     isCubing;
 	private bool	attraction;
 	private float 	angle;
 	private float 	localGravity;
@@ -40,6 +41,8 @@ public class PlayerScript : MonoBehaviour
 	private UnityEngine.Transform target; // cible de la camera
 	private int lastDir;
 	private bool tap;
+	private bool powerLoop;
+	public bool hasWon;
 	
 	//private List<Contact> lastContacts;
 	
@@ -47,8 +50,10 @@ public class PlayerScript : MonoBehaviour
 	
 	private FVector2  walkVelocity;
 	[HideInInspector]
-	public  bool      onPFM   = false;
-	public  Body      bodyPFM = null;
+	public  bool      onPFM       = false;
+	public  Body      bodyPFM     = null;
+	public  bool      jumpFromPFM = false;
+	public  float     pfmVelocity = 0.0f;
 	
 	private float dirCoeff = 0;
 	private float frictionFactor;
@@ -65,7 +70,7 @@ public class PlayerScript : MonoBehaviour
 	private int checkpointIndex;
 	
 	public bool canJump;
-	
+		
 	void Start ()
 	{
 		controllerMain = GetComponent<ControllerMain>() as ControllerMain;
@@ -82,7 +87,8 @@ public class PlayerScript : MonoBehaviour
 		this.isFalling  = false;
 		this.isCharged  = false;
 		this.isGrabbing = false;
-		this.onGround   = true;
+		this.isCubing	= false;
+ 		this.onGround   = true;
 		this.headStucked = false;
 		this.onPFM      = false;
 		this.bodyPFM    = null;
@@ -93,6 +99,8 @@ public class PlayerScript : MonoBehaviour
 		this.attraction = false;
 		this.angle = 0;
 		this.localGravity = 1;
+		this.powerLoop = false;
+		this.hasWon = false;
 		
 		this.target = GlobalVarScript.instance.cameraTarget;
 		Line = this.GetComponent<LineRenderer>();
@@ -123,6 +131,9 @@ public class PlayerScript : MonoBehaviour
 			this.playerMesh.animation["jump"].speed = 2.0f;
 			this.playerMesh.animation["fall"].speed = 8.0f;
 			this.playerMesh.animation["idle"].speed = 2.0f;
+			this.playerMesh.animation["power"].speed = 4.0f;
+			this.playerMesh.animation["powerLoop"].speed = 2.0f;
+			this.playerMesh.animation["win"].speed = 2.0f;
 			this.playerMesh.animation.Play("idle");
 		}
 		
@@ -173,7 +184,15 @@ public class PlayerScript : MonoBehaviour
 				GlobalVarScript.instance.resetCamera();
 			}
 			
-			playerMesh.animation.CrossFade("idle", 0.25f);
+			if(this.hasWon && this.onGround)
+			{
+				playerMesh.animation.CrossFade("win", 0.25f);
+			}
+			else
+			{
+				playerMesh.animation.CrossFade("idle", 0.25f);
+			}
+			
 			return;
 		}
 		
@@ -251,7 +270,7 @@ public class PlayerScript : MonoBehaviour
 			
 			if(playerMesh != null && isFalling)
 			{
-				playerMesh.animation.CrossFade("fall", 0.4f);
+				playerMesh.animation.CrossFade("fall", 0.25f);
 			}
 		}
 		
@@ -274,12 +293,17 @@ public class PlayerScript : MonoBehaviour
 					playerBody.ApplyLinearImpulse(new FVector2(grabForce.X * 25f, grabForce.Y));
 				}
 			}
+			
 			else
 			{
 				this.grabTarget = Vector3.zero;
 			}
 		}
 		
+		if(isCubing)
+		{
+			
+		}
 		// orientation du joueur
 		if (dir != 0 && lastDir != 0)
 		{
@@ -345,12 +369,12 @@ public class PlayerScript : MonoBehaviour
 			float speedX = speed * AccelerationCurve.Evaluate((Time.time - AccelerationTime) * accelerationFactor) * dirCoeff;
 			walkVelocity = new FVector2(speedX, 0);
 			
-			if(playerMesh != null && onGround)
+			if(playerMesh != null && onGround && !isCubing)
 			{
 				playerMesh.animation.CrossFade("run", 0.25f);
 			}
 			
-			else if(playerMesh != null && isJumping)
+			else if(playerMesh != null && isJumping && !isCubing)
 			{
 				playerMesh.animation.CrossFade("jump", 0.1f);
 			}
@@ -362,14 +386,29 @@ public class PlayerScript : MonoBehaviour
 			{
 				walkVelocity = new FVector2(playerBody.LinearVelocity.X * DecelerationCurve.Evaluate((Time.time - AccelerationTime) * decelerationFactor * frictionFactor), 0);
 				
-				if(playerMesh != null && isFalling)
+				if(playerMesh != null && isFalling && !isCubing)
 				{
 					playerMesh.animation.CrossFade("idle", 0.1f);
 				}
 				
-				else if (playerMesh != null && !isFalling && !isJumping)
+				else if (playerMesh != null && !isFalling && !isJumping && !isCubing)
 				{
 					playerMesh.animation.CrossFade("idle", 0.25f);
+				}
+				
+				else if(playerMesh != null && this.onGround && isCubing && !powerLoop)
+				{
+					playerMesh.animation.CrossFade("power", 0.5f);
+					
+					if(playerMesh.animation["power"].time >= playerMesh.animation["power"].length)
+					{
+						SetPowerLoop();
+					}
+				}
+				
+				else if (playerMesh != null && this.onGround && isCubing)
+				{
+					playerMesh.animation.CrossFade("powerLoop", 0.25f);
 				}
 			}
 			
@@ -381,7 +420,6 @@ public class PlayerScript : MonoBehaviour
 				
 				if(playerMesh != null && isJumping)
 				{
-					Debug.Log("There");
 					playerMesh.animation.CrossFade("jump", 0.1f);
 				}
 			}
@@ -392,10 +430,12 @@ public class PlayerScript : MonoBehaviour
 	{
 		playerBody.LinearVelocity = new FVector2(0.0f, this.headStucked ? 0 : playerBody.LinearVelocity.Y);
 		playerBody.LinearVelocity += walkVelocity;
+		//if(this.jumpFromPFM)
+		//	playerBody.LinearVelocity += new FVector2(this.pfmVelocity, 0.0f);
 	}
 	
 	private void Jump()
-	{
+	{	
 		if(canJump)
 		{
 			playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0f);
@@ -408,9 +448,20 @@ public class PlayerScript : MonoBehaviour
 				this.playerMesh.animation["fall"].time = 0.0f;
 			}
 			
-			this.onGround = false;
-			this.onPFM = false;
-			this.bodyPFM = null;
+			if(this.onPFM)
+			{
+				this.jumpFromPFM = true;
+				FollowRoad tmpfroad = (this.bodyPFM.UserData as GameObject).GetComponent<FollowRoad>();
+				if(tmpfroad.back)
+				{
+					this.pfmVelocity = tmpfroad.roadVerso.vx / Time.deltaTime / 10.0f;
+				}
+				else
+				{
+					this.pfmVelocity = tmpfroad.roadRecto.vx / Time.deltaTime / 10.0f;
+				}
+			}
+			
 			GlobalVarScript.instance.blockCamera(Camera.main.transform.position);	
 		}
 	}			
@@ -477,10 +528,18 @@ public class PlayerScript : MonoBehaviour
 		//GlobalVarScript.instance.blockCamera(Camera.main.transform.position);
 	}
 	
+	public void ApplyPFMVelocity(float bumpForce)
+	{
+		playerBody.ApplyLinearImpulse(new FVector2(bumpForce, 0));
+		this.onGround = false;
+		this.onPFM = false;
+		this.bodyPFM = null;
+	}
+	
 	public void CheckpointReached()
 	{
-		this.checkpointIndex++;
-		Debug.Log(checkpointIndex);
+		if(checkpointIndex <= checkpoints.Count - 1)
+			this.checkpointIndex++;
 	}
 	
 	public void Kill()
@@ -623,25 +682,56 @@ public class PlayerScript : MonoBehaviour
 		this.playerBody.Position = new FVector2(currentCheckpoint.x, currentCheckpoint.y);
 	}
 	
-	public void GrabObject(bool grab)
+	public void GrabObject(Vector3 grab)
 	{
-		if (grab)
+		if (grab != Vector3.zero)
 		{
 			// TODO : halo de couleur sur la main
 			//this.playerBody.BodyType = BodyType.Kinematic;
 			this.playerBody.Mass = 100f;
+			
+			if(!isCubing)
+			{
+				isCubing = true;
+				powerLoop = false;
+			}
+			
+			if(grab.x < this.transform.position.x)
+			{
+				this.lastDir = -1;
+			}
+			
+			else
+			{
+				this.lastDir = 1;
+			}
 		}
+		
 		else
 		{
 			//this.playerBody.BodyType = BodyType.Dynamic;
 			this.playerBody.ResetDynamics();
 			this.playerBody.Mass = 1f;
+			
+			if(isCubing)
+			{
+				isCubing = false;
+				powerLoop = false;
+			}
 		}
 	}
 	
 	public void Tap()
 	{
 		this.tap = true;
+	}
+	
+	public void SetPowerLoop()
+	{
+		if(!this.powerLoop)
+		{
+			this.powerLoop = true;
+		}
 	}
 	
 	IEnumerator ResetTouch()
