@@ -169,12 +169,25 @@ ModelImporter:
     400160: Wrist_L_ctrl
     400162: Wrist_L_GRP
     400164: Wrist_L_jnt
+    2300000: MAGNOBOT_BODY
+    2300002: MAGNOBOT_EYE_L_DEEP
+    2300004: MAGNOBOT_EYE_R_DEEP
+    2300006: MAGNOBOT_GAUNTLET_GLASS
+    2300008: MAGNOBOT_JAW
+    2300010: MAGNOBOT_LIGHT_BATTERY
+    3300000: MAGNOBOT_BODY
+    3300002: MAGNOBOT_EYE_L_DEEP
+    3300004: MAGNOBOT_EYE_R_DEEP
+    3300006: MAGNOBOT_GAUNTLET_GLASS
+    3300008: MAGNOBOT_JAW
+    3300010: MAGNOBOT_LIGHT_BATTERY
     4300000: MAGNOBOT_EYE_L_DEEP
     4300002: MAGNOBOT_EYE_R_DEEP
     4300004: MAGNOBOT_BODY
     4300006: MAGNOBOT_JAW
     4300008: MAGNOBOT_GAUNTLET_GLASS
     4300010: MAGNOBOT_LIGHT_BATTERY
+    7400000: Take 001
     9500000: //RootNode
     11100000: //RootNode
     13700000: MAGNOBOT_BODY
@@ -202,7 +215,7 @@ ModelImporter:
     globalScale: .300000012
     meshCompression: 0
     addColliders: 0
-    swapUVChannels: 0
+    swapUVChannels: 1
     generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
@@ -212,7 +225,7 @@ ModelImporter:
     secondaryUVPackMargin: 4
   tangentSpace:
     normalSmoothAngle: 60
-    splitTangentsAcrossUV: 1
+    splitTangentsAcrossUV: 0
     normalImportMode: 0
     tangentImportMode: 1
   importAnimation: 1

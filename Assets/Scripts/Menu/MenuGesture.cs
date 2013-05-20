@@ -84,7 +84,6 @@ public class MenuGesture : MonoBehaviour {
 					widget.color   = new Color(1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue);
 				}
 			}
-
 			else
 			{
 				widget.alpha = 1.0f;
@@ -140,12 +139,14 @@ public class MenuGesture : MonoBehaviour {
 		Datas.sharedDatas().saveDatas();
 		
 		bool loadLevel = false;
+		bool loadTuto  = false;
 		bool loadMenus = false;
 		bool switchHUD = false;
 		
 		screen.desactivateMenu();
 		
 		loadLevel = screen.loadLevel;
+		loadTuto  = screen.loadTuto;
 		if(!screenIsMenuScreen(nextScreen) && screenIsMenuScreen(menuScreen))
 			loadMenus = true;
 		if(screenIsMenuScreen(nextScreen) != screenIsMenuScreen(menuScreen))
@@ -157,6 +158,8 @@ public class MenuGesture : MonoBehaviour {
 			Application.LoadLevel("MENU");
 		else if(loadLevel)
 			Application.LoadLevel(Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld + Datas.sharedDatas().datas.selectedLevel + 1);
+		else if(loadTuto)
+			Application.LoadLevel("CM_Level_0");
 		
 		if(switchHUD || loadMenus || loadLevel)
 			return;

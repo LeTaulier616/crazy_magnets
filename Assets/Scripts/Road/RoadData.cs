@@ -8,7 +8,7 @@ public class RoadData
 	public EndBehaviour endBehaviour;
 	Deplacement        deplacement;
 	public Activation  activation;
-	List<KeyPoint>     keyPoints;
+	public List<KeyPoint> keyPoints;
 
 	public Vector3 currentPosition;
 	public bool    endOfRoad = false;
@@ -21,8 +21,8 @@ public class RoadData
 	float   speedTmp;
 	float   currentAngle;
 	
-	float vx, vy, va;
-	int   currentPath;
+	public float vx, vy, va;
+	public int   currentPath;
 	float totalTime;
 	float currentTime;
 	float pathLength;
