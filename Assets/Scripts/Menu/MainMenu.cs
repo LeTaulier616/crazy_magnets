@@ -28,7 +28,8 @@ public class MainMenu : MenuScreen {
 		datas_button_go.SetActive(MyDefines.developmentMode);
 		
 		exitScreen = false;
-		loadLevel = false;
+		loadLevel  = false;
+		loadTuto   = false;
 	}
 	
 	public override void desactivateMenu()
@@ -41,10 +42,13 @@ public class MainMenu : MenuScreen {
 		Debug.Log("New Game");
 		Datas.sharedDatas().datas.selectedLevel = 0;
 		Datas.sharedDatas().datas.selectedWorld = 0;
-		Datas.sharedDatas().datas.isNewGame = false;
 		exitScreen = true;
 		screenToGo = MenuGesture.ScreenMenu.NONE;
-		loadLevel = true;
+		if(Datas.sharedDatas().datas.isNewGame)
+			loadTuto  = true;
+		else
+			loadLevel = true;
+		Datas.sharedDatas().datas.isNewGame = false;
 	}
 
 	void continuegame(GameObject go)
@@ -75,5 +79,14 @@ public class MainMenu : MenuScreen {
 	{
 		Debug.Log("Reset Datas");
 		Datas.sharedDatas().reinitDatas();
+	}
+	
+	private void gotuto(GameObject go)
+	{
+		exitScreen = true;
+		loadTuto   = true;
+		screenToGo = MenuGesture.ScreenMenu.NONE;
+		Datas.sharedDatas().datas.selectedLevel = 0;
+		Datas.sharedDatas().datas.selectedWorld = 0;
 	}
 }
