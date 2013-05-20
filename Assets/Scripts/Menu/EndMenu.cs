@@ -41,7 +41,7 @@ public class EndMenu : MenuScreen
 		int nextLevelLevel = (Datas.sharedDatas().datas.currentLevel+1)%MyDefines.kLevelsByWorld;
 		int nextLevelWorld = Datas.sharedDatas().datas.currentWorld + (nextLevelLevel == 0 ? 1 : 0);
 		
-		if(Application.loadedLevelName == "TUTO")
+		if(Application.loadedLevelName == "CM_Level_0")
 		{
 			nextLevelWorld = 0;
 			nextLevelLevel = 0;
