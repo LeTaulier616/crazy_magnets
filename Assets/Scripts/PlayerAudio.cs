@@ -167,4 +167,9 @@ public class PlayerAudio : MonoBehaviour {
 			}
 		}
 	}
+	
+	public void SetPowerLoop()
+	{
+		this.SendMessageUpwards("SetPowerLoop", SendMessageOptions.DontRequireReceiver);
+	}
 }

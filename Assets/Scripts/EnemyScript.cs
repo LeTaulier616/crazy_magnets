@@ -22,16 +22,18 @@ public class PatrolState : State
 			this.hasLeftWayPoint = true;
 		if (this.rightWayPoint != null)
 			this.hasRightWayPoint = true;
-		GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
 		
-		if(playerMesh != null)
-			playerMesh.animation.CrossFade("patrol", 0.5f);
+		enemy = it.GetComponent<EnemyScript>();
+		
+		if(enemy.enemyMesh != null)
+			enemy.enemyMesh.animation.CrossFade("patrol", 0.5f);
 	}
 
 	override public void UpdateState(GameObject it)
 	{
 		Ray sight = new Ray(it.transform.position, it.transform.right);
 		RaycastHit hit = new RaycastHit();
+		
 		if (Physics.Raycast(sight, out hit, this.playerDist) && hit.transform.tag == "Player" && GlobalVarScript.instance.player.GetComponent<PlayerScript>().isAlive)
 		{
 			PursuitState pursuit = it.GetComponent<EnemyScript>().pursuit;
@@ -45,6 +47,7 @@ public class PatrolState : State
 		{
 			it.transform.Rotate(it.transform.up, 180);
 		}
+		
 		else
 		{
 			Body body = it.GetComponent<FSBodyComponent>().PhysicsBody;
@@ -62,9 +65,11 @@ public class PursuitState : State
 
 	public override void EnterState (GameObject it)
 	{
-		GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
-		if(playerMesh != null)
-			playerMesh.animation.CrossFade("patrol", 0.5f);
+		enemy = it.GetComponent<EnemyScript>();
+		
+		if(enemy.enemyMesh != null)
+			enemy.enemyMesh.animation.CrossFade("chase", 0.25f);
+		
 		this.stopped = false;
 	}
 
@@ -92,11 +97,12 @@ public class PursuitState : State
 		{
 			if (this.stopped == true)
 			{
-				GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
-				if(playerMesh != null)
-					playerMesh.animation.CrossFade("patrol", 0.5f);
+				
+				if(enemy.enemyMesh != null)
+					enemy.enemyMesh.animation.CrossFade("chase", 0.5f);
 				this.stopped = false;
 			}
+			
 			Body body = it.GetComponent<FSBodyComponent>().PhysicsBody;
 			body.LinearVelocity = new FVector2(it.transform.right.x * this.speed, 0f);
 		}
@@ -104,9 +110,8 @@ public class PursuitState : State
 		{
 			if (this.stopped == false)
 			{
-				GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
-		//		if(playerMesh != null)
-		//			playerMesh.animation.CrossFade("idle", 0.5f);
+				if(enemy.enemyMesh != null)
+					enemy.enemyMesh.animation.CrossFade("idle", 0.5f);
 				this.stopped = true;
 			}
 			Body body = it.GetComponent<FSBodyComponent>().PhysicsBody;
@@ -124,9 +129,9 @@ public class AttackState : State
 	{
 		this.enemy = it.gameObject.GetComponent<EnemyScript>();
 		this.player = GlobalVarScript.instance.player;
-		GameObject playerMesh = it.GetComponent<EnemyScript>().playerMesh;
-//		if(playerMesh != null)
-//			playerMesh.animation.CrossFade("attack", 0.5f);
+		
+		if(enemy.enemyMesh != null)
+			enemy.enemyMesh.animation.CrossFade("attack", 0.5f);
 	}
 
 	public override void UpdateState (GameObject it)
@@ -281,7 +286,7 @@ public class EnemyScript : StateMachine
 	public GameObject	leftWayPoint = null;
 	public GameObject	rightWayPoint = null;
 
-	public GameObject	playerMesh;
+	public GameObject	enemyMesh;
 	public Transform	target;
 
 	[HideInInspector]
@@ -386,6 +391,7 @@ public class EnemyScript : StateMachine
 			this.jumpForce = GlobalVarScript.instance.smallEnemyJumpForce;
 			this.playerBody.LinearDamping = GlobalVarScript.instance.smallEnemyDamping;
 		}
+		
 		else// if (this.type == EnemyType.Big)
 		{
 			this.patrolingSpeed = GlobalVarScript.instance.bigEnemyPatrolSpeed;
@@ -397,19 +403,9 @@ public class EnemyScript : StateMachine
 			this.jumpForce = GlobalVarScript.instance.bigEnemyJumpForce;
 			this.playerBody.LinearDamping = GlobalVarScript.instance.bigEnemyDamping;
 		}
+		
 		this.accelerationFactor = GlobalVarScript.instance.accelerationFactor;
 		this.decelerationFactor = GlobalVarScript.instance.decelerationFactor;
-
-		//this.playerMesh = GlobalVarScript.instance.playerMesh;
-		//this.playerMesh = null;
-/*
-		if(playerMesh != null)
-		{
-			this.playerMesh.animation["patrol"].speed = 1.5f;
-			this.playerMesh.animation.Play("idle");
-		}
-*/
-		// end of control values
 
 		this.patrol = new PatrolState();
 		this.patrol.speed = this.patrolingSpeed;
@@ -502,16 +498,16 @@ public class EnemyScript : StateMachine
 			float speedX = speed * AccelerationCurve.Evaluate((Time.time - AccelerationTime) * accelerationFactor) * dirCoeff;
 			walkVelocity = new FVector2(speedX, 0);
 			
-			if(playerMesh != null)
-				playerMesh.animation.CrossFade("patrol", 0.5f);
+			if(enemyMesh != null)
+				enemyMesh.animation.CrossFade("patrol", 0.5f);
 		}
 		else
 		{
 			if (this.onGround)
 			{
 				walkVelocity = new FVector2(playerBody.LinearVelocity.X * DecelerationCurve.Evaluate((Time.time - AccelerationTime) * decelerationFactor * frictionFactor), 0);
-			//	if(playerMesh != null)
-			//		playerMesh.animation.CrossFade("idle", 0.5f);
+			//	if(enemyMesh != null)
+			//		enemyMesh.animation.CrossFade("idle", 0.5f);
 			}
 			
 			else

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 572e093f0e3bb8b4e8ac58113d9d723b
+guid: 592e231a6326bcc4ab165f110b42a151
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -57,35 +57,35 @@ ModelImporter:
     100102: MAGNOBOT_GEO
     100104: MAGNOBOT_HEAD_grp
     100106: MAGNOBOT_JAW
-    100108: MAGNOBOT_RIG
-    100110: MAGNOBOT_SKELETTON
-    100112: MidSpine_C_ctrl
-    100114: MidSpine_C_GRP
-    100116: MidSpine_C_jnt
-    100118: Neck_C_ctrl
-    100120: Neck_C_GRP
-    100122: Neck_C_jnt
-    100124: Root_C_ctrl
-    100126: Root_C_GRP
-    100128: Root_C_jnt
-    100130: Shoulder_L_ctrl
-    100132: Shoulder_L_GRP
-    100134: Shoulder_L_jnt
-    100136: Shoulder_R_ctrl
-    100138: Shoulder_R_GRP
-    100140: Shoulder_R_jnt
-    100142: Thumb01_L_jnt
-    100144: Thumb02_L_jnt
-    100146: Thumb03_L_jnt
-    100148: Thumb_L_ctrl
-    100150: Thumb_L_GRP
-    100152: Toe_L_jnt
-    100154: Toe_R_jnt
-    100156: Ultimate_C_ctrl
-    100158: Wrist_L_ctrl
-    100160: Wrist_L_GRP
-    100162: Wrist_L_jnt
-    100164: MAGNOBOT_LIGHT_BATTERY
+    100108: MAGNOBOT_LIGHT_BATTERY
+    100110: MAGNOBOT_RIG
+    100112: MAGNOBOT_SKELETTON
+    100114: MidSpine_C_ctrl
+    100116: MidSpine_C_GRP
+    100118: MidSpine_C_jnt
+    100120: Neck_C_ctrl
+    100122: Neck_C_GRP
+    100124: Neck_C_jnt
+    100126: Root_C_ctrl
+    100128: Root_C_GRP
+    100130: Root_C_jnt
+    100132: Shoulder_L_ctrl
+    100134: Shoulder_L_GRP
+    100136: Shoulder_L_jnt
+    100138: Shoulder_R_ctrl
+    100140: Shoulder_R_GRP
+    100142: Shoulder_R_jnt
+    100144: Thumb01_L_jnt
+    100146: Thumb02_L_jnt
+    100148: Thumb03_L_jnt
+    100150: Thumb_L_ctrl
+    100152: Thumb_L_GRP
+    100154: Toe_L_jnt
+    100156: Toe_R_jnt
+    100158: Ultimate_C_ctrl
+    100160: Wrist_L_ctrl
+    100162: Wrist_L_GRP
+    100164: Wrist_L_jnt
     400000: Battery_01_jnt
     400002: Battery_02_jnt
     400004: Battery_03_jnt
@@ -140,35 +140,35 @@ ModelImporter:
     400102: MAGNOBOT_GEO
     400104: MAGNOBOT_HEAD_grp
     400106: MAGNOBOT_JAW
-    400108: MAGNOBOT_RIG
-    400110: MAGNOBOT_SKELETTON
-    400112: MidSpine_C_ctrl
-    400114: MidSpine_C_GRP
-    400116: MidSpine_C_jnt
-    400118: Neck_C_ctrl
-    400120: Neck_C_GRP
-    400122: Neck_C_jnt
-    400124: Root_C_ctrl
-    400126: Root_C_GRP
-    400128: Root_C_jnt
-    400130: Shoulder_L_ctrl
-    400132: Shoulder_L_GRP
-    400134: Shoulder_L_jnt
-    400136: Shoulder_R_ctrl
-    400138: Shoulder_R_GRP
-    400140: Shoulder_R_jnt
-    400142: Thumb01_L_jnt
-    400144: Thumb02_L_jnt
-    400146: Thumb03_L_jnt
-    400148: Thumb_L_ctrl
-    400150: Thumb_L_GRP
-    400152: Toe_L_jnt
-    400154: Toe_R_jnt
-    400156: Ultimate_C_ctrl
-    400158: Wrist_L_ctrl
-    400160: Wrist_L_GRP
-    400162: Wrist_L_jnt
-    400164: MAGNOBOT_LIGHT_BATTERY
+    400108: MAGNOBOT_LIGHT_BATTERY
+    400110: MAGNOBOT_RIG
+    400112: MAGNOBOT_SKELETTON
+    400114: MidSpine_C_ctrl
+    400116: MidSpine_C_GRP
+    400118: MidSpine_C_jnt
+    400120: Neck_C_ctrl
+    400122: Neck_C_GRP
+    400124: Neck_C_jnt
+    400126: Root_C_ctrl
+    400128: Root_C_GRP
+    400130: Root_C_jnt
+    400132: Shoulder_L_ctrl
+    400134: Shoulder_L_GRP
+    400136: Shoulder_L_jnt
+    400138: Shoulder_R_ctrl
+    400140: Shoulder_R_GRP
+    400142: Shoulder_R_jnt
+    400144: Thumb01_L_jnt
+    400146: Thumb02_L_jnt
+    400148: Thumb03_L_jnt
+    400150: Thumb_L_ctrl
+    400152: Thumb_L_GRP
+    400154: Toe_L_jnt
+    400156: Toe_R_jnt
+    400158: Ultimate_C_ctrl
+    400160: Wrist_L_ctrl
+    400162: Wrist_L_GRP
+    400164: Wrist_L_jnt
     7400000: Take 001
     9500000: //RootNode
     11100000: //RootNode
@@ -183,7 +183,7 @@ ModelImporter:
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
-    animationWrapMode: 0
+    animationWrapMode: 2
     clipAnimations: []
     isReadable: 1
   meshes:

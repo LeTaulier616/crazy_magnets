@@ -147,7 +147,7 @@ public class CubeScript : MonoBehaviour
 	
 	void Move(Vector3 target)
 	{
-		this.player.SendMessage("GrabObject", true, SendMessageOptions.DontRequireReceiver);
+		this.player.SendMessage("GrabObject", this.gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
 		this.selected = 1;
 		this.target = target;
 		if(!audio.isPlaying)
@@ -174,7 +174,7 @@ public class CubeScript : MonoBehaviour
 	
 	void UnselectObject()
 	{
-		this.player.SendMessage("GrabObject", false, SendMessageOptions.DontRequireReceiver);
+		this.player.SendMessage("GrabObject", Vector3.zero, SendMessageOptions.DontRequireReceiver);
 		this.body.GravityScale = 2f;
 		this.selected = 0;
 		if(renderer != null)
