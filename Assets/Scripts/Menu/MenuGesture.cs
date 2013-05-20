@@ -30,7 +30,6 @@ public class MenuGesture : MonoBehaviour {
 	
 	void Start()
 	{
-		Debug.Log(Application.loadedLevelName);
 		if(Application.loadedLevelName == "MENU")
 			menuScreen = ScreenMenu.MAIN;
 		else 

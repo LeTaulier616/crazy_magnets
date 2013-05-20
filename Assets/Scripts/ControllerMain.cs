@@ -31,8 +31,9 @@ public class ControllerMain : MonoBehaviour
 	{
 		if (Input.touchCount > 0) 
 		{
-			foreach (Touch touch in Input.touches)
+			for (int i = 0; i < Input.touchCount; i++)
 			{
+				Touch touch = Input.GetTouch(i);
 				if (!touchesTab.ContainsKey(touch.fingerId))
 				{
 					// ajout du touch dans la biblio
@@ -63,6 +64,8 @@ public class ControllerMain : MonoBehaviour
 							resetSlide ();
 							touchObj.startPos = touch.position;
 							touchObj.startTime = Time.time;
+							touchObj.leftTouched = touchPos.x < GlobalVarScript.instance.hudLimitX;
+							touchObj.rightTouched = touchPos.x > 1 - GlobalVarScript.instance.hudLimitX;
 						break;
 						
 						case TouchPhase.Stationary:

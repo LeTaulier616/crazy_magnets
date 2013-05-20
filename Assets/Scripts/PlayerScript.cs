@@ -23,12 +23,14 @@ public class PlayerScript : MonoBehaviour
 	public Body      playerBody;
 	
 	public bool isAlive;
-	private bool canResurrect;
-	private bool      isWalking;
-	private bool      isCharged;
-	private bool attraction;
-	private float angle;
-	private float localGravity;
+	private bool 	canResurrect;
+	public bool      isWalking;
+	public bool      isJumping;
+	public bool      isFalling;
+	private bool     isCharged;
+	private bool	attraction;
+	private float 	angle;
+	private float 	localGravity;
 	[HideInInspector]
 	public bool		isGrabbing;
 	[HideInInspector]
@@ -47,7 +49,6 @@ public class PlayerScript : MonoBehaviour
 	[HideInInspector]
 	public  bool      onPFM       = false;
 	public  Body      bodyPFM     = null;
-	public  bool      isJumping   = false;
 	public  bool      jumpFromPFM = false;
 	public  float     pfmVelocity = 0.0f;
 	
@@ -60,10 +61,13 @@ public class PlayerScript : MonoBehaviour
 	
 	private float grabRange;
 	
-	private GameObject playerMesh;
+	[HideInInspector]
+	public GameObject playerMesh;
 	
 	private int checkpointIndex;
-
+	
+	public bool canJump;
+	
 	void Start ()
 	{
 		controllerMain = GetComponent<ControllerMain>() as ControllerMain;
@@ -76,6 +80,8 @@ public class PlayerScript : MonoBehaviour
 		this.isAlive	= true;
 		this.canResurrect = false;
 		this.isWalking  = false;
+		this.isJumping  = false;
+		this.isFalling  = false;
 		this.isCharged  = false;
 		this.isGrabbing = false;
 		this.onGround   = true;
@@ -115,7 +121,10 @@ public class PlayerScript : MonoBehaviour
 		
 		if(playerMesh != null)
 		{
-			this.playerMesh.animation["run"].speed = 1.5f;
+			this.playerMesh.animation["run"].speed = 5.0f;
+			this.playerMesh.animation["jump"].speed = 2.0f;
+			this.playerMesh.animation["fall"].speed = 8.0f;
+			this.playerMesh.animation["idle"].speed = 2.0f;
 			this.playerMesh.animation.Play("idle");
 		}
 		
@@ -124,6 +133,7 @@ public class PlayerScript : MonoBehaviour
 		this.BroadcastMessage("ConstantParams", Color.cyan, SendMessageOptions.DontRequireReceiver);
 		//this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
 		
+		this.canJump = true;
 	}
 	
 	bool keyinputed = false;
@@ -164,6 +174,8 @@ public class PlayerScript : MonoBehaviour
 			{
 				GlobalVarScript.instance.resetCamera();
 			}
+			
+			playerMesh.animation.CrossFade("idle", 0.25f);
 			return;
 		}
 		
@@ -224,6 +236,12 @@ public class PlayerScript : MonoBehaviour
 		
 		if (this.onGround == false && this.playerBody.LinearVelocity.Y < 0)
 		{			
+			if(this.isJumping)
+			{
+				this.isJumping = false;
+				this.isFalling = true;
+			}
+			
 			// pour que le perso tombe plus vite
 			this.playerBody.GravityScale = GlobalVarScript.instance.playerGravityScale;
 			
@@ -231,6 +249,11 @@ public class PlayerScript : MonoBehaviour
 			if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.down, out hit, 4.5f) && GlobalVarScript.instance.groundTags.Contains(transform.tag))
 			{
 				Camera.main.SendMessage("ResetFall", SendMessageOptions.DontRequireReceiver);
+			}
+			
+			if(playerMesh != null && isFalling)
+			{
+				playerMesh.animation.CrossFade("fall", 0.4f);
 			}
 		}
 		
@@ -324,16 +347,32 @@ public class PlayerScript : MonoBehaviour
 			float speedX = speed * AccelerationCurve.Evaluate((Time.time - AccelerationTime) * accelerationFactor) * dirCoeff;
 			walkVelocity = new FVector2(speedX, 0);
 			
-			if(playerMesh != null)
-				playerMesh.animation.CrossFade("run", 0.5f);
+			if(playerMesh != null && onGround)
+			{
+				playerMesh.animation.CrossFade("run", 0.25f);
+			}
+			
+			else if(playerMesh != null && isJumping)
+			{
+				playerMesh.animation.CrossFade("jump", 0.1f);
+			}
 		}
+		
 		else
 		{
 			if (this.onGround)
 			{
 				walkVelocity = new FVector2(playerBody.LinearVelocity.X * DecelerationCurve.Evaluate((Time.time - AccelerationTime) * decelerationFactor * frictionFactor), 0);
-				if(playerMesh != null)
-					playerMesh.animation.CrossFade("idle", 0.5f);
+				
+				if(playerMesh != null && isFalling)
+				{
+					playerMesh.animation.CrossFade("idle", 0.1f);
+				}
+				
+				else if (playerMesh != null && !isFalling && !isJumping)
+				{
+					playerMesh.animation.CrossFade("idle", 0.25f);
+				}
 			}
 			
 			else
@@ -341,6 +380,12 @@ public class PlayerScript : MonoBehaviour
 				// TODO ajuster le parametre
 				float airControlFactor = 0.1f;
 				walkVelocity = new FVector2(playerBody.LinearVelocity.X * DecelerationCurve.Evaluate((Time.time - AccelerationTime) * decelerationFactor * airControlFactor), 0);
+				
+				if(playerMesh != null && isJumping)
+				{
+					Debug.Log("There");
+					playerMesh.animation.CrossFade("jump", 0.1f);
+				}
 			}
 		}	
     }
@@ -354,24 +399,35 @@ public class PlayerScript : MonoBehaviour
 	}
 	
 	private void Jump()
-	{
-		playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0f);
-		playerBody.ApplyLinearImpulse(new FVector2(0, jumpForce * this.localGravity));
-		this.isJumping = true;
-		if(this.onPFM)
+	{	
+		if(canJump)
 		{
-			this.jumpFromPFM = true;
-			FollowRoad tmpfroad = (this.bodyPFM.UserData as GameObject).GetComponent<FollowRoad>();
-			if(tmpfroad.back)
+			playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0f);
+			playerBody.ApplyLinearImpulse(new FVector2(0, jumpForce * this.localGravity));
+			this.isJumping = true;
+			
+			if(playerMesh != null)
 			{
-				this.pfmVelocity = tmpfroad.roadVerso.vx / Time.deltaTime / 10.0f;
+				this.playerMesh.animation["jump"].time = 0.0f;
+				this.playerMesh.animation["fall"].time = 0.0f;
 			}
-			else
+			
+			if(this.onPFM)
 			{
-				this.pfmVelocity = tmpfroad.roadRecto.vx / Time.deltaTime / 10.0f;
+				this.jumpFromPFM = true;
+				FollowRoad tmpfroad = (this.bodyPFM.UserData as GameObject).GetComponent<FollowRoad>();
+				if(tmpfroad.back)
+				{
+					this.pfmVelocity = tmpfroad.roadVerso.vx / Time.deltaTime / 10.0f;
+				}
+				else
+				{
+					this.pfmVelocity = tmpfroad.roadRecto.vx / Time.deltaTime / 10.0f;
+				}
 			}
+			
+			GlobalVarScript.instance.blockCamera(Camera.main.transform.position);	
 		}
-		GlobalVarScript.instance.blockCamera(Camera.main.transform.position);
 	}			
 	
 	public void Attract(float force)
@@ -474,11 +530,21 @@ public class PlayerScript : MonoBehaviour
 		
 		if (GlobalVarScript.instance.groundTags.Contains(ground.tag))
 		{
+												
+			if(Application.loadedLevelName == "CM_Level_0" && !this.onGround)
+			{
+				if(Tutorial.instance.checkJumps)
+					Tutorial.instance.jumpCount++;
+			}
+			
 			this.onGround = true;
-		
-			this.isJumping   = false;
-			this.jumpFromPFM = false;
-				
+			
+			if(this.isFalling)
+			{
+				this.isJumping = false;
+				this.isFalling = false;
+			}
+			
 			this.playerBody.GravityScale = 1f;
 			
 			// Gestion surface glissante
@@ -499,7 +565,7 @@ public class PlayerScript : MonoBehaviour
 				}
 			}
 			
-			if (GlobalVarScript.instance.cameraTarget.GetInstanceID() == this.target.GetInstanceID())
+			if (GlobalVarScript.instance.cameraTarget.GetInstanceID() == this.target.GetInstanceID() && Application.loadedLevelName != "CM_Level_0")
 			{
 				// reset la camera uniquement si elle est fixee au joueur
 				GlobalVarScript.instance.resetCamera();
