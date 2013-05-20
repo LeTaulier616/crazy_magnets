@@ -60,7 +60,7 @@ public class MenuGesture : MonoBehaviour {
 	
 	void LateUpdate()
 	{
-		timer += Time.deltaTime/(lerpMaxValue*lerpSpeed);
+		timer += Time.deltaTime/(lerpMaxValue*lerpSpeed)/Time.timeScale;
 		
 		float lerpValue = Mathf.Lerp(0,lerpMaxValue,timer);
 		
@@ -110,6 +110,9 @@ public class MenuGesture : MonoBehaviour {
 			{
 				lerpValue = 1.0f;
 			}
+			
+			if(setHidden)
+				Debug.Log(lerpValue);
 			
 			if(lerpValue >= 1.0f && setHidden)
 			{
@@ -188,6 +191,8 @@ public class MenuGesture : MonoBehaviour {
 				screen = GameObject.Find("Menus").GetComponent<PauseMenu>();
 			break;
 		}
+		
+		Debug.Log("Menu Screen");
 		
 		screen.activateMenu();
 		setHidden = false;
