@@ -22,12 +22,13 @@ public class FollowRoad : MonoBehaviour {
 	
 	public Road road;
 	
-	RoadData roadRecto;
-	RoadData roadVerso;
-	
 	bool activated = false;
-	bool back = false;
-	bool pause = false;
+	bool pause     = false;
+	
+	[HideInInspector]
+	public bool back = false;
+	public RoadData roadRecto;
+	public RoadData roadVerso;
 	
 	public FVector2 pfVelocity = FVector2.Zero;
 	
@@ -58,6 +59,8 @@ public class FollowRoad : MonoBehaviour {
 		
 		roadBody.OnCollision  += OnCollisionEvent;
 		roadBody.OnSeparation += OnSeparationEvent;
+		
+		this.gameObject.GetComponent<FSBodyComponent>().PhysicsBody.UserData = this.gameObject;
 	}
 	
 	void FixedUpdate () 
@@ -176,8 +179,9 @@ public class FollowRoad : MonoBehaviour {
 	
 	private bool OnCollisionEvent(Fixture fixtureA, Fixture fixtureB, Contact contact)
 	{
+		Body bodyA = fixtureA.Body;
 		Body bodyB = fixtureB.Body;
-		if((bodyB.UserTag == "PlayerObject") && !jointConnected)
+		/*if((bodyB.UserTag == "PlayerObject") && !jointConnected)
 		{
 			FVector2 colNorm = contact.Manifold.LocalNormal;
 			if (Mathf.Abs(colNorm.X) > Mathf.Abs(colNorm.Y))
@@ -215,28 +219,52 @@ public class FollowRoad : MonoBehaviour {
 					cubejointConnected = true;
 				}
 			}
-			
+		}*/
+		
+		if((bodyB.UserTag == "PlayerObject") && !jointConnected)
+		{
+			FVector2 colNorm = contact.Manifold.LocalNormal;
+			if (colNorm.Y > 0 || bodyB.UserFSBodyComponent.transform.position.y > this.transform.position.y)
+			{
+				playerScript.onGround = true;
+				playerScript.onPFM = true;
+				playerScript.bodyPFM = bodyA;
+				lastRoadPosition = roadBody.Position;
+				jointConnected = true;
+				
+				if(roadRecto.activation == Activation.PLAYER)
+				{
+					playRoad();
+				}
+			}
+		}
+		else if(bodyB.UserTag == "Bloc")
+		{
+			FVector2 colNorm = contact.Manifold.LocalNormal;
+			if (colNorm.Y > 0 || bodyB.UserFSBodyComponent.transform.position.y > this.transform.position.y)
+			{
+				cube               = bodyB.UserFSBodyComponent.gameObject;
+				cubeBody           = bodyB;
+				cubejointConnected = true;
+			}
 		}
 		return true;
 	}
 	
 	private void OnSeparationEvent(Fixture fixtureA, Fixture fixtureB)
 	{
-		Body bodyB = fixtureB.Body;
-		if(bodyB.UserTag == "PlayerObject" && jointConnected)
+
+	}
+	
+	private void OnTriggerExit(Collider col)
+	{
+		if(col.name == "GROUND_HITBOX" && col.transform.parent.name == "PLAYER")
 		{
 			playerScript.onGround = false;
 			playerScript.onPFM    = false;
 			playerScript.bodyPFM  = null;
 			jointConnected        = false;
+			Debug.Log("End Player on PFM");
 		}
-		
-		else if(bodyB.UserTag == "Bloc")
-		{
-			cube = null;
-			cubeBody = null;
-			cubejointConnected = false;
-		}
-			
 	}
 }

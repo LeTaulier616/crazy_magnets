@@ -50,8 +50,10 @@ public class PlayerScript : MonoBehaviour
 	
 	private FVector2  walkVelocity;
 	[HideInInspector]
-	public  bool      onPFM   = false;
-	public  Body      bodyPFM = null;
+	public  bool      onPFM       = false;
+	public  Body      bodyPFM     = null;
+	public  bool      jumpFromPFM = false;
+	public  float     pfmVelocity = 0.0f;
 	
 	private float dirCoeff = 0;
 	private float frictionFactor;
@@ -428,10 +430,12 @@ public class PlayerScript : MonoBehaviour
 	{
 		playerBody.LinearVelocity = new FVector2(0.0f, this.headStucked ? 0 : playerBody.LinearVelocity.Y);
 		playerBody.LinearVelocity += walkVelocity;
+		//if(this.jumpFromPFM)
+		//	playerBody.LinearVelocity += new FVector2(this.pfmVelocity, 0.0f);
 	}
 	
 	private void Jump()
-	{
+	{	
 		if(canJump)
 		{
 			playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0f);
@@ -444,9 +448,20 @@ public class PlayerScript : MonoBehaviour
 				this.playerMesh.animation["fall"].time = 0.0f;
 			}
 			
-			this.onGround = false;
-			this.onPFM = false;
-			this.bodyPFM = null;
+			if(this.onPFM)
+			{
+				this.jumpFromPFM = true;
+				FollowRoad tmpfroad = (this.bodyPFM.UserData as GameObject).GetComponent<FollowRoad>();
+				if(tmpfroad.back)
+				{
+					this.pfmVelocity = tmpfroad.roadVerso.vx / Time.deltaTime / 10.0f;
+				}
+				else
+				{
+					this.pfmVelocity = tmpfroad.roadRecto.vx / Time.deltaTime / 10.0f;
+				}
+			}
+			
 			GlobalVarScript.instance.blockCamera(Camera.main.transform.position);	
 		}
 	}			
@@ -511,6 +526,14 @@ public class PlayerScript : MonoBehaviour
 		this.onPFM = false;
 		this.bodyPFM = null;
 		//GlobalVarScript.instance.blockCamera(Camera.main.transform.position);
+	}
+	
+	public void ApplyPFMVelocity(float bumpForce)
+	{
+		playerBody.ApplyLinearImpulse(new FVector2(bumpForce, 0));
+		this.onGround = false;
+		this.onPFM = false;
+		this.bodyPFM = null;
 	}
 	
 	public void CheckpointReached()
