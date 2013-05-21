@@ -65,6 +65,7 @@ public class ControllerMain : MonoBehaviour
 					switch (touch.phase) 
 					{
 						case TouchPhase.Began:
+							this.SendMessage("Tap", SendMessageOptions.DontRequireReceiver);
 							resetSlide ();
 							touchObj.startPos = touch.position;
 							touchObj.startTime = Time.time;
@@ -139,52 +140,58 @@ public class ControllerMain : MonoBehaviour
 					case TouchPhase.Began:
 						Ray ray = Camera.mainCamera.ScreenPointToRay (touch.position);
 						RaycastHit hitInfo;
-						if (GlobalVarScript.instance.cameraFree != 2 && Physics.Raycast(ray, out hitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
+						if (Physics.Raycast(ray, out hitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
 						{
-							//Debug.Log(hitInfo.collider.gameObject.name);
-							// si on pointe un objet on l'attache à l'objet touch
-							if (hitInfo.transform.gameObject.tag == "Bloc" || hitInfo.transform.gameObject.tag == "Player"
-								|| hitInfo.transform.gameObject.tag == "Grab" || hitInfo.transform.gameObject.tag == "Button")
+							if (this.canMagnet)
 							{
-								touchObj.selectedObject = hitInfo.transform.gameObject;
-								touchObj.selectedObject.SendMessageUpwards("SelectObject", SendMessageOptions.DontRequireReceiver);
+								//Debug.Log(hitInfo.collider.gameObject.name);
+								// si on pointe un objet on l'attache à l'objet touch
+								if (hitInfo.transform.gameObject.tag == "Bloc" || hitInfo.transform.gameObject.tag == "Player"
+									|| hitInfo.transform.gameObject.tag == "Grab" || hitInfo.transform.gameObject.tag == "Button")
+								{
+									touchObj.selectedObject = hitInfo.transform.gameObject;
+									touchObj.selectedObject.SendMessageUpwards("SelectObject", SendMessageOptions.DontRequireReceiver);
+								}
 							}
 						}
 					break;
 					
 					case TouchPhase.Stationary:
 					case TouchPhase.Moved:
-						if (GlobalVarScript.instance.cameraFree != 2 && touchObj.selectedObject != null)
+						if (touchObj.selectedObject != null)
 						{
 							Ray cRay = Camera.mainCamera.ScreenPointToRay (touch.position);
 							RaycastHit cHitInfo;
 							if (Physics.Raycast(cRay, out cHitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
 							{
-								// gestion de l'objet sélectionné en fonction de son tag
-								/*
-								if (cHitInfo.transform.gameObject.tag == "Player")
+								if (this.canMagnet)
 								{
-									//if(Vector3.Distance(touchObj.selectedObject.transform.position, this.transform.position) < blockRange)
-										//touchObj.selectedObject.SendMessageUpwards("Move", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
-								}
-								else if (cHitInfo.transform.gameObject.tag == "Bloc" && touchObj.selectedObject.tag == "Player")
-								{
-									if(Vector3.Distance(cHitInfo.transform.position, this.transform.position) < blockRange)
+									// gestion de l'objet sélectionné en fonction de son tag
+									/*
+									if (cHitInfo.transform.gameObject.tag == "Player")
 									{
-										this.selectedObject = cHitInfo.transform.gameObject;
-										//cHitInfo.transform.gameObject.SendMessageUpwards("Repulse", touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+										//if(Vector3.Distance(touchObj.selectedObject.transform.position, this.transform.position) < blockRange)
+											//touchObj.selectedObject.SendMessageUpwards("Move", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
 									}
-								}
-								*/
-								if (cHitInfo.transform.gameObject.tag == "Bloc" && Vector3.Distance(touchObj.selectedObject.transform.position, this.transform.position) < blockRange)
-								{
-									touchObj.selectedObject.SendMessageUpwards("Move", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
-								}
-							
-								else if (cHitInfo.transform.gameObject.tag == "Grab")
-								{
-									touchObj.selectedObject = cHitInfo.transform.gameObject;
-									gameObject.SendMessage("Grab", touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+									else if (cHitInfo.transform.gameObject.tag == "Bloc" && touchObj.selectedObject.tag == "Player")
+									{
+										if(Vector3.Distance(cHitInfo.transform.position, this.transform.position) < blockRange)
+										{
+											this.selectedObject = cHitInfo.transform.gameObject;
+											//cHitInfo.transform.gameObject.SendMessageUpwards("Repulse", touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+										}
+									}
+									*/
+									if (cHitInfo.transform.gameObject.tag == "Bloc" && Vector3.Distance(touchObj.selectedObject.transform.position, this.transform.position) < blockRange)
+									{
+										touchObj.selectedObject.SendMessageUpwards("Move", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
+									}
+								
+									else if (cHitInfo.transform.gameObject.tag == "Grab")
+									{
+										touchObj.selectedObject = cHitInfo.transform.gameObject;
+										gameObject.SendMessage("Grab", touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+									}
 								}
 							}
 						}
@@ -221,7 +228,7 @@ public class ControllerMain : MonoBehaviour
 				
 				Ray ray = Camera.mainCamera.ScreenPointToRay (Input.mousePosition);
 				RaycastHit hitInfo;
-				if (GlobalVarScript.instance.cameraFree != 2 && Physics.Raycast(ray, out hitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
+				if (Physics.Raycast(ray, out hitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
 				{
 					if (this.canMagnet)
 					{
@@ -237,7 +244,7 @@ public class ControllerMain : MonoBehaviour
 			}
 			else if (Input.GetMouseButton(0))
 			{
-				if (GlobalVarScript.instance.cameraFree != 2 && mouseObject != null && mouseObject.selectedObject != null)
+				if (mouseObject != null && mouseObject.selectedObject != null)
 				{
 					Ray cRay = Camera.mainCamera.ScreenPointToRay (Input.mousePosition);
 					RaycastHit cHitInfo;
@@ -338,7 +345,10 @@ public class ControllerMain : MonoBehaviour
 				}
 			}
 		}
-		dir = (Input.GetKey(KeyCode.RightArrow) ? 1 : 0) + (Input.GetKey(KeyCode.LeftArrow) ? -1 : 0);
+		if (dir == 0)
+		{
+			dir = (Input.GetKey(KeyCode.RightArrow) ? 1 : 0) + (Input.GetKey(KeyCode.LeftArrow) ? -1 : 0);
+		}
 		
 		if (dir > 0)
 			dir = 1;

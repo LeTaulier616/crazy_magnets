@@ -387,6 +387,7 @@ public class Controllable : MonoBehaviour
 	public void Bump(float bumpForce)
 	{
 		playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0f);
+		Debug.Log(bumpForce * this.localGravity);
 		playerBody.ApplyLinearImpulse(new FVector2(0, bumpForce * this.localGravity));
 		this.isJumping = true;
 		
@@ -534,6 +535,7 @@ public class Controllable : MonoBehaviour
 		this.walkVelocity = FVector2.Zero;
 		this.canMove = false;
 		this.canJump = false;
+		GlobalVarScript.instance.player.GetComponent<ControllerMain>().canMagnet = false;
 		this.playerBody.Mass = 100f;
 	}
 	
@@ -542,6 +544,7 @@ public class Controllable : MonoBehaviour
 		this.playerBody.ResetDynamics();
 		this.canMove = true;
 		this.canJump = true;
+		GlobalVarScript.instance.player.GetComponent<ControllerMain>().canMagnet = true;
 		this.playerBody.Mass = 1f;
 	}
 }
