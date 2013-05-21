@@ -111,9 +111,6 @@ public class MenuGesture : MonoBehaviour {
 				lerpValue = 1.0f;
 			}
 			
-			if(setHidden)
-				Debug.Log(lerpValue);
-			
 			if(lerpValue >= 1.0f && setHidden)
 			{
 				switchScreen();
@@ -194,6 +191,23 @@ public class MenuGesture : MonoBehaviour {
 		
 		Debug.Log("Menu Screen");
 		
+		screen.activateMenu();
+		setHidden = false;
+		setVisible = true;
+		timer = 0.0f;
+	}
+	
+	public void startTuto()
+	{
+		menuScreen = MenuGesture.ScreenMenu.NONE;
+		screen = GameObject.Find("Menus").GetComponent<Interface>();
+	}
+	
+	public void endTuto()
+	{
+		screen.desactivateMenu();
+		menuScreen = MenuGesture.ScreenMenu.ENDLEVEL;
+		screen = GameObject.Find("Menus").GetComponent<EndMenu>();
 		screen.activateMenu();
 		setHidden = false;
 		setVisible = true;

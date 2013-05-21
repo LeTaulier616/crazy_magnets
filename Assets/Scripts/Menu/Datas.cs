@@ -84,7 +84,7 @@ public class Datas
 		datas.currentLevel  = 0;
 		
 		datas.lastWorld     = 0;
-		datas.lastLevel     = 5;
+		datas.lastLevel     = 0;
 		
 		datas.selectedLevel = 0;
 		datas.selectedWorld = 0;
@@ -94,6 +94,7 @@ public class Datas
 		datas.bgmVolume     = 100;
 		
 		datas.isNewGame     = true;
+		datas.tutoDone      = false;
 		
 		datas.timeLevels = new float[MyDefines.kNbLevels];
 		for(int iii = 0; iii < MyDefines.kNbLevels; ++iii)

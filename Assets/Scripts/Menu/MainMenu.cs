@@ -8,6 +8,7 @@ public class MainMenu : MenuScreen {
 	public GameObject options_button_go;
 	public GameObject levels_button_go;
 	public GameObject datas_button_go;
+	public GameObject demo_button_go;
 
 	void Start () 
 	{
@@ -16,6 +17,7 @@ public class MainMenu : MenuScreen {
    		UIEventListener.Get(options_button_go).onClick  = options;
   	 	UIEventListener.Get(levels_button_go).onClick   = levels;
   	 	UIEventListener.Get(datas_button_go).onClick    = resetDatas;
+  	 	UIEventListener.Get(demo_button_go).onClick     = unlockDemo;
 	}
 	
 	public override void activateMenu()
@@ -45,9 +47,15 @@ public class MainMenu : MenuScreen {
 		exitScreen = true;
 		screenToGo = MenuGesture.ScreenMenu.NONE;
 		if(Datas.sharedDatas().datas.isNewGame)
+		{
+			Debug.Log("Launch Tuto");
 			loadTuto  = true;
+		}
 		else
+		{
+			Debug.Log("Launch Level");
 			loadLevel = true;
+		}
 		Datas.sharedDatas().datas.isNewGame = false;
 	}
 
@@ -79,6 +87,7 @@ public class MainMenu : MenuScreen {
 	{
 		Debug.Log("Reset Datas");
 		Datas.sharedDatas().reinitDatas();
+		Datas.sharedDatas().saveDatas();
 	}
 	
 	private void gotuto(GameObject go)
@@ -88,5 +97,11 @@ public class MainMenu : MenuScreen {
 		screenToGo = MenuGesture.ScreenMenu.NONE;
 		Datas.sharedDatas().datas.selectedLevel = 0;
 		Datas.sharedDatas().datas.selectedWorld = 0;
+	}
+	
+	private void unlockDemo(GameObject go)
+	{
+		Datas.sharedDatas().datas.tutoDone  = true;
+		Datas.sharedDatas().datas.lastLevel = 4;
 	}
 }

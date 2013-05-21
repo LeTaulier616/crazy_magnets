@@ -23,7 +23,9 @@ public class EndLevelScript : MonoBehaviour
 	{
 		player.GetComponent<PlayerScript>().hasWon = true;
 		
-		GlobalVarScript.instance.cameraFree = 2;
+		GlobalVarScript.instance.SetCameraTarget(player.GetComponent<PlayerScript>().transform, true);
+		player.GetComponent<PlayerScript>().canMove = false;
+		player.GetComponent<PlayerScript>().canJump = false;
 				
 		yield return new WaitForSeconds(player.GetComponent<PlayerScript>().playerMesh.animation["win"].length / 4.0f);
 				

@@ -42,7 +42,24 @@ public class InterruptorReceiver : MonoBehaviour
 				}
 			}
 		}
-		
+	}
+	
+	public void reloadInterruptor()
+	{
+		this.interruptorCount = 0;	
+		this.isOpen = false;
+		this.isActivated = false;
+		for(int trg = 0; trg < targets.Length; ++trg)
+		{
+			targets[trg].GetComponent<Interruptor>().reloadInterruptorFromParent();
+		} 
+	}
+	
+	public void reloadInterruptorFromParent()
+	{
+		this.interruptorCount = 0;	
+		this.isOpen = false;
+		this.isActivated = false;
 	}
 	
 	public void OnActivate()
