@@ -347,7 +347,7 @@ public class ControllerMain : MonoBehaviour
 		}
 		if (dir == 0)
 		{
-			dir = (Input.GetKey(KeyCode.RightArrow) ? 1 : 0) + (Input.GetKey(KeyCode.LeftArrow) ? -1 : 0);
+			dir = (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D) ? 1 : 0) + (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q) ? -1 : 0);
 		}
 		
 		if (dir > 0)

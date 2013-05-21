@@ -314,6 +314,38 @@ public class GlobalEditor : Editor
 		
 		EditorGUILayout.Space();
 			
+		target_.BigChaseSoundsExpand = EditorGUILayout.Foldout(target_.BigChaseSoundsExpand, "Sons de poursuite - Grand ennemi");
+		
+		if(target_.BigChaseSoundsExpand)
+		{
+			int x = 0;	
+			target_.BigChaseSoundsSize = EditorGUILayout.IntField("Size", target_.BigChaseSoundsSize);
+			
+			if(target_.BigChaseSounds.Length != target_.BigChaseSoundsSize)
+			{
+				AudioClip[] newBigChaseSounds = new AudioClip[target_.BigChaseSoundsSize];
+				
+				for(x = 0; x < target_.BigChaseSoundsSize; x++)
+				{
+					if(target_.BigChaseSounds.Length > x)
+					{
+						newBigChaseSounds[x] = target_.BigChaseSounds[x];
+					}
+				}
+				target_.BigChaseSounds = newBigChaseSounds;
+			}
+			
+			for(x = 0; x < target_.BigChaseSounds.Length; x++)
+			{
+				target_.BigChaseSounds[x] = addSoundField(target_.BigChaseSounds[x],
+					false,
+					"Sons de poursuite " + (x + 1),
+					"");
+			}
+		}
+		
+		EditorGUILayout.Space();
+			
 		target_.SmallSoundsExpand = EditorGUILayout.Foldout(target_.SmallSoundsExpand, "Sons de marche - Petit ennemi");
 		
 		if(target_.SmallSoundsExpand)
@@ -340,6 +372,38 @@ public class GlobalEditor : Editor
 				target_.SmallSounds[x] = addSoundField(target_.SmallSounds[x],
 					false,
 					"Sons de marche " + (x + 1),
+					"");
+			}
+		}
+		
+		EditorGUILayout.Space();
+			
+		target_.SmallChaseSoundsExpand = EditorGUILayout.Foldout(target_.SmallChaseSoundsExpand, "Sons de poursuite - Petit ennemi");
+		
+		if(target_.SmallChaseSoundsExpand)
+		{
+			int x = 0;	
+			target_.SmallChaseSoundsSize = EditorGUILayout.IntField("Size", target_.SmallChaseSoundsSize);
+			
+			if(target_.SmallChaseSounds.Length != target_.SmallChaseSoundsSize)
+			{
+				AudioClip[] newSmallChaseSounds = new AudioClip[target_.SmallChaseSoundsSize];
+				
+				for(x = 0; x < target_.SmallChaseSoundsSize; x++)
+				{
+					if(target_.SmallChaseSounds.Length > x)
+					{
+						newSmallChaseSounds[x] = target_.SmallChaseSounds[x];
+					}
+				}
+				target_.SmallChaseSounds = newSmallChaseSounds;
+			}
+			
+			for(x = 0; x < target_.SmallChaseSounds.Length; x++)
+			{
+				target_.SmallChaseSounds[x] = addSoundField(target_.SmallChaseSounds[x],
+					false,
+					"Sons de poursuite " + (x + 1),
 					"");
 			}
 		}

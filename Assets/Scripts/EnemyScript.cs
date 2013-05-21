@@ -26,7 +26,9 @@ public class PatrolState : State
 		this.enemy = it.GetComponent<EnemyScript>();
 		
 		if(this.enemy.enemyMesh != null)
-			this.enemy.enemyMesh.animation.CrossFade("patrol", 0.5f);
+		{
+			this.enemy.enemyMesh.animation.CrossFade("run", 0.5f);
+		}
 	}
 
 	override public void UpdateState(GameObject it)
@@ -240,6 +242,9 @@ public class EnemyScript : StateMachine
 		this.playerBody.Mass = 100f;
 		Controllable controllable = this.GetComponent<Controllable>();
 		controllable.isAlive = false;
+		
+		controllable.playerMesh = enemyMesh;
+		
 		if (this.type == EnemyType.Small)
 		{
 			this.patrolingSpeed = GlobalVarScript.instance.smallEnemyPatrolSpeed;
@@ -263,7 +268,7 @@ public class EnemyScript : StateMachine
 			controllable.jumpForce = GlobalVarScript.instance.bigEnemyJumpForce;
 			this.playerBody.LinearDamping = GlobalVarScript.instance.bigEnemyDamping;
 			
-			this.enemyMesh.animation["patrol"].speed = 2.0f;
+			this.enemyMesh.animation["run"].speed = 2.0f;
 			this.enemyMesh.animation["chase"].speed = 2.0f;
 			this.enemyMesh.animation["idle"].speed = 2.0f;
 		}

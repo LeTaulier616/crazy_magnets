@@ -167,12 +167,19 @@ public class PlayerScript : Controllable
 			this.renderer.enabled =false;
 		
 		GameObject platforms = GameObject.FindGameObjectWithTag("PlatForms");
+		GameObject interruptors = GameObject.FindGameObjectWithTag("Interruptors");
 		
 		FollowRoad[] roads = platforms.GetComponentsInChildren<FollowRoad>();
+		Interruptor[] buttons = interruptors.GetComponentsInChildren<Interruptor>();
 		
 		foreach(FollowRoad road in roads)
 		{
-			road.stopRoad();
+			road.reloadRoad();
+		}
+		
+		foreach(Interruptor button in buttons)
+		{
+			//button.reloadInterruptor();
 		}
 	}
 	
