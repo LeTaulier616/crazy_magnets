@@ -363,7 +363,7 @@ public class Interruptor : MonoBehaviour
 				return;
 			
 			if(!(this.activator == Activator.ELECTRIC_TOUCH && !isElectrified)
-				&& Vector3.Distance(GameObject.FindGameObjectWithTag("PlayerObject").transform.position, gameObject.transform.position) < (isElectrified ? tmpPorteeElec : tmpPorteeNorm) )
+				&& (Vector3.Distance(GameObject.FindGameObjectWithTag("PlayerObject").transform.position, gameObject.transform.position) < (isElectrified ? tmpPorteeElec : tmpPorteeNorm) || isEnnemy) )
 			{
 				if(this.activator == Activator.ELECTRIC_TOUCH)
 				{

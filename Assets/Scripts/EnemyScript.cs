@@ -45,9 +45,9 @@ public class PatrolState : State
 			|| (it.transform.right.x > 0 && this.hasRightWayPoint && this.rightWayPoint.transform.position.x - it.transform.position.x < 0)
 			|| (it.transform.right.x < 0 && this.hasLeftWayPoint && this.leftWayPoint.transform.position.x - it.transform.position.x > 0))
 		{
-			it.transform.Rotate(it.transform.up, 180);
+			//it.transform.Rotate(it.transform.up, 180);
+			it.GetComponent<Controllable>().lastDir *= -1;
 		}
-		
 		else
 		{
 			Body body = it.GetComponent<FSBodyComponent>().PhysicsBody;
@@ -84,7 +84,8 @@ public class PursuitState : State
 
 		if (((GlobalVarScript.instance.player.transform.position.x - it.transform.position.x) > 0) != (it.transform.right.x > 0))
 		{
-			it.transform.Rotate(it.transform.up, 180);
+			//it.transform.Rotate(it.transform.up, 180);
+			it.GetComponent<Controllable>().lastDir *= -1;
 		}
 
 		if (Vector3.Distance(GlobalVarScript.instance.player.transform.position, it.transform.position) < 2f)
@@ -167,128 +168,27 @@ public class AttackState : State
 
 public class ControlledState : State
 {
-	public float			speed;
 	public Transform		target;
-	public EnemyScript 		enemy;
-	private bool			keyinputed;
 
 	public override void EnterState (GameObject it)
 	{
-		GlobalVarScript.instance.cameraTarget = this.target;
-		GlobalVarScript.instance.cameraFree = 2;
+		GlobalVarScript.instance.SetCameraTarget(this.target);
+		GlobalVarScript.instance.cameraFree = 0;
 		Interruptor button = it.gameObject.GetComponentInChildren<Interruptor>();
 		button.activator = Interruptor.Activator.TOUCH;
-		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.BodyType = BodyType.Static;
-		
-		this.enemy = it.gameObject.GetComponent<EnemyScript>();
-		keyinputed = false;
+		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.Mass = 1.0f;
+		it.GetComponent<Controllable>().isAlive = true;
+		//it.GetComponent<Controllable>().canMove = true;
+		//it.GetComponent<Controllable>().canJump = true;
 	}
-
-	public override void UpdateState (GameObject it)
-	{
-		int dir = (this.enemy.controllerMain.isRightTouched() ? 1 : 0) + (this.enemy.controllerMain.isLeftTouched() ? -1 : 0);
-		// Gestion clavier temporaire
-		if (dir == 0)
-		{
-			dir = (Input.GetKey(KeyCode.RightArrow) ? 1 : 0) + (Input.GetKey(KeyCode.LeftArrow) ? -1 : 0);
-		}
-		
-		if (dir != 0 && Mathf.Abs(this.enemy.walkVelocity.X) > 2f)
-		{
-			this.enemy.lastDir = dir;
-		}
-		
-		this.enemy.Walk(dir);
-
-		this.enemy.ApplyLinearVelocity();
-
-		if(this.enemy.onGround && (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Space)))
-		{
-			this.enemy.Jump();
-		}
-		if(Input.GetKeyDown(KeyCode.Z) || keyinputed)
-		{
-			keyinputed = true;
-			this.enemy.Walk(1);
-		}
-		
-		if (this.enemy.controllerMain.isSliding())
-		{
-			this.enemy.controllerMain.resetSlide();
-			if (this.enemy.onGround)
-			{
-				this.enemy.Jump();
-			}
-		}
-		
-		else if (!this.enemy.isWalking)
-		{
-			this.enemy.controllerMain.resetSlide();	
-		}
-		
-		if (this.enemy.onGround == false && this.enemy.playerBody.LinearVelocity.Y < 0)
-		{			
-			// pour que le perso tombe plus vite
-			if (this.enemy.type == EnemyScript.EnemyType.Small)
-				this.enemy.playerBody.GravityScale = GlobalVarScript.instance.smallEnemyGravityScale;
-			else //if (this.enemy.type == EnemyScript.EnemyType.Big)
-				this.enemy.playerBody.GravityScale = GlobalVarScript.instance.bigEnemyGravityScale;
-			
-			RaycastHit hit;
-			if (Physics.Raycast(new Vector3(it.transform.position.x, it.transform.position.y, it.transform.position.z), Vector3.down, out hit, 4.5f) && GlobalVarScript.instance.groundTags.Contains(hit.transform.tag))
-			{
-				Debug.Log("Over Here");
-				Camera.main.SendMessage("ResetFall", SendMessageOptions.DontRequireReceiver);
-			}
-		}
-		
-			// orientation du joueur
-		if (dir != 0 && this.enemy.lastDir != 0)
-		{
-			this.enemy.transform.forward = new Vector3(0, 0, (dir != 0 ? dir : this.enemy.lastDir));
-		}
-			  
-			// position cible de la camera
-		this.target.transform.localPosition = new Vector3(2.5f, 2.5f, 0.0f);
-	}
-
-	public override void LateUpdateState(GameObject it)
-	{
-		//this.transform.localRotation = Quaternion.Euler(new Vector3(this.angle, lastDir == 1 ? 0 : 180, 0));
-		if (this.enemy.attraction == true)
-		{
-			this.enemy.angle += Time.deltaTime * 400f;
-			this.enemy.attraction = false;
-			if (this.enemy.angle > 180)
-			{
-				this.enemy.angle = 180;
-			}
-			
-			// gestion gravite inverse
-			this.enemy.localGravity = -1f;
-			this.enemy.playerBody.ApplyForce(new FVector2(0, 9.8f * this.enemy.playerBody.Mass * this.enemy.playerBody.GravityScale));
-		}
-		else
-		{
-			this.enemy.angle -= Time.deltaTime * 400f;
-			if (this.enemy.angle < 0)
-			{
-				this.enemy.angle = 0;
-			}
-			
-			// gestion gravite
-			this.enemy.localGravity = 1f;
-		}
-		this.enemy.transform.localRotation = Quaternion.Euler(new Vector3(this.enemy.angle, this.enemy.lastDir == 1 ? 0 : 180, 0));
-	}
-
 
 	public override void ExitState (GameObject it)
 	{
-		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.BodyType = BodyType.Dynamic;
-		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.Mass = 1.0f;
-		
+		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.Mass = 100.0f;
 		GlobalVarScript.instance.resetCamera();
+		it.GetComponent<Controllable>().isAlive = false;
+		//it.GetComponent<Controllable>().canMove = false;
+		//it.GetComponent<Controllable>().canJump = false;
 	}
 }
 
@@ -309,6 +209,8 @@ public class EnemyScript : StateMachine
 
 	public GameObject	enemyMesh;
 	public Transform	target;
+
+	public Body			playerBody;
 
 	[HideInInspector]
 	public float	patrolingSpeed = 1;
@@ -332,75 +234,12 @@ public class EnemyScript : StateMachine
 	public ControlledState	controlled;
 	public State			idle;
 
-	// control values
-	
-	[HideInInspector]
-	public AnimationCurve AccelerationCurve;
-	[HideInInspector]
-	public AnimationCurve DecelerationCurve;
-	
-	[HideInInspector]
-	public float accelerationFactor;
-	[HideInInspector]
-	public float decelerationFactor;
-	
-	[HideInInspector]
-	public ControllerMain controllerMain;
-	[HideInInspector]
-	public float	speed;
-	[HideInInspector]
-	public float	jumpForce;
-	public Body		playerBody;
-	private bool	headStucked;
-	[HideInInspector]
-	public bool		isWalking;
-	[HideInInspector]
-	public bool	attraction;
-	[HideInInspector]
-	public float	angle;
-	[HideInInspector]
-	public float	localGravity;
-	[HideInInspector]
-	public bool		onGround;
-	[HideInInspector]
-	public int		lastDir = 0;
-	
-	[HideInInspector]
-	public float dirCoeff = 0;
-	[HideInInspector]
-	public float frictionFactor;
-	
-	[HideInInspector]
-	public float     AccelerationTime;
-	
-	[HideInInspector]
-	public FVector2  walkVelocity;
-	[HideInInspector]
-	public  bool      onPFM   = false;
-	public  Body      bodyPFM = null;
-
 	void Start()
 	{
-		playerBody = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
-		playerBody.FixedRotation = true;
-		playerBody.Mass = 1f;
-
-		this.startPosition = this.transform.position;
-		
-		this.isWalking  = false;
-		this.attraction = false;
-		this.angle = 0;
-		this.localGravity = 1;
-		this.onGround   = true;
-		this.headStucked = false;
-		this.onPFM      = false;
-		this.bodyPFM    = null;
-		this.walkVelocity    = FVector2.Zero;
-
-		this.frictionFactor = 1f;
-
-		this.controllerMain = GlobalVarScript.instance.player.GetComponent<ControllerMain>();
-
+		this.playerBody = this.GetComponent<FSBodyComponent>().PhysicsBody;
+		this.playerBody.Mass = 100f;
+		Controllable controllable = this.GetComponent<Controllable>();
+		controllable.isAlive = false;
 		if (this.type == EnemyType.Small)
 		{
 			this.patrolingSpeed = GlobalVarScript.instance.smallEnemyPatrolSpeed;
@@ -408,8 +247,8 @@ public class EnemyScript : StateMachine
 			this.pursuitSpeed = GlobalVarScript.instance.smallEnemyPursuitSpeed;
 			this.alertRange = GlobalVarScript.instance.smallEnemyAlertRange;
 			this.waitingTime = 0; // unused
-			this.speed = GlobalVarScript.instance.smallEnemySpeed;
-			this.jumpForce = GlobalVarScript.instance.smallEnemyJumpForce;
+			controllable.speed = GlobalVarScript.instance.smallEnemySpeed;
+			controllable.jumpForce = GlobalVarScript.instance.smallEnemyJumpForce;
 			this.playerBody.LinearDamping = GlobalVarScript.instance.smallEnemyDamping;
 		}
 		
@@ -420,17 +259,14 @@ public class EnemyScript : StateMachine
 			this.pursuitSpeed = GlobalVarScript.instance.bigEnemyPursuitSpeed;
 			this.alertRange = GlobalVarScript.instance.bigEnemyAlertRange;
 			this.waitingTime = 0; // unused
-			this.speed = GlobalVarScript.instance.bigEnemySpeed;
-			this.jumpForce = GlobalVarScript.instance.bigEnemyJumpForce;
+			controllable.speed = GlobalVarScript.instance.bigEnemySpeed;
+			controllable.jumpForce = GlobalVarScript.instance.bigEnemyJumpForce;
 			this.playerBody.LinearDamping = GlobalVarScript.instance.bigEnemyDamping;
 			
 			this.enemyMesh.animation["patrol"].speed = 2.0f;
 			this.enemyMesh.animation["chase"].speed = 2.0f;
 			this.enemyMesh.animation["idle"].speed = 2.0f;
 		}
-		
-		this.accelerationFactor = GlobalVarScript.instance.accelerationFactor;
-		this.decelerationFactor = GlobalVarScript.instance.decelerationFactor;
 
 		this.patrol = new PatrolState();
 		this.patrol.speed = this.patrolingSpeed;
@@ -446,7 +282,6 @@ public class EnemyScript : StateMachine
 		this.attack.hitTime = 0.5f;
 		
 		this.controlled = new ControlledState();
-		this.controlled.speed = this.patrolingSpeed;
 		this.controlled.target = this.target;
 
 		this.idle = new State();
@@ -476,8 +311,8 @@ public class EnemyScript : StateMachine
 		bool ret = (Physics.Raycast(this.ray, out hit, 20.0f, LayerMask.NameToLayer("World")) && floatCompare(hit.distance, this.floorDist));
 
 		Debug.DrawRay(this.ray.origin, this.ray.direction);
-		if (!ret)
-			Debug.Log("distance is: " + hit.distance + " instead of: " + this.floorDist);
+		//if (!ret)
+			//Debug.Log("distance is: " + hit.distance + " instead of: " + this.floorDist);
 
 		return ret;
 	}
@@ -499,163 +334,11 @@ public class EnemyScript : StateMachine
 		this.SwitchState(nextState);
 	}
 
-	public void Walk(int dir)
-    {
-		if(isWalking != (dir != 0))
-		{
-			this.isWalking = dir != 0;
-			AccelerationTime = Time.time;
-		}
-		
-		// gestion d'un coeff de dir pour pas que le joueur se retourne instantanement quand on change de direction
-		if (dirCoeff < dir)
-		{
-			dirCoeff += Time.deltaTime * 10f * frictionFactor;
-			dirCoeff = dirCoeff < 1 ? dirCoeff : 1;
-		}
-		else if (dirCoeff > dir)
-		{
-			dirCoeff -= Time.deltaTime * 10f * frictionFactor;
-			dirCoeff = dirCoeff > -1 ? dirCoeff : -1;
-		}
-	
-		if (isWalking)
-		{
-			float speedX = speed * AccelerationCurve.Evaluate((Time.time - AccelerationTime) * accelerationFactor) * dirCoeff;
-			walkVelocity = new FVector2(speedX, 0);
-			
-			if(enemyMesh != null)
-				enemyMesh.animation.CrossFade("patrol", 0.25f);
-		}
-		else
-		{
-			if (this.onGround)
-			{
-				walkVelocity = new FVector2(playerBody.LinearVelocity.X * DecelerationCurve.Evaluate((Time.time - AccelerationTime) * decelerationFactor * frictionFactor), 0);
-				if(enemyMesh != null)
-					enemyMesh.animation.CrossFade("idle", 0.25f);
-			}
-			
-			else
-			{
-				// TODO ajuster le parametre
-				float airControlFactor = 0.1f;
-				walkVelocity = new FVector2(playerBody.LinearVelocity.X * DecelerationCurve.Evaluate((Time.time - AccelerationTime) * decelerationFactor * airControlFactor), 0);
-			}
-		}	
-    }
-	
-	public void ApplyLinearVelocity()
-	{
-		playerBody.LinearVelocity = new FVector2(0.0f, this.headStucked ? 0 : playerBody.LinearVelocity.Y);
-		playerBody.LinearVelocity += walkVelocity;
-	}
-	
-	public void Jump()
-	{
-		playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0f);
-		playerBody.ApplyLinearImpulse(new FVector2(0, jumpForce * this.localGravity));
-		this.onGround = false;
-		this.onPFM = false;
-		this.bodyPFM = null;
-		GlobalVarScript.instance.blockCamera(Camera.main.transform.position);
-	}
-	
-	public void Bump(float bumpForce)
-	{
-		playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0);
-		playerBody.ApplyLinearImpulse(new FVector2(0, bumpForce));
-		this.onGround = false;
-		this.onPFM = false;
-		this.bodyPFM = null;
-		//GlobalVarScript.instance.blockCamera(Camera.main.transform.position);
-	}
-	
 	public void ResetPosition()
 	{
 		//Debug.Log("There");
 		this.playerBody.SetTransform(new FVector2(startPosition.x, startPosition.y), 0.0f);
 		this.SwitchState(this.patrol);
 	}
-	
-	public void CollisionGround(GameObject ground)
-	{
-		//Camera.main.gameObject.SendMessageUpwards("Reset", SendMessageOptions.DontRequireReceiver);
-		
-		if (GlobalVarScript.instance.groundTags.Contains(ground.tag))
-		{
-			this.onGround = true;
-			this.playerBody.GravityScale = 1f;
-			
-			// Gestion surface glissante
-			this.frictionFactor = 1f;
-						
-			if (ground.tag == "Slippery" || ground.tag == "Slippery")
-			{
-				this.frictionFactor = GlobalVarScript.instance.slipperyFactor;
-			}
-			
-			if (ground.tag == "Bumper")
-			{
-				BumperScript bs = ground.transform.gameObject.GetComponent<BumperScript>();
-				if (bs != null)
-				{
-					Bump(bs.bumperForce);
-					bs.PlayAnimation();
-				}
-			}
-		}
-	}
-	
-	public void StayGround(GameObject ground)
-	{
-		//Camera.main.gameObject.SendMessageUpwards("Reset", SendMessageOptions.DontRequireReceiver);
-		
-		if (GlobalVarScript.instance.groundTags.Contains(ground.tag))
-		{
-			this.onGround = true;
-			this.playerBody.GravityScale = 1f;
-		}
-	}
-	
-	public void ExitGround(GameObject ground)
-	{
-		this.onGround = false;
-	}
-	
-	public void CollisionHead(GameObject ceiling)
-	{/*
-		if (ceiling.transform.tag == "Attractor")
-		{
-			this.headStucked = true;
-			this.playerBody.IgnoreGravity = true;
-		}*/
-	}
-	
-	public void StayHead(GameObject ceiling)
-	{/*
-		if (ceiling.transform.tag == "Attractor")
-		{
-			this.headStucked = true;
-			this.playerBody.IgnoreGravity = true;
-		}*/
-	}
-	
-	public void ExitHead(GameObject ceiling)
-	{/*
-		if (ceiling.transform.tag == "Attractor")
-		{
-			this.headStucked = false;
-			this.playerBody.IgnoreGravity = false;
-		}*/
-	}
 
-	public void Attract(float force)
-	{
-		if (this.angle < 180)
-		{
-			playerBody.ApplyForce(new FVector2(0, force));
-		}
-		this.attraction = true;
-	}
 }

@@ -16,6 +16,8 @@ public class ControllerMain : MonoBehaviour
 	
 	private TouchObject mouseObject;
 	
+	public bool canMagnet;
+	
 	void Start ()
 	{
 		screenTouch = new Touch();
@@ -25,6 +27,8 @@ public class ControllerMain : MonoBehaviour
 		blockRange = GlobalVarScript.instance.BlockRadius;
 		
 		mouseObject = new TouchObject(0);
+		
+		canMagnet = true;
 	}
 	
 	void Update ()
@@ -61,6 +65,7 @@ public class ControllerMain : MonoBehaviour
 					switch (touch.phase) 
 					{
 						case TouchPhase.Began:
+							this.SendMessage("Tap", SendMessageOptions.DontRequireReceiver);
 							resetSlide ();
 							touchObj.startPos = touch.position;
 							touchObj.startTime = Time.time;
@@ -97,7 +102,7 @@ public class ControllerMain : MonoBehaviour
 								if (tapTime < GlobalVarScript.instance.maxTapTime && this.touchesTab.Count > 1)
 								{
 									// tap : saut
-									this.SendMessage("Tap", SendMessageOptions.DontRequireReceiver);
+									StartCoroutine(ResetTouch());
 								}
 							}
 							touchesToRemove.Add(touchObj);
@@ -124,7 +129,7 @@ public class ControllerMain : MonoBehaviour
 						{
 							touchObj.slideStart = Time.time;
 							touchObj.startPos = touch.position;
-							this.slide = true;
+							StartCoroutine(ResetTouch());
 						}
 					}
 				}
@@ -135,52 +140,58 @@ public class ControllerMain : MonoBehaviour
 					case TouchPhase.Began:
 						Ray ray = Camera.mainCamera.ScreenPointToRay (touch.position);
 						RaycastHit hitInfo;
-						if (GlobalVarScript.instance.cameraFree != 2 && Physics.Raycast(ray, out hitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
+						if (Physics.Raycast(ray, out hitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
 						{
-							//Debug.Log(hitInfo.collider.gameObject.name);
-							// si on pointe un objet on l'attache à l'objet touch
-							if (hitInfo.transform.gameObject.tag == "Bloc" || hitInfo.transform.gameObject.tag == "Player"
-								|| hitInfo.transform.gameObject.tag == "Grab" || hitInfo.transform.gameObject.tag == "Button")
+							if (this.canMagnet)
 							{
-								touchObj.selectedObject = hitInfo.transform.gameObject;
-								touchObj.selectedObject.SendMessageUpwards("SelectObject", SendMessageOptions.DontRequireReceiver);
+								//Debug.Log(hitInfo.collider.gameObject.name);
+								// si on pointe un objet on l'attache à l'objet touch
+								if (hitInfo.transform.gameObject.tag == "Bloc" || hitInfo.transform.gameObject.tag == "Player"
+									|| hitInfo.transform.gameObject.tag == "Grab" || hitInfo.transform.gameObject.tag == "Button")
+								{
+									touchObj.selectedObject = hitInfo.transform.gameObject;
+									touchObj.selectedObject.SendMessageUpwards("SelectObject", SendMessageOptions.DontRequireReceiver);
+								}
 							}
 						}
 					break;
 					
 					case TouchPhase.Stationary:
 					case TouchPhase.Moved:
-						if (GlobalVarScript.instance.cameraFree != 2 && touchObj.selectedObject != null)
+						if (touchObj.selectedObject != null)
 						{
 							Ray cRay = Camera.mainCamera.ScreenPointToRay (touch.position);
 							RaycastHit cHitInfo;
 							if (Physics.Raycast(cRay, out cHitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
 							{
-								// gestion de l'objet sélectionné en fonction de son tag
-								/*
-								if (cHitInfo.transform.gameObject.tag == "Player")
+								if (this.canMagnet)
 								{
-									//if(Vector3.Distance(touchObj.selectedObject.transform.position, this.transform.position) < blockRange)
-										//touchObj.selectedObject.SendMessageUpwards("Move", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
-								}
-								else if (cHitInfo.transform.gameObject.tag == "Bloc" && touchObj.selectedObject.tag == "Player")
-								{
-									if(Vector3.Distance(cHitInfo.transform.position, this.transform.position) < blockRange)
+									// gestion de l'objet sélectionné en fonction de son tag
+									/*
+									if (cHitInfo.transform.gameObject.tag == "Player")
 									{
-										this.selectedObject = cHitInfo.transform.gameObject;
-										//cHitInfo.transform.gameObject.SendMessageUpwards("Repulse", touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+										//if(Vector3.Distance(touchObj.selectedObject.transform.position, this.transform.position) < blockRange)
+											//touchObj.selectedObject.SendMessageUpwards("Move", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
 									}
-								}
-								*/
-								if (cHitInfo.transform.gameObject.tag == "Bloc" && Vector3.Distance(touchObj.selectedObject.transform.position, this.transform.position) < blockRange)
-								{
-									touchObj.selectedObject.SendMessageUpwards("Move", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
-								}
-							
-								else if (cHitInfo.transform.gameObject.tag == "Grab")
-								{
-									touchObj.selectedObject = cHitInfo.transform.gameObject;
-									gameObject.SendMessage("Grab", touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+									else if (cHitInfo.transform.gameObject.tag == "Bloc" && touchObj.selectedObject.tag == "Player")
+									{
+										if(Vector3.Distance(cHitInfo.transform.position, this.transform.position) < blockRange)
+										{
+											this.selectedObject = cHitInfo.transform.gameObject;
+											//cHitInfo.transform.gameObject.SendMessageUpwards("Repulse", touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+										}
+									}
+									*/
+									if (cHitInfo.transform.gameObject.tag == "Bloc" && Vector3.Distance(touchObj.selectedObject.transform.position, this.transform.position) < blockRange)
+									{
+										touchObj.selectedObject.SendMessageUpwards("Move", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
+									}
+								
+									else if (cHitInfo.transform.gameObject.tag == "Grab")
+									{
+										touchObj.selectedObject = cHitInfo.transform.gameObject;
+										gameObject.SendMessage("Grab", touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+									}
 								}
 							}
 						}
@@ -213,71 +224,73 @@ public class ControllerMain : MonoBehaviour
 			// controle souris
 			if (Input.GetMouseButtonDown(0))
 			{
+				this.SendMessage("Tap", SendMessageOptions.DontRequireReceiver);
+				
 				Ray ray = Camera.mainCamera.ScreenPointToRay (Input.mousePosition);
 				RaycastHit hitInfo;
-				if (GlobalVarScript.instance.cameraFree != 2 && Physics.Raycast(ray, out hitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
+				if (Physics.Raycast(ray, out hitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
 				{
-					//Debug.Log(hitInfo.collider.gameObject.name);
-					// si on pointe un objet on l'attache à l'objet touch
-					if (hitInfo.transform.gameObject.tag == "Bloc" || hitInfo.transform.gameObject.tag == "Player"
-						|| hitInfo.transform.gameObject.tag == "Grab" || hitInfo.transform.gameObject.tag == "Button")
+					if (this.canMagnet)
 					{
-						mouseObject.selectedObject = hitInfo.transform.gameObject;
-						mouseObject.selectedObject.SendMessageUpwards("SelectObject", SendMessageOptions.DontRequireReceiver);
+						// si on pointe un objet on l'attache à l'objet touch
+						if (hitInfo.transform.gameObject.tag == "Bloc" || hitInfo.transform.gameObject.tag == "Player"
+							|| hitInfo.transform.gameObject.tag == "Grab" || hitInfo.transform.gameObject.tag == "Button")
+						{
+							mouseObject.selectedObject = hitInfo.transform.gameObject;
+							mouseObject.selectedObject.SendMessageUpwards("SelectObject", SendMessageOptions.DontRequireReceiver);
+						}
 					}
 				}
 			}
 			else if (Input.GetMouseButton(0))
 			{
-				if (GlobalVarScript.instance.cameraFree != 2 && mouseObject != null && mouseObject.selectedObject != null)
+				if (mouseObject != null && mouseObject.selectedObject != null)
 				{
 					Ray cRay = Camera.mainCamera.ScreenPointToRay (Input.mousePosition);
 					RaycastHit cHitInfo;
 					if (Physics.Raycast(cRay, out cHitInfo, Camera.mainCamera.far, Camera.mainCamera.cullingMask))
 					{
-						// gestion de l'objet sélectionné en fonction de son tag
-						/*
-						if (cHitInfo.transform.gameObject.tag == "Player")
+						if (this.canMagnet)
 						{
-							if(Vector3.Distance(mouseObject.selectedObject.transform.position, this.transform.position) < blockRange)
-								mouseObject.selectedObject.SendMessageUpwards("Move", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
-						}
-						else if (cHitInfo.transform.gameObject.tag == "Bloc" && mouseObject.selectedObject.tag == "Player")
-						{
-							if(Vector3.Distance(cHitInfo.transform.position, this.transform.position) < blockRange)
+							// gestion de l'objet sélectionné en fonction de son tag
+							if (cHitInfo.transform.gameObject.tag == "Bloc" && Vector3.Distance(mouseObject.selectedObject.transform.position, this.transform.position) < blockRange)
 							{
-								this.selectedObject = cHitInfo.transform.gameObject;
-								cHitInfo.transform.gameObject.SendMessageUpwards("Repulse", mouseObject.selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+								mouseObject.selectedObject.SendMessageUpwards("Move", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
 							}
-						}
-						*/
-						if (cHitInfo.transform.gameObject.tag == "Bloc" && Vector3.Distance(mouseObject.selectedObject.transform.position, this.transform.position) < blockRange)
-						{
-							mouseObject.selectedObject.SendMessageUpwards("Move", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
-						}
-						else if (cHitInfo.transform.gameObject.tag == "Grab")
-						{
-							mouseObject.selectedObject = cHitInfo.transform.gameObject;
-							gameObject.SendMessage("Grab", mouseObject.selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+							else if (cHitInfo.transform.gameObject.tag == "Grab")
+							{
+								mouseObject.selectedObject = cHitInfo.transform.gameObject;
+								gameObject.SendMessage("Grab", mouseObject.selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+							}
 						}
 					}
 				}
 			}
 			else if (Input.GetMouseButtonUp(0))
 			{
-				if (mouseObject.selectedObject != null)
+				if (this.canMagnet)
 				{
-					mouseObject.selectedObject.SendMessageUpwards("UnselectObject", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
-				}
-				if (this.selectedObject != null)
-				{
-					this.selectedObject.SendMessageUpwards("UnselectObject", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
-					this.selectedObject = null;
+					if (mouseObject.selectedObject != null)
+					{
+						mouseObject.selectedObject.SendMessageUpwards("UnselectObject", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
+					}
+					if (this.selectedObject != null)
+					{
+						this.selectedObject.SendMessageUpwards("UnselectObject", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
+						this.selectedObject = null;
+					}
 				}
 				mouseObject.selectedObject = null;
 				resetTouch(0);
 			}
 		}
+		
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			StartCoroutine(ResetTouch());
+		}
+		
+		checkTouched();
 	}
 	
 	void checkInputs()
@@ -300,7 +313,7 @@ public class ControllerMain : MonoBehaviour
 		this.screenTouch = new Touch();
 		//this.leftTouched = false;
 		//this.rightTouched = false;
-		gameObject.SendMessage("ReleaseTouch", SendMessageOptions.DontRequireReceiver);
+		//gameObject.SendMessage("ReleaseTouch", SendMessageOptions.DontRequireReceiver);
 		if (this.touchesTab.ContainsKey(fingerId))
 		{
 			this.touchesTab.Remove(fingerId);
@@ -312,9 +325,9 @@ public class ControllerMain : MonoBehaviour
 		return Input.touchCount > 0;
 	}
 	
-	public bool isRightTouched()
+	public void checkTouched()
 	{
-		bool ret = false;
+		int dir = 0;
 		float touchTime = 9999;
 		foreach (TouchObject touchObj in this.touchesTab.Values)
 		{
@@ -322,40 +335,27 @@ public class ControllerMain : MonoBehaviour
 			{
 				if (touchObj.rightTouched)
 				{
-					ret = true;
+					dir += 1;
 					touchTime = touchObj.startTime;
 				}
 				if (touchObj.leftTouched)
 				{
-					ret = false;
+					dir -= 1;
 					touchTime = touchObj.startTime;
 				}
 			}
 		}
-		return ret;
-	}
-	
-	public bool isLeftTouched()
-	{
-		bool ret = false;
-		float touchTime = 9999;
-		foreach (TouchObject touchObj in this.touchesTab.Values)
+		if (dir == 0)
 		{
-			if (touchObj.startTime < touchTime)
-			{
-				if (touchObj.leftTouched)
-				{
-					ret = true;
-					touchTime = touchObj.startTime;
-				}
-				if (touchObj.rightTouched)
-				{
-					ret = false;
-					touchTime = touchObj.startTime;
-				}
-			}
+			dir = (Input.GetKey(KeyCode.RightArrow) ? 1 : 0) + (Input.GetKey(KeyCode.LeftArrow) ? -1 : 0);
 		}
-		return ret;
+		
+		if (dir > 0)
+			dir = 1;
+		else if (dir < 0)
+			dir = -1;
+		
+		GlobalVarScript.instance.cameraTarget.SendMessageUpwards("Walk", dir, SendMessageOptions.DontRequireReceiver);
 	}
 	
 	private bool hasObjectSelected()
@@ -371,19 +371,15 @@ public class ControllerMain : MonoBehaviour
 		return ret;
 	}
 	
-	// DEBUG
-	public void activeSlide()
-	{
-		this.slide = true;
-	}
-	
-	public bool isSliding()
-	{
-		return this.slide;
-	}
-	
-	public void resetSlide()
+	private void resetSlide()
 	{
 		this.slide = false;
+	}
+	
+	IEnumerator ResetTouch()
+	{
+		GlobalVarScript.instance.cameraTarget.SendMessageUpwards("Jump", SendMessageOptions.DontRequireReceiver);
+	    yield return new WaitForSeconds(0.2f);
+		resetSlide();
 	}
 }
