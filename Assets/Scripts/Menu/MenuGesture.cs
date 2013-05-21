@@ -197,6 +197,23 @@ public class MenuGesture : MonoBehaviour {
 		timer = 0.0f;
 	}
 	
+	public void startTuto()
+	{
+		menuScreen = MenuGesture.ScreenMenu.NONE;
+		screen = GameObject.Find("Menus").GetComponent<Interface>();
+	}
+	
+	public void endTuto()
+	{
+		screen.desactivateMenu();
+		menuScreen = MenuGesture.ScreenMenu.ENDLEVEL;
+		screen = GameObject.Find("Menus").GetComponent<EndMenu>();
+		screen.activateMenu();
+		setHidden = false;
+		setVisible = true;
+		timer = 0.0f;
+	}
+	
 	private bool screenIsMenuScreen(ScreenMenu m_screen)
 	{
 		return (m_screen == ScreenMenu.NONE || m_screen == ScreenMenu.PAUSE || m_screen == ScreenMenu.ENDLEVEL);

@@ -179,47 +179,9 @@ public class FollowRoad : MonoBehaviour {
 	
 	private bool OnCollisionEvent(Fixture fixtureA, Fixture fixtureB, Contact contact)
 	{
+		/*
 		Body bodyA = fixtureA.Body;
 		Body bodyB = fixtureB.Body;
-		/*if((bodyB.UserTag == "PlayerObject") && !jointConnected)
-		{
-			FVector2 colNorm = contact.Manifold.LocalNormal;
-			if (Mathf.Abs(colNorm.X) > Mathf.Abs(colNorm.Y))
-			{}
-			else
-			{
-				if (colNorm.Y > 0 || bodyB.UserFSBodyComponent.transform.position.y > this.transform.position.y)
-				{
-					playerScript.onGround = true;
-					playerScript.onPFM = true;
-					playerScript.bodyPFM = bodyB;
-					lastRoadPosition = roadBody.Position;
-					jointConnected = true;
-					
-					if(roadRecto.activation == Activation.PLAYER)
-					{
-						playRoad();
-						Debug.Log("Play Road");
-					}
-				}
-			}
-		}
-		
-		else if(bodyB.UserTag == "Bloc")
-		{
-			FVector2 colNorm = contact.Manifold.LocalNormal;
-			if (Mathf.Abs(colNorm.X) > Mathf.Abs(colNorm.Y))
-			{}
-			else
-			{
-				if (colNorm.Y > 0)
-				{
-					cube = bodyB.UserFSBodyComponent.gameObject;
-					cubeBody = bodyB;
-					cubejointConnected = true;
-				}
-			}
-		}*/
 		
 		if((bodyB.UserTag == "PlayerObject") && !jointConnected)
 		{
@@ -248,12 +210,36 @@ public class FollowRoad : MonoBehaviour {
 				cubejointConnected = true;
 			}
 		}
+		*/
 		return true;
 	}
 	
 	private void OnSeparationEvent(Fixture fixtureA, Fixture fixtureB)
 	{
 
+	}
+	
+	private void OnTriggerEnter(Collider col)
+	{
+		if(col.name == "GROUND_HITBOX" && col.transform.parent.name == "PLAYER" && col.transform.position.y > this.transform.position.y)
+		{
+			playerScript.onGround = true;
+			playerScript.onPFM = true;
+			playerScript.bodyPFM = col.transform.parent.gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
+			lastRoadPosition = roadBody.Position;
+			jointConnected = true;
+			
+			if(roadRecto.activation == Activation.PLAYER)
+			{
+				playRoad();
+			}
+		}
+		else if(col.tag == "Bloc" && col.name != "Hitbox" && col.transform.position.y > this.transform.position.y)
+		{
+			cube               = col.transform.parent.gameObject;
+			cubeBody           = col.transform.parent.gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
+			cubejointConnected = true;
+		}
 	}
 	
 	private void OnTriggerExit(Collider col)
