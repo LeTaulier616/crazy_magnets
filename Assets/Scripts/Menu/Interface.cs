@@ -14,6 +14,13 @@ public class Interface : MenuScreen {
 	{
 		pause_button_go.transform.parent.gameObject.SetActive(true);
 		
+		GameObject endpanel = GameObject.Find("HUD_PANEL");
+		
+		for(int iii = 0; iii < endpanel.transform.GetChildCount(); ++iii)
+    	{
+			endpanel.transform.GetChild(iii).gameObject.SetActive(Application.loadedLevelName != "CM_Level_0");
+		}
+		
 		exitScreen = false;
 	}
 	
