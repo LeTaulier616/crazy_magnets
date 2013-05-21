@@ -417,6 +417,27 @@ public class Interruptor : MonoBehaviour
 		Debug.Log("Set Off");
 	}
 	
+	public void reloadInterruptor()
+	{
+		pushCounter  = 0;
+		unpushTime   = 0.0f;
+		isPushed     = false;
+		activated    = false;
+		
+		for(int trg = 0; trg < targets.Length; ++trg)
+		{
+			targets[trg].GetComponent<InterruptorReceiver>().reloadInterruptorFromParent();
+		}
+	}
+	
+	public void reloadInterruptorFromParent()
+	{
+		pushCounter  = 0;
+		unpushTime   = 0.0f;
+		isPushed     = false;
+		activated    = false;
+	}
+	
 	private void launchAnimation()
 	{		
 		if(animation != null || this.GetComponentInChildren<Animation>() != null)
