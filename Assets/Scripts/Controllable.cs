@@ -28,8 +28,8 @@ public class Controllable : MonoBehaviour
 	public bool      isFalling;
 	private bool     isCharged;
 	private bool     isCubing;
-	private bool	attraction;
-	private float 	angle;
+	protected bool	attraction;
+	protected float 	angle;
 	private float 	localGravity;
 	[HideInInspector]
 	public bool		isGrabbing;
@@ -218,7 +218,7 @@ public class Controllable : MonoBehaviour
 		}
 		  
 		// position cible de la camera
-		this.target.transform.localPosition = new Vector3(2.5f, 2.5f, 0.0f);
+		this.target.transform.localPosition = new Vector3(2.5f, this.angle == 0 ? 2.5f : 0f, 0.0f);
 	}
 	
 	protected void LateUpdate()
@@ -226,7 +226,6 @@ public class Controllable : MonoBehaviour
 		//this.transform.localRotation = Quaternion.Euler(new Vector3(this.angle, lastDir == 1 ? 0 : 180, 0));
 		if (this.attraction == true)
 		{
-			this.angle += Time.deltaTime * 400f;
 			this.attraction = false;
 			if (this.angle > 180)
 			{
@@ -332,8 +331,14 @@ public class Controllable : MonoBehaviour
 		}
 	}			
 	
-	public void Attract(float force)
+	public void Attract(float distance)
 	{
+		float force = distance < 1f ? 30f : 15f;
+		this.angle += Time.deltaTime * 400f / (distance/2f);
+		if (distance < 0.5f)
+		{
+			this.angle = 180f;
+		}
 		if (this.angle < 180)
 		{
 			playerBody.ApplyForce(new FVector2(0, force));

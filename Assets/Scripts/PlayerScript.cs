@@ -186,6 +186,10 @@ public class PlayerScript : Controllable
 			this.playerBody.IgnoreGravity = true;
 		}
 		*/
+		if (this.angle > 0)
+		{
+			this.angle = 180;
+		}
 		if (this.grabTarget != Vector3.zero)
 		{
 			this.grabTarget = Vector3.zero;
