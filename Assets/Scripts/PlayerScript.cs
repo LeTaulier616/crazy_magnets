@@ -137,7 +137,7 @@ public class PlayerScript : Controllable
 		this.playerBody.Enabled = true;
 		this.playerBody.ResetDynamics();
 		this.playerBody.Mass = 1f;
-		GlobalVarScript.instance.resetCamera();
+		GlobalVarScript.instance.resetCamera(true);
 		
 		if(playerMesh != null)
 			this.playerMesh.SetActiveRecursively(true);
