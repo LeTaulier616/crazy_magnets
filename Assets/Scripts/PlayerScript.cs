@@ -165,6 +165,15 @@ public class PlayerScript : Controllable
 			this.playerMesh.SetActiveRecursively(false);
 		else
 			this.renderer.enabled =false;
+		
+		GameObject platforms = GameObject.FindGameObjectWithTag("PlatForms");
+		
+		FollowRoad[] roads = platforms.GetComponentsInChildren<FollowRoad>();
+		
+		foreach(FollowRoad road in roads)
+		{
+			road.stopRoad();
+		}
 	}
 	
 	private void CollisionHead(GameObject ceiling)
