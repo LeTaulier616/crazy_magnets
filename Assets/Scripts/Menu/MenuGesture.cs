@@ -111,9 +111,6 @@ public class MenuGesture : MonoBehaviour {
 				lerpValue = 1.0f;
 			}
 			
-			if(setHidden)
-				Debug.Log(lerpValue);
-			
 			if(lerpValue >= 1.0f && setHidden)
 			{
 				switchScreen();

@@ -51,6 +51,9 @@ public class EndMenu : MenuScreen
 			Datas.sharedDatas().datas.selectedLevel = 0;
 			Datas.sharedDatas().datas.isNewGame     = false;
 			Datas.sharedDatas().datas.tutoDone      = true;
+			
+			endgame_button_go.SetActive(false);
+			next_button_go.SetActive(true);
 		}
 		else if((nextLevelWorld >= MyDefines.kNbWorlds && nextLevelLevel >= MyDefines.kNbLevels) || MyDefines.kNbLevelsAvailable <= levelnumber)
 		{
