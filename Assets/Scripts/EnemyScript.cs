@@ -178,8 +178,6 @@ public class ControlledState : State
 		GlobalVarScript.instance.cameraFree = 2;
 		Interruptor button = it.gameObject.GetComponentInChildren<Interruptor>();
 		button.activator = Interruptor.Activator.TOUCH;
-		KillzoneScript killer = it.gameObject.GetComponent<KillzoneScript>();
-		killer.Disable();
 		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.BodyType = BodyType.Static;
 		
 		this.enemy = it.gameObject.GetComponent<EnemyScript>();
@@ -237,8 +235,9 @@ public class ControlledState : State
 				this.enemy.playerBody.GravityScale = GlobalVarScript.instance.bigEnemyGravityScale;
 			
 			RaycastHit hit;
-			if (Physics.Raycast(new Vector3(it.transform.position.x, it.transform.position.y, it.transform.position.z), Vector3.down, out hit, 4.5f) && GlobalVarScript.instance.groundTags.Contains(it.transform.tag))
+			if (Physics.Raycast(new Vector3(it.transform.position.x, it.transform.position.y, it.transform.position.z), Vector3.down, out hit, 4.5f) && GlobalVarScript.instance.groundTags.Contains(hit.transform.tag))
 			{
+				Debug.Log("Over Here");
 				Camera.main.SendMessage("ResetFall", SendMessageOptions.DontRequireReceiver);
 			}
 		}
@@ -287,6 +286,8 @@ public class ControlledState : State
 	public override void ExitState (GameObject it)
 	{
 		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.BodyType = BodyType.Dynamic;
+		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.Mass = 1.0f;
+		
 		GlobalVarScript.instance.resetCamera();
 	}
 }
@@ -422,6 +423,10 @@ public class EnemyScript : StateMachine
 			this.speed = GlobalVarScript.instance.bigEnemySpeed;
 			this.jumpForce = GlobalVarScript.instance.bigEnemyJumpForce;
 			this.playerBody.LinearDamping = GlobalVarScript.instance.bigEnemyDamping;
+			
+			this.enemyMesh.animation["patrol"].speed = 2.0f;
+			this.enemyMesh.animation["chase"].speed = 2.0f;
+			this.enemyMesh.animation["idle"].speed = 2.0f;
 		}
 		
 		this.accelerationFactor = GlobalVarScript.instance.accelerationFactor;
@@ -520,15 +525,15 @@ public class EnemyScript : StateMachine
 			walkVelocity = new FVector2(speedX, 0);
 			
 			if(enemyMesh != null)
-				enemyMesh.animation.CrossFade("patrol", 0.5f);
+				enemyMesh.animation.CrossFade("patrol", 0.25f);
 		}
 		else
 		{
 			if (this.onGround)
 			{
 				walkVelocity = new FVector2(playerBody.LinearVelocity.X * DecelerationCurve.Evaluate((Time.time - AccelerationTime) * decelerationFactor * frictionFactor), 0);
-			//	if(enemyMesh != null)
-			//		enemyMesh.animation.CrossFade("idle", 0.5f);
+				if(enemyMesh != null)
+					enemyMesh.animation.CrossFade("idle", 0.25f);
 			}
 			
 			else
@@ -570,8 +575,6 @@ public class EnemyScript : StateMachine
 	{
 		//Debug.Log("There");
 		this.playerBody.SetTransform(new FVector2(startPosition.x, startPosition.y), 0.0f);
-		KillzoneScript killer = this.GetComponent<KillzoneScript>();
-		killer.Enable();
 		this.SwitchState(this.patrol);
 	}
 	

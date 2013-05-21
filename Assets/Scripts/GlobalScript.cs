@@ -11,7 +11,7 @@ public class GlobalScript : MonoBehaviour
 	
 	void Update ()
 	{
-		if(Input.GetKeyDown(KeyCode.Escape))
+		if(Input.GetKeyDown(KeyCode.Escape) && Application.loadedLevelName == "MENU")
 		{
 			Application.Quit();
 		}
