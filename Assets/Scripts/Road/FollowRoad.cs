@@ -221,7 +221,6 @@ public class FollowRoad : MonoBehaviour {
 	
 	private void OnTriggerEnter(Collider col)
 	{
-		Debug.Log("Collision");
 		if(col.name == "GROUND_HITBOX" && col.transform.parent.name == "PLAYER" && col.transform.position.y > this.transform.position.y)
 		{
 			playerScript.onGround = true;
@@ -235,7 +234,7 @@ public class FollowRoad : MonoBehaviour {
 				playRoad();
 			}
 		}
-		else if(col.tag == "Bloc" && col.name == "Hitbox" && col.transform.position.y > this.transform.position.y)
+		else if(col.tag == "Bloc" && col.name != "Hitbox" && col.transform.position.y > this.transform.position.y)
 		{
 			cube               = col.transform.parent.gameObject;
 			cubeBody           = col.transform.parent.gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
@@ -252,7 +251,7 @@ public class FollowRoad : MonoBehaviour {
 			playerScript.bodyPFM  = null;
 			jointConnected        = false;
 		}
-		else if(col.tag == "Bloc" && col.name == "Hitbox")
+		else if(col.tag == "Bloc" && col.name != "Hitbox")
 		{
 			cube               = null;
 			cubeBody           = null;
