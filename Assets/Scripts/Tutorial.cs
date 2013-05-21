@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
-public class Tutorial : MonoBehaviour {
-	
+public class Tutorial : MonoBehaviour
+{
 	public GameObject ControlLabel;
 	public GameObject JumpLabel;
 	public GameObject MagnetismLabel;
@@ -26,6 +26,7 @@ public class Tutorial : MonoBehaviour {
 	private float walkDistance;
 	
 	public bool checkJumps;
+	private bool canCheckJump;
 	public int jumpCount;
 	
 	private Vector3 playerPosition;
@@ -42,6 +43,7 @@ public class Tutorial : MonoBehaviour {
 		playerScript = player.GetComponent<PlayerScript>();
 		
 		playerScript.canJump = false;
+		canCheckJump = false;
 				
 		showBorders = false;
 		checkDistance = false;
@@ -79,7 +81,16 @@ public class Tutorial : MonoBehaviour {
 		
 		if(checkJumps)
 		{
-			if(jumpCount >= 5 && playerScript.onGround)
+			if (canCheckJump && playerScript.onGround == false)
+			{
+				jumpCount++;
+				canCheckJump = false;
+			}
+			if (!canCheckJump && playerScript.onGround == true)
+			{
+				canCheckJump = true;
+			}
+			if(jumpCount >= 4 && playerScript.onGround)
 			{
 				checkJumps = false;
 				ShowMagnetismControls();
@@ -202,18 +213,19 @@ public class Tutorial : MonoBehaviour {
 	
 	void OnGUI()
 	{
+		
 		if(showBorders)
 		{
 			Rect leftBorder = new Rect(0.0f, 0.0f, viewportWidthLeft.x, Screen.height);
 			Rect rightBorder = new Rect(viewportWidthRight.x, 0.0f, Screen.width - viewportWidthRight.x, Screen.height);
 			
-			if(playerController.isLeftTouched())
+			if(playerScript.lastDir == 1)
 				GUI.DrawTexture(leftBorder, GreenControlTexture);
 			
 			else
 				GUI.DrawTexture(leftBorder, RedControlTexture);
 			
-			if(playerController.isRightTouched())
+			if(playerScript.lastDir == -1)
 				GUI.DrawTexture(rightBorder, GreenControlTexture);
 			
 			else
