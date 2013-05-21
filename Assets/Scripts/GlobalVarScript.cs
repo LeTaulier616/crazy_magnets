@@ -113,6 +113,13 @@ public class GlobalVarScript : MonoBehaviour
 		groundTags.AddRange(new string[]{"Ground", "Slippery", "Bumper", "Bloc", "Attractor", "Platform", "Door", "MultiDoor"});
 	}
 	
+	public void SetCameraTarget(Transform target)
+	{
+		cameraTarget.SendMessageUpwards("ReleaseFocus", SendMessageOptions.DontRequireReceiver);
+		cameraTarget = target;
+		cameraTarget.SendMessageUpwards("Focus", SendMessageOptions.DontRequireReceiver);
+	}
+	
 	public void blockCamera(Vector3 pos)
 	{
 		cameraFixedPos = pos;
@@ -122,7 +129,7 @@ public class GlobalVarScript : MonoBehaviour
 	{
 		cameraFixedPos = Vector3.zero;
 		cameraFree = 0;
-		cameraTarget = cameraTargetDefault;
+		SetCameraTarget(cameraTargetDefault);
 		cameraSmooth = cameraSmoothDefault;
 	}
 }

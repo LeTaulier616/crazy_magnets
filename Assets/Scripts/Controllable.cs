@@ -3,353 +3,371 @@ using System.Collections;
 using System.Collections.Generic;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
+using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Common;
 using FarseerPhysics.Dynamics.Contacts;
 
-public class WalkState : State
+public class Controllable : MonoBehaviour
 {
-	public Controllable player;
-	public ControllerMain controllerMain;
+	public AnimationCurve AccelerationCurve;
+	public AnimationCurve DecelerationCurve;
+	
+	private float accelerationFactor;
+	private float decelerationFactor;
 
-	public override void EnterState (GameObject it)
+	[HideInInspector]
+	public float speed;
+	[HideInInspector]
+	public float jumpForce;
+	
+	public Body      playerBody;
+	
+	public bool 	 isAlive;
+	public bool      isWalking;
+	public bool      isJumping;
+	public bool      isFalling;
+	private bool     isCharged;
+	private bool     isCubing;
+	protected bool	attraction;
+	protected float 	angle;
+	private float 	localGravity;
+	[HideInInspector]
+	public bool		isGrabbing;
+	[HideInInspector]
+	public bool      onGround;
+	private bool	headStucked;
+	protected UnityEngine.Transform target; // cible de la camera
+	public int lastDir;
+	private bool powerLoop;
+	
+	//private List<Contact> lastContacts;
+	
+	private float     AccelerationTime;
+	
+	private FVector2  walkVelocity;
+	[HideInInspector]
+	public  bool      onPFM       = false;
+	public  Body      bodyPFM     = null;
+	public  bool      jumpFromPFM = false;
+	public  float     pfmVelocity = 0.0f;
+	
+	private float dirCoeff = 0;
+	private float frictionFactor;
+	
+	private LineRenderer Line;
+	
+	[HideInInspector]
+	public GameObject playerMesh;
+	
+	public bool canMove;
+	public bool canCharge;
+	public bool canJump;
+		
+	protected void Start ()
 	{
-		this.player.onGround = true;
-	}
-
-	public override void UpdateState (GameObject it)
-	{
-		if (this.controllerMain.isSliding() || Input.GetKeyDown(KeyCode.Space))
+		playerBody = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
+		
+		playerBody.FixedRotation = true;
+		playerBody.Mass = 1f;
+		
+		this.isAlive	= true;
+		this.isWalking  = false;
+		this.isJumping  = false;
+		this.isFalling  = false;
+		this.isCharged  = false;
+		this.isGrabbing = false;
+		this.isCubing	= false;
+ 		this.onGround   = true;
+		this.headStucked = false;
+		this.onPFM      = false;
+		this.bodyPFM    = null;
+		walkVelocity    = FVector2.Zero;
+		this.lastDir = 1;
+		this.attraction = false;
+		this.angle = 0;
+		this.localGravity = 1;
+		this.powerLoop = false;
+		
+		this.target = GlobalVarScript.instance.cameraTarget;
+		Line = this.GetComponent<LineRenderer>();
+		
+		this.accelerationFactor = GlobalVarScript.instance.accelerationFactor;
+		this.decelerationFactor = GlobalVarScript.instance.decelerationFactor;
+		
+		this.frictionFactor = 1f;
+				
+		this.playerMesh = GlobalVarScript.instance.playerMesh;
+		
+		if(playerMesh != null)
 		{
-			this.controllerMain.resetSlide();
-			this.machine.SwitchState(this.player.jump);
-			return;
+			this.playerMesh.animation["run"].speed = 5.0f;
+			this.playerMesh.animation["jump"].speed = 2.0f;
+			this.playerMesh.animation["fall"].speed = 8.0f;
+			this.playerMesh.animation["idle"].speed = 2.0f;
+			this.playerMesh.animation["power"].speed = 4.0f;
+			this.playerMesh.animation["powerLoop"].speed = 2.0f;
+			this.playerMesh.animation["win"].speed = 2.0f;
+			this.playerMesh.animation.Play("idle");
 		}
-
-		this.player.Walk(this.player.GetDir());
-	}
-
-	public override void ExitState (GameObject it)
-	{
-		this.player.onGround = false;
-	}
-}
-
-public class JumpState : State
-{
-	public Controllable	player;
-	public float		jumpForce;
-	public Body			playerBody;
-
-	public override void EnterState (GameObject it)
-	{
-		playerBody.LinearVelocity = new FVector2(this.playerBody.LinearVelocity.X, 0f);
-		playerBody.ApplyLinearImpulse(new FVector2(0, this.jumpForce));
-		GlobalVarScript.instance.blockCamera(Camera.main.transform.position);
-	}
-
-	public override void UpdateState (GameObject it)
-	{
-		if (playerBody.LinearVelocity.Y < 0)
-		{
-			this.machine.SwitchState(this.player.fall);
-			return;
-		}
-
-		this.player.Walk(this.player.GetDir());
-	}
-}
-
-public class FallState : State
-{
-	public Controllable	player;
-	public Body			playerBody;
-
-	public override void EnterState (GameObject it)
-	{
-		this.playerBody.GravityScale = 2f;
+		
+		this.BroadcastMessage("ConstantParams", Color.cyan, SendMessageOptions.DontRequireReceiver);
+		//this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
+		
+		this.canMove = true;
+		this.canCharge = true;
+		this.canJump = true;
 	}
 	
-	public override void UpdateState (GameObject it)
-	{
-		this.player.Walk(this.player.GetDir());
-	}
-
-	public override void ExitState (GameObject it)
-	{
-		this.playerBody.GravityScale = 1f;
-	}
-}
-
-public class AttractState : FallState
-{
-	public float attractionForce;
-
-	public override void EnterState (GameObject it)
-	{
-		this.player.transform.Rotate(Vector3.right, 180f);
-		//this.playerBody.Mass = -this.playerBody.Mass;
-		this.playerBody.ApplyForce(new FVector2(0,this.attractionForce));
-		base.EnterState (it);
-	}
-
-	public override void UpdateState (GameObject it)
-	{
-		this.playerBody.ApplyForce(new FVector2(0,this.attractionForce));
-		base.UpdateState (it);
-	}
-
-	public override void ExitState (GameObject it)
-	{
-		this.player.transform.Rotate(Vector3.right, 180f);
-		//this.playerBody.Mass = -this.playerBody.Mass;
-		base.ExitState (it);
-	}
-}
-
-public class GrabState : State
-{
-	public Controllable	player;
-	public Body			playerBody;
-	public Vector3		grabTarget;
-
-	public override void UpdateState (GameObject it)
-	{
-		float dist = Vector3.Distance(it.transform.position, this.grabTarget);
-		Vector3 rayTest = new Vector3(this.grabTarget.x - it.transform.position.x, this.grabTarget.y - it.transform.position.y, this.grabTarget.z - it.transform.position.z);
-		rayTest = Vector3.Normalize(rayTest);
-		RaycastHit hit;
-		if (Physics.Raycast(it.transform.position, rayTest, out hit, dist) && hit.transform.tag != "Grab")
+	protected void Update ()
+	{	
+		if (this.isAlive == false)
 		{
-			// objet en travers : ne rien faire
-			this.machine.SwitchState(this.player.fall);
+			return;
+		}
+		
+		/* Appliquer la bonne vélocité suivant les données récoltées */
+		ApplyLinearVelocity();
+		
+		if (this.onGround == false && this.playerBody.LinearVelocity.Y < 0)
+		{			
+			if(this.isJumping)
+			{
+				this.isJumping = false;
+				this.isFalling = true;
+			}
+			
+			// pour que le perso tombe plus vite
+			this.playerBody.GravityScale = GlobalVarScript.instance.playerGravityScale;
+			
+			RaycastHit hit;
+			if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.down, out hit, 4.5f) && GlobalVarScript.instance.groundTags.Contains(hit.transform.tag))
+			{
+				Camera.main.SendMessage("ResetFall", SendMessageOptions.DontRequireReceiver);
+			}
+			
+			if(playerMesh != null && isFalling)
+			{
+				playerMesh.animation.CrossFade("fall", 0.25f);
+			}
+		}
+		
+		if (isWalking)
+		{			
+			if(playerMesh != null && onGround)
+			{
+				playerMesh.animation.CrossFade("run", 0.25f);
+			}
+			
+			else if(playerMesh != null && isJumping)
+			{
+				playerMesh.animation.CrossFade("jump", 0.1f);
+			}
 		}
 		else
 		{
-			if (Vector3.Distance(it.transform.position, this.grabTarget) < 2f)
-				this.machine.SwitchState(this.player.fall);
-			FVector2 grabForce = new FVector2(rayTest.x, rayTest.y);
-			playerBody.ApplyLinearImpulse(new FVector2(grabForce.X, grabForce.Y));
+			if (this.onGround)
+			{
+				if (playerMesh != null)
+				{
+					if (!isCubing)
+					{
+						if (isFalling)
+						{
+							playerMesh.animation.CrossFade("idle", 0.1f);
+						}
+						else
+						{
+							playerMesh.animation.CrossFade("idle", 0.25f);
+						}
+					}
+					else
+					{
+						if (!powerLoop)
+						{
+							playerMesh.animation.CrossFade("power", 0.5f);
+						
+							if(playerMesh.animation["power"].time >= playerMesh.animation["power"].length)
+							{
+								SetPowerLoop();
+							}
+						}
+						else
+						{
+							playerMesh.animation.CrossFade("powerLoop", 0.25f);
+						}
+					}
+				}
+			}
+			else
+			{
+				if(playerMesh != null && isJumping)
+				{
+					playerMesh.animation.CrossFade("jump", 0.1f);
+				}
+			}
 		}
-	}
-
-	public override void ExitState (GameObject it)
-	{
-		this.grabTarget = Vector3.zero;
-	}
-}
-
-public class MagnetState : State
-{
-	public Controllable player;
-}
-
-public class DeadState : State
-{
-	public Controllable 	player;
-	public Body				playerBody;
-	public ControllerMain	controllerMain;
-
-	public override void EnterState (GameObject it)
-	{
-		this.playerBody.BodyType = BodyType.Static;
-		// TODO
-		it.GetComponent<MeshRenderer>().enabled = false;
-	}
-
-	public override void UpdateState (GameObject it)
-	{
-		if (this.controllerMain.isTouched() || Input.GetKeyDown(KeyCode.Return))
-			this.machine.SwitchState(this.player.fall);
-	}
-
-	public override void ExitState (GameObject it)
-	{
-		Vector3 lastCheckpoint = this.player.checkpoints[this.player.checkpoints.Count - 1];
-		this.playerBody.Position = new FVector2(lastCheckpoint.x, lastCheckpoint.y);
-		it.transform.position = lastCheckpoint;
-		this.playerBody.BodyType = BodyType.Dynamic;
-		this.playerBody.ResetDynamics();
-		this.playerBody.Mass = 1f;
-		GlobalVarScript.instance.resetCamera();
-		// TODO
-		it.GetComponent<MeshRenderer>().enabled = true;
-	}
-}
-
-public class Controllable : StateMachine
-{
-	public AnimationCurve accelerationCurve;
-	public AnimationCurve decelerationCurve;
-	
-	private float	accelerationFactor;
-	private float	decelerationFactor;
-
-	private float			speed;
-	private float			jumpForce;
-	private ControllerMain	controllerMain;
-	public Body				playerBody;
-
-	private Transform	target;
-
-	public WalkState	walk;
-	public JumpState	jump;
-	public JumpState	bump;
-	public FallState	fall;
-	public AttractState	attract;
-	public GrabState	grab;
-	public DeadState	dead;
-	public State		idle;
-
-	private bool		isWalking;
-	private FVector2	walkVelocity;
-	private float		accelerationTime = 0;
-	private float		dirCoeff = 0;
-	private float		frictionFactor;
-
-	public List<Vector3> checkpoints = new List<Vector3>();
-
-	public bool	onGround { get; set; }
-	public bool	onPFM { get; set; }
-	public Body	bodyPFM;
-
-	// todo change to chargable
-	public bool	isCharged { get; private set; }
-	LineRenderer Line;
-	
-	void Start()
-	{
-		this.accelerationFactor = GlobalVarScript.instance.accelerationFactor;
-		this.decelerationFactor = GlobalVarScript.instance.decelerationFactor;
-
-		this.speed = GlobalVarScript.instance.playerSpeed;
-		this.jumpForce = GlobalVarScript.instance.playerJumpForce;
-		this.controllerMain = GetComponent<ControllerMain>() as ControllerMain;
-		this.playerBody = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
-		playerBody.FixedRotation = true;
-		playerBody.Mass = 1f;
-		this.checkpoints.Add(this.transform.position);
 		
-		this.isWalking = false;
-		this.walkVelocity = new FVector2(0, 0);
-
-		this.onGround = false;
-		this.onPFM = false;
-
-		this.target = GlobalVarScript.instance.cameraTarget;
-		Line = GetComponent<LineRenderer>();
-
-		this.walk = new WalkState();
-		this.walk.player = this;
-		this.walk.controllerMain = controllerMain;
-
-		this.jump = new JumpState();
-		this.jump.player = this;
-		this.jump.jumpForce = this.jumpForce;
-		this.jump.playerBody = playerBody;
-
-		this.bump = new JumpState();
-		this.bump.player = this;
-		this.bump.playerBody = playerBody;
-
-		this.fall = new FallState();
-		this.fall.player = this;
-		this.fall.playerBody = playerBody;
-
-		this.attract = new AttractState();
-		this.attract.player = this;
-		this.attract.playerBody = playerBody;
-
-		this.grab = new GrabState();
-		this.grab.player = this;
-		this.grab.playerBody = playerBody;
-
-		this.dead = new DeadState();
-		this.dead.player = this;
-		this.dead.playerBody = playerBody;
-		this.dead.controllerMain = this.controllerMain;
-
-		this.idle = null;
-
-		this.SwitchState(this.fall);
-	}
-
-	public int GetDir()
-	{
-		int dir = (this.controllerMain.isRightTouched() ? 1 : 0) + (this.controllerMain.isLeftTouched() ? -1 : 0);
-		if (dir == 0)
-			dir = (Input.GetKey(KeyCode.RightArrow) ? 1 : 0) + (Input.GetKey(KeyCode.LeftArrow) ? -1 : 0);
-		return dir;
+		if(isCubing)
+		{
+			
+		}
+		// orientation du joueur
+		if (lastDir != 0)
+		{
+			transform.forward = new Vector3(0, 0, this.lastDir);
+		}
+		  
+		// position cible de la camera
+		this.target.transform.localPosition = new Vector3(2.5f, this.angle == 0 ? 2.5f : 0f, 0.0f);
 	}
 	
-	public void Walk(int dir)
+	protected void LateUpdate()
+	{
+		//this.transform.localRotation = Quaternion.Euler(new Vector3(this.angle, lastDir == 1 ? 0 : 180, 0));
+		if (this.attraction == true)
+		{
+			this.attraction = false;
+			if (this.angle > 180)
+			{
+				this.angle = 180;
+			}
+			
+			// gestion gravite inverse
+			this.localGravity = -1f;
+			this.playerBody.ApplyLinearImpulse(new FVector2(0, 9.8f * 2 * this.playerBody.Mass * this.playerBody.GravityScale * Time.deltaTime));
+		}
+		else
+		{
+			this.angle -= Time.deltaTime * 400f;
+			if (this.angle < 0)
+			{
+				this.angle = 0;
+			}
+			
+			// gestion gravite
+			this.localGravity = 1f;
+		}
+		this.transform.localRotation = Quaternion.Euler(new Vector3(this.angle, lastDir == 1 ? 0 : 180, 0));
+	}
+	
+	private void Walk(int dir)
     {
-		if (this.isWalking != (dir != 0))
+		if (this.canMove == false)
+		{
+			return;
+		}
+		
+		if (dir != 0 && Mathf.Abs(this.walkVelocity.X) > speed/4f)
+		{
+			this.lastDir = dir;
+		}
+		
+		if(isWalking != (dir != 0))
 		{
 			this.isWalking = dir != 0;
-			this.accelerationTime = Time.time;
+			AccelerationTime = Time.time;
 		}
 		
 		// gestion d'un coeff de dir pour pas que le joueur se retourne instantanement quand on change de direction
-		if (this.dirCoeff < dir)
+		if (dirCoeff < dir)
 		{
-			this.dirCoeff += Time.deltaTime * 10f * this.frictionFactor;
-			this.dirCoeff = this.dirCoeff < 1 ? this.dirCoeff : 1;
+			dirCoeff += Time.deltaTime * 10f * frictionFactor;
+			dirCoeff = dirCoeff < 1 ? dirCoeff : 1;
 		}
 		else if (dirCoeff > dir)
 		{
-			this.dirCoeff -= Time.deltaTime * 10f * this.frictionFactor;
-			this.dirCoeff = this.dirCoeff > -1 ? this.dirCoeff : -1;
+			dirCoeff -= Time.deltaTime * 10f * frictionFactor;
+			dirCoeff = dirCoeff > -1 ? dirCoeff : -1;
 		}
 	
-		if (this.isWalking)
+		if (isWalking)
 		{
-			float speedX = this.speed * this.accelerationCurve.Evaluate((Time.time - this.accelerationTime) * this.accelerationFactor) * this.dirCoeff;
-			this.walkVelocity = new FVector2(speedX, 0);
+			float speedX = speed * AccelerationCurve.Evaluate((Time.time - AccelerationTime) * accelerationFactor) * dirCoeff;
+			walkVelocity = new FVector2(speedX, 0);
 		}
 		else
 		{
-			if (this.curState == this.walk)
+			if (this.onGround)
 			{
-				this.walkVelocity = new FVector2(this.playerBody.LinearVelocity.X * this.decelerationCurve.Evaluate((Time.time - this.accelerationTime) * this.decelerationFactor * this.frictionFactor), 0);
+				walkVelocity = new FVector2(playerBody.LinearVelocity.X * DecelerationCurve.Evaluate((Time.time - AccelerationTime) * decelerationFactor * frictionFactor), 0);
 			}
-			else if (this.curState == this.jump
-				||	 this.curState == this.fall
-				||	 this.curState == this.attract)
+			else
 			{
-				// TODO ajuster le parametre
 				float airControlFactor = 0.1f;
-				this.walkVelocity = new FVector2(this.playerBody.LinearVelocity.X * this.decelerationCurve.Evaluate((Time.time - this.accelerationTime) * this.decelerationFactor * airControlFactor), 0);
+				walkVelocity = new FVector2(playerBody.LinearVelocity.X * DecelerationCurve.Evaluate((Time.time - AccelerationTime) * decelerationFactor * airControlFactor), 0);
 			}
 		}	
-		this.playerBody.LinearVelocity = new FVector2(walkVelocity.X, this.playerBody.LinearVelocity.Y);
     }
-
-	public void Move(Vector2 dir)
+	
+	private void ApplyLinearVelocity()
 	{
-		
+		playerBody.LinearVelocity = new FVector2(0.0f, this.headStucked ? 0 : playerBody.LinearVelocity.Y);
+		playerBody.LinearVelocity += walkVelocity;
+		//if(this.jumpFromPFM)
+		//	playerBody.LinearVelocity += new FVector2(this.pfmVelocity, 0.0f);
 	}
 	
-	public void CheckpointReached(Vector3 pos)
-	{
-		Debug.Log("checkpoint Reached");
-		this.checkpoints.Add(pos);
-	}
-
-	public void Kill()
-	{
-		this.SwitchState(this.dead);
-	}
-
-	public void Attract(float force)
-	{
-		playerBody.ApplyForce(new FVector2(0, force));
-	}
-	
-	public void Grab(Vector3 target)
-	{
-		if (this.grab.grabTarget == Vector3.zero)
+	private void Jump()
+	{	
+		if (this.canJump && this.onGround)
 		{
-			this.grab.grabTarget = target;
-			this.SwitchState(this.grab);
+			this.Bump(this.jumpForce);
+			
+			if(this.onPFM)
+			{
+				this.jumpFromPFM = true;
+				FollowRoad tmpfroad = (this.bodyPFM.UserData as GameObject).GetComponent<FollowRoad>();
+				if(tmpfroad.back)
+				{
+					this.pfmVelocity = tmpfroad.roadVerso.vx / Time.deltaTime / 10.0f;
+				}
+				else
+				{
+					this.pfmVelocity = tmpfroad.roadRecto.vx / Time.deltaTime / 10.0f;
+				}
+			}
+			
+			GlobalVarScript.instance.blockCamera(Camera.main.transform.position);
+		}
+	}			
+	
+	public void Attract(float distance)
+	{
+		float force = distance < 1f ? 30f : 15f;
+		this.angle += Time.deltaTime * 400f / (distance/2f);
+		if (distance < 0.5f)
+		{
+			this.angle = 180f;
+		}
+		if (this.angle < 180)
+		{
+			playerBody.ApplyForce(new FVector2(0, force));
+		}
+		this.attraction = true;
+	}
+
+	public bool IsCharged()
+	{
+		return this.isCharged;
+	}
+	
+	public void Charge()
+	{
+		if (this.canCharge)
+		{
+			this.isCharged = true;
+			this.BroadcastMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
+		}
+	}
+
+	public void Discharge()
+	{
+		if (this.isCharged)
+		{
+			Line.enabled = true;
+			Invoke("DisableSpark", 0.5f);
+			this.isCharged = false;
+			this.BroadcastMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
 		}
 	}
 	
@@ -358,38 +376,57 @@ public class Controllable : StateMachine
 		Line.SetPosition(1, transform.InverseTransformPoint(position));
 	}
 	
-	public void DisableSpark()
+	void DisableSpark()
 	{
 		Line.enabled = false;
 	}
-
-	public bool IsCharged()
+	
+	public void Bump(float bumpForce)
 	{
-		return this.isCharged;
+		playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0f);
+		playerBody.ApplyLinearImpulse(new FVector2(0, bumpForce * this.localGravity));
+		this.isJumping = true;
+		
+		if(playerMesh != null)
+		{
+			this.playerMesh.animation["jump"].time = 0.0f;
+			this.playerMesh.animation["fall"].time = 0.0f;
+		}
 	}
-
-	public void Charge()
+	
+	public void ApplyPFMVelocity(float bumpForce)
 	{
-		this.isCharged = true;
-		renderer.material.color = Color.cyan;
+		playerBody.ApplyLinearImpulse(new FVector2(bumpForce, 0));
+		this.onGround = false;
+		this.onPFM = false;
+		this.bodyPFM = null;
 	}
-
-	public void Discharge()
+	
+	protected virtual void Kill()
 	{
-		this.isCharged = false;
-		renderer.material.color = Color.white;
-		Line.enabled = true;
-		Invoke("DisableSpark", 0.5f);
+		this.SendMessage("ResetPosition", SendMessageOptions.DontRequireReceiver);
 	}
 	
 	private void CollisionGround(GameObject ground)
-	{	
-		Debug.Log("touch ground");
-		if (GlobalVarScript.instance.groundTags.Contains(ground.tag))
-		{
+	{
+		Camera.main.gameObject.SendMessageUpwards("Reset", SendMessageOptions.DontRequireReceiver);
+		
+		if (GlobalVarScript.instance.groundTags.Contains(ground.tag) && this.isFalling)
+		{			
+			this.onGround = true;
+			
+			if(this.isFalling)
+			{
+				this.isJumping = false;
+				this.isFalling = false;
+			}
+			
+			this.playerBody.GravityScale = 1f;
+			
 			// Gestion surface glissante
 			this.frictionFactor = 1f;
-			if (ground.tag == "Slippery")
+						
+			if (ground.tag == "Slippery" || ground.tag == "Slippery")
 			{
 				this.frictionFactor = GlobalVarScript.instance.slipperyFactor;
 			}
@@ -399,30 +436,109 @@ public class Controllable : StateMachine
 				BumperScript bs = ground.transform.gameObject.GetComponent<BumperScript>();
 				if (bs != null)
 				{
-					//Bump(bs.bumperForce);
-					this.bump.jumpForce = bs.bumperForce;
-					this.SwitchState(this.bump);
-					return;
+					Bump(bs.bumperForce);
+					bs.PlayAnimation();
 				}
 			}
 			
-			if (GlobalVarScript.instance.cameraTarget.GetInstanceID() == this.target.GetInstanceID())
+			if (this.canMove && GlobalVarScript.instance.cameraTarget.GetInstanceID() == this.target.GetInstanceID() && Application.loadedLevelName != "CM_Level_0")
 			{
-				// reset la camera uniquement si elle est fixee au joueur
+				// reset la camera uniquement si elle est fixee au controllable
 				GlobalVarScript.instance.resetCamera();
 			}
-			this.SwitchState(this.walk);
 		}
 	}
 	
 	private void StayGround(GameObject ground)
 	{
-		Camera.main.gameObject.SendMessageUpwards("Reset", SendMessageOptions.DontRequireReceiver);
+		if (this.canMove)
+		{
+			Camera.main.gameObject.SendMessageUpwards("Reset", SendMessageOptions.DontRequireReceiver);
+		}
+		
+		if (GlobalVarScript.instance.groundTags.Contains(ground.tag))
+		{
+			this.onGround = true;
+			this.playerBody.GravityScale = 1f;
+		}
 	}
 	
 	private void ExitGround(GameObject ground)
 	{
-		if (this.curState == walk)
-			this.SwitchState(this.fall);
+		this.onGround = false;
+	}
+	
+	public void GrabObject(Vector3 grab)
+	{
+		if (grab != Vector3.zero)
+		{
+			// TODO : halo de couleur sur la main
+			//this.playerBody.BodyType = BodyType.Kinematic;
+			this.playerBody.Mass = 100f;
+			
+			if(!isCubing)
+			{
+				isCubing = true;
+				powerLoop = false;
+				this.canMove = false;
+				this.canJump = false;
+			}
+			
+			if(grab.x < this.transform.position.x)
+			{
+				this.lastDir = -1;
+			}
+			
+			else
+			{
+				this.lastDir = 1;
+			}
+		}
+		
+		else
+		{
+			//this.playerBody.BodyType = BodyType.Dynamic;
+			this.playerBody.ResetDynamics();
+			this.playerBody.Mass = 1f;
+			
+			if(isCubing)
+			{
+				isCubing = false;
+				powerLoop = false;
+				this.canMove = true;
+				this.canJump = true;
+			}
+		}
+	}
+	
+	public virtual void Tap()
+	{
+		// nothing
+	}
+	
+	public void SetPowerLoop()
+	{
+		if(!this.powerLoop)
+		{
+			this.powerLoop = true;
+		}
+	}
+	
+	public void ReleaseFocus()
+	{
+		// desactive la gestion du joueur si la camera n'est pas sur lui
+		this.playerBody.ResetDynamics();
+		this.walkVelocity = FVector2.Zero;
+		this.canMove = false;
+		this.canJump = false;
+		this.playerBody.Mass = 100f;
+	}
+	
+	public void Focus()
+	{
+		this.playerBody.ResetDynamics();
+		this.canMove = true;
+		this.canJump = true;
+		this.playerBody.Mass = 1f;
 	}
 }
