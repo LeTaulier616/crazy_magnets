@@ -192,12 +192,7 @@ public class Tutorial : MonoBehaviour {
 		EndLabel.SetActive(true);
 		ToggleControls();
 		
-		Invoke("LoadNextLevel", 5.0f);
-	}
-	
-	void LoadNextLevel()
-	{
-		Application.LoadLevel(1);
+		GameObject.Find("Menus").GetComponent<MenuGesture>().endTuto();
 	}
 	
 	void OnGUI()
@@ -209,13 +204,11 @@ public class Tutorial : MonoBehaviour {
 			
 			if(playerController.isLeftTouched())
 				GUI.DrawTexture(leftBorder, GreenControlTexture);
-			
 			else
 				GUI.DrawTexture(leftBorder, RedControlTexture);
 			
 			if(playerController.isRightTouched())
 				GUI.DrawTexture(rightBorder, GreenControlTexture);
-			
 			else
 				GUI.DrawTexture(rightBorder, RedControlTexture);
 		}
