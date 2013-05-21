@@ -93,7 +93,7 @@ public class CameraTriggerScript : MonoBehaviour
 		this.activated = false;
 		this.cameraIndex = 0;
 		this.asc = true;
-		GlobalVarScript.instance.resetCamera();
+		GlobalVarScript.instance.resetCamera(false);
 		
 		if (activeOnce == true)
 		{

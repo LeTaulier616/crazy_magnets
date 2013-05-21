@@ -172,7 +172,7 @@ public class ControlledState : State
 
 	public override void EnterState (GameObject it)
 	{
-		GlobalVarScript.instance.SetCameraTarget(this.target);
+		GlobalVarScript.instance.SetCameraTarget(this.target, true);
 		GlobalVarScript.instance.cameraFree = 0;
 		Interruptor button = it.gameObject.GetComponentInChildren<Interruptor>();
 		button.activator = Interruptor.Activator.TOUCH;
@@ -185,7 +185,7 @@ public class ControlledState : State
 	public override void ExitState (GameObject it)
 	{
 		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.Mass = 100.0f;
-		GlobalVarScript.instance.resetCamera();
+		GlobalVarScript.instance.resetCamera(true);
 		it.GetComponent<Controllable>().isAlive = false;
 		//it.GetComponent<Controllable>().canMove = false;
 		//it.GetComponent<Controllable>().canJump = false;

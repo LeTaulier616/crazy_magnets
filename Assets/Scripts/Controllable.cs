@@ -329,7 +329,7 @@ public class Controllable : MonoBehaviour
 			
 			GlobalVarScript.instance.blockCamera(Camera.main.transform.position);
 		}
-	}			
+	}
 	
 	public void Attract(float distance)
 	{
@@ -384,7 +384,6 @@ public class Controllable : MonoBehaviour
 	public void Bump(float bumpForce)
 	{
 		playerBody.LinearVelocity = new FVector2(playerBody.LinearVelocity.X, 0f);
-		Debug.Log(bumpForce * this.localGravity);
 		playerBody.ApplyLinearImpulse(new FVector2(0, bumpForce * this.localGravity));
 		this.isJumping = true;
 		
@@ -412,8 +411,8 @@ public class Controllable : MonoBehaviour
 	{
 		Camera.main.gameObject.SendMessageUpwards("Reset", SendMessageOptions.DontRequireReceiver);
 		
-		if (GlobalVarScript.instance.groundTags.Contains(ground.tag) && this.isFalling)
-		{			
+		if (GlobalVarScript.instance.groundTags.Contains(ground.tag))
+		{
 			this.onGround = true;
 			
 			if(this.isFalling)
@@ -445,7 +444,7 @@ public class Controllable : MonoBehaviour
 			if (this.canMove && GlobalVarScript.instance.cameraTarget.GetInstanceID() == this.target.GetInstanceID() && Application.loadedLevelName != "CM_Level_0")
 			{
 				// reset la camera uniquement si elle est fixee au controllable
-				GlobalVarScript.instance.resetCamera();
+				GlobalVarScript.instance.resetCamera(false);
 			}
 		}
 	}
