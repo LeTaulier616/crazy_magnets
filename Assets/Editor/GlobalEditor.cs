@@ -68,7 +68,9 @@ public class GlobalEditor : Editor
 		
 		
 		openBox ("Parametres enemis");
+		
 		openBox ("Petits enemis");
+		
 		this.target_.smallEnemySpeed = addFloatField (this.target_.smallEnemySpeed, "Vitesse", "Vitesse du déplacement du personnage au sol et en l'air", "unites/s");
 		this.target_.smallEnemyJumpForce = addFloatField (this.target_.smallEnemyJumpForce, "Hauteur du saut", "Puissance de l'impulsion de saut", "unites");
 		this.target_.smallEnemyDamping = addFloatField (this.target_.smallEnemyDamping, "Amortissement", "Friction de l'air en saut", "u.a");
@@ -77,8 +79,11 @@ public class GlobalEditor : Editor
 		this.target_.smallEnemyPursuitSpeed = addFloatField (this.target_.smallEnemyPursuitSpeed, "Vitesse de Poursuite", "Vitesse du déplacement de l'enemis en poursuite", "unites/s");
 		this.target_.smallEnemyLocateDistance = addFloatField (this.target_.smallEnemyLocateDistance, "Distance de Reperage", "Distance maximale de reperage du personnage", "unites");
 		this.target_.smallEnemyAlertRange = addFloatField (this.target_.smallEnemyAlertRange, "Distance d'Alerte", "Distance d'abandon de la poursuite", "unites");
+		
 		closeBox ();
+		
 		openBox ("Gros enemis");
+		
 		this.target_.bigEnemySpeed = addFloatField (this.target_.bigEnemySpeed, "Vitesse", "Vitesse du déplacement du personnage au sol et en l'air", "unites/s");
 		this.target_.bigEnemyJumpForce = addFloatField (this.target_.bigEnemyJumpForce, "Hauteur du saut", "Puissance de l'impulsion de saut", "unites");
 		this.target_.bigEnemyDamping = addFloatField (this.target_.bigEnemyDamping, "Amortissement", "Friction de l'air en saut", "u.a");
@@ -87,7 +92,9 @@ public class GlobalEditor : Editor
 		this.target_.bigEnemyPursuitSpeed = addFloatField (this.target_.bigEnemyPursuitSpeed, "Vitesse de Poursuite", "Vitesse du déplacement de l'enemis en poursuite", "unites/s");
 		this.target_.bigEnemyLocateDistance = addFloatField (this.target_.bigEnemyLocateDistance, "Distance de Reperage", "Distance maximale de reperage du personnage", "unites");
 		this.target_.bigEnemyAlertRange = addFloatField (this.target_.bigEnemyAlertRange, "Distance d'Alerte", "Distance d'abandon de la poursuite", "unites");
+		
 		closeBox ();
+		
 		closeBox ();
 		
 		
@@ -243,7 +250,7 @@ public class GlobalEditor : Editor
 		
 		EditorGUILayout.Space();
 			
-		target_.WalkSoundsExpand = EditorGUILayout.Foldout(target_.WalkSoundsExpand, "Sons de marche");
+		target_.WalkSoundsExpand = EditorGUILayout.Foldout(target_.WalkSoundsExpand, "Sons de marche - Magnobot");
 		
 		if(target_.WalkSoundsExpand)
 		{
@@ -267,6 +274,70 @@ public class GlobalEditor : Editor
 			for(x = 0; x < target_.WalkSounds.Length; x++)
 			{
 				target_.WalkSounds[x] = addSoundField(target_.WalkSounds[x],
+					false,
+					"Sons de marche " + (x + 1),
+					"");
+			}
+		}
+		
+		EditorGUILayout.Space();
+			
+		target_.BigSoundsExpand = EditorGUILayout.Foldout(target_.BigSoundsExpand, "Sons de marche - Grand ennemi");
+		
+		if(target_.BigSoundsExpand)
+		{
+			int x = 0;	
+			target_.BigSoundsSize = EditorGUILayout.IntField("Size", target_.BigSoundsSize);
+			
+			if(target_.BigSounds.Length != target_.BigSoundsSize)
+			{
+				AudioClip[] newBigSounds = new AudioClip[target_.BigSoundsSize];
+				
+				for(x = 0; x < target_.BigSoundsSize; x++)
+				{
+					if(target_.BigSounds.Length > x)
+					{
+						newBigSounds[x] = target_.BigSounds[x];
+					}
+				}
+				target_.BigSounds = newBigSounds;
+			}
+			
+			for(x = 0; x < target_.BigSounds.Length; x++)
+			{
+				target_.BigSounds[x] = addSoundField(target_.BigSounds[x],
+					false,
+					"Sons de marche " + (x + 1),
+					"");
+			}
+		}
+		
+		EditorGUILayout.Space();
+			
+		target_.SmallSoundsExpand = EditorGUILayout.Foldout(target_.SmallSoundsExpand, "Sons de marche - Petit ennemi");
+		
+		if(target_.SmallSoundsExpand)
+		{
+			int x = 0;	
+			target_.SmallSoundsSize = EditorGUILayout.IntField("Size", target_.SmallSoundsSize);
+			
+			if(target_.SmallSounds.Length != target_.SmallSoundsSize)
+			{
+				AudioClip[] newSmallSounds = new AudioClip[target_.SmallSoundsSize];
+				
+				for(x = 0; x < target_.SmallSoundsSize; x++)
+				{
+					if(target_.SmallSounds.Length > x)
+					{
+						newSmallSounds[x] = target_.SmallSounds[x];
+					}
+				}
+				target_.SmallSounds = newSmallSounds;
+			}
+			
+			for(x = 0; x < target_.SmallSounds.Length; x++)
+			{
+				target_.SmallSounds[x] = addSoundField(target_.SmallSounds[x],
 					false,
 					"Sons de marche " + (x + 1),
 					"");

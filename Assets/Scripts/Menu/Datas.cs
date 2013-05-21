@@ -83,7 +83,7 @@ public class Datas
 		datas.currentWorld  = 0;
 		datas.currentLevel  = 0;
 		
-		datas.lastWorld     = 0;
+		datas.lastWorld     = 1;
 		datas.lastLevel     = 5;
 		
 		datas.selectedLevel = 0;

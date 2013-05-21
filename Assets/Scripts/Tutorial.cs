@@ -33,7 +33,7 @@ public class Tutorial : MonoBehaviour {
 	public static Tutorial instance;
 	
 	// Use this for initialization
-	void Awake () 
+	void Start () 
 	{
 		instance = this;
 		player = GlobalVarScript.instance.player;
@@ -191,6 +191,13 @@ public class Tutorial : MonoBehaviour {
 	{
 		EndLabel.SetActive(true);
 		ToggleControls();
+		
+		Invoke("LoadNextLevel", 5.0f);
+	}
+	
+	void LoadNextLevel()
+	{
+		Application.LoadLevel(1);
 	}
 	
 	void OnGUI()
