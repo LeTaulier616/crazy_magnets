@@ -19,11 +19,8 @@ public class InterruptorPusher : MonoBehaviour
 		if(isElectrifable && gameObject.tag == "PlayerObject")
 		{
 			PlayerScript player = gameObject.GetComponentInChildren<PlayerScript>();
-			Controllable controllable = gameObject.GetComponentInChildren<Controllable>();
 			if (player != null)
 				isElectrified = player.IsCharged();
-			else
-				isElectrified = controllable.isCharged;
 		}
 	}
 }
