@@ -47,9 +47,15 @@ public class MainMenu : MenuScreen {
 		exitScreen = true;
 		screenToGo = MenuGesture.ScreenMenu.NONE;
 		if(Datas.sharedDatas().datas.isNewGame)
+		{
+			Debug.Log("Launch Tuto");
 			loadTuto  = true;
+		}
 		else
+		{
+			Debug.Log("Launch Level");
 			loadLevel = true;
+		}
 		Datas.sharedDatas().datas.isNewGame = false;
 	}
 
@@ -81,6 +87,7 @@ public class MainMenu : MenuScreen {
 	{
 		Debug.Log("Reset Datas");
 		Datas.sharedDatas().reinitDatas();
+		Datas.sharedDatas().saveDatas();
 	}
 	
 	private void gotuto(GameObject go)
