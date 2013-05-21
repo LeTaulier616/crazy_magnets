@@ -406,15 +406,8 @@ public class Controllable : MonoBehaviour
 	{
 		Camera.main.gameObject.SendMessageUpwards("Reset", SendMessageOptions.DontRequireReceiver);
 		
-		if (GlobalVarScript.instance.groundTags.Contains(ground.tag))
-		{
-												
-			if(Application.loadedLevelName == "CM_Level_0" && !this.onGround)
-			{
-				//if(Tutorial.instance.checkJumps)
-					//Tutorial.instance.jumpCount++;
-			}
-			
+		if (GlobalVarScript.instance.groundTags.Contains(ground.tag) && this.isFalling)
+		{			
 			this.onGround = true;
 			
 			if(this.isFalling)
