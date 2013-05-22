@@ -485,6 +485,7 @@ public class Controllable : MonoBehaviour
 				powerLoop = false;
 				this.canMove = false;
 				this.canJump = false;
+				this.walkVelocity = FVector2.Zero;
 			}
 			
 			if(grab.x < this.transform.position.x)
