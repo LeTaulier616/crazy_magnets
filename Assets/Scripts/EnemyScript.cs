@@ -124,12 +124,12 @@ public class PursuitState : State
 
 public class AttackState : State
 {
-	public EnemyScript enemy;
-	public GameObject player;
+	private EnemyScript enemy;
+	private GameObject player;
 	
 	public float hitTime;
-	public float endTime;
 
+	private float endTime;
 	private float actionTime;
 	private bool hitDone;
 
@@ -244,6 +244,11 @@ public class EnemyScript : StateMachine
 		controllable.isAlive = false;
 		
 		controllable.playerMesh = enemyMesh;
+
+		this.patrol = new PatrolState();
+		this.pursuit = new PursuitState();
+		this.attack = new AttackState();
+		this.idle = new State();
 		
 		if (this.type == EnemyType.Small)
 		{
@@ -252,6 +257,7 @@ public class EnemyScript : StateMachine
 			this.pursuitSpeed = GlobalVarScript.instance.smallEnemyPursuitSpeed;
 			this.alertRange = GlobalVarScript.instance.smallEnemyAlertRange;
 			this.waitingTime = 0; // unused
+			this.attack.hitTime = GlobalVarScript.instance.smallEnemyHitTime;
 			controllable.speed = GlobalVarScript.instance.smallEnemySpeed;
 			controllable.jumpForce = GlobalVarScript.instance.smallEnemyJumpForce;
 			this.playerBody.LinearDamping = GlobalVarScript.instance.smallEnemyDamping;
@@ -264,6 +270,7 @@ public class EnemyScript : StateMachine
 			this.pursuitSpeed = GlobalVarScript.instance.bigEnemyPursuitSpeed;
 			this.alertRange = GlobalVarScript.instance.bigEnemyAlertRange;
 			this.waitingTime = 0; // unused
+			this.attack.hitTime = GlobalVarScript.instance.bigEnemyHitTime;
 			controllable.speed = GlobalVarScript.instance.bigEnemySpeed;
 			controllable.jumpForce = GlobalVarScript.instance.bigEnemyJumpForce;
 			this.playerBody.LinearDamping = GlobalVarScript.instance.bigEnemyDamping;
@@ -273,23 +280,17 @@ public class EnemyScript : StateMachine
 			this.enemyMesh.animation["idle"].speed = 2.0f;
 		}
 
-		this.patrol = new PatrolState();
+		this.controlled = new ControlledState();
 		this.patrol.speed = this.patrolingSpeed;
 		this.patrol.playerDist = this.viewDepth;
 		this.patrol.leftWayPoint = this.leftWayPoint;
 		this.patrol.rightWayPoint = this.rightWayPoint;
 
-		this.pursuit = new PursuitState();
 		this.pursuit.speed = this.pursuitSpeed;
 		this.pursuit.playerDist = this.alertRange;
 		
-		this.attack = new AttackState();
-		this.attack.hitTime = 0.5f;
-		
-		this.controlled = new ControlledState();
 		this.controlled.target = this.target;
 
-		this.idle = new State();
 
 		FSCapsuleShape capsule = this.GetComponent<FSCapsuleShape>();
 		Vector3 size;
