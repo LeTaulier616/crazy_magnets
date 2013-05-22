@@ -95,8 +95,6 @@ public class Controllable : MonoBehaviour
 		this.decelerationFactor = GlobalVarScript.instance.decelerationFactor;
 		
 		this.frictionFactor = 1f;
-				
-		this.playerMesh = GlobalVarScript.instance.playerMesh;
 		
 		if(playerMesh != null)
 		{

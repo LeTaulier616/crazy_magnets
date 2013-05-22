@@ -21,6 +21,8 @@ public class PlayerScript : Controllable
 	void Start()
 	{
 		base.Start();
+				
+		this.playerMesh = GlobalVarScript.instance.playerMesh;
 	
 		this.speed = GlobalVarScript.instance.playerSpeed;
 		this.jumpForce = GlobalVarScript.instance.playerJumpForce;
