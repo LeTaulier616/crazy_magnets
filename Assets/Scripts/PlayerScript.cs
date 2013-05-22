@@ -138,6 +138,8 @@ public class PlayerScript : Controllable
 		this.playerBody.ResetDynamics();
 		this.playerBody.Mass = 1f;
 		GlobalVarScript.instance.resetCamera(true);
+		// pour teleporter la camera et faire un leger dezoom
+		Camera.main.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, Camera.main.transform.position.z / 2f);
 		
 		if(playerMesh != null)
 			this.playerMesh.SetActiveRecursively(true);

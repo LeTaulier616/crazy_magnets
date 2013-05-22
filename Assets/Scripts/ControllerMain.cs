@@ -116,6 +116,7 @@ public class ControllerMain : MonoBehaviour
 				}
 				
 				// gestion du slide pour le saut
+				/*
 				if ((touchObj.leftTouched || touchObj.rightTouched) && Mathf.Abs(touch.position.x - touchObj.startPos.x) <= GlobalVarScript.instance.comfortZone) 
 				{
 					float swipeTime = Time.time - touchObj.slideStart;
@@ -133,6 +134,7 @@ public class ControllerMain : MonoBehaviour
 						}
 					}
 				}
+				*/
 
 				// intérieur de l'écran : active seulement si on a le controle du joueur
 				switch (touch.phase) 
