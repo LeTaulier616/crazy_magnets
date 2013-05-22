@@ -54,6 +54,7 @@
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-weapon.shader" />
      <None Include="Assets\Fonts\Razer.txt" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (AlphaClip) .shader" />
+     <None Include="Assets\FX\Particles\Smoke\Shaders\Particle Alpha Blend (Queue +100).shader" />
      <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingBlur.shader" />
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-animtexture.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />
@@ -71,6 +72,7 @@
      <None Include="Assets\Materials\MAD_SHADER\Environment\Mobile-Lightmap-Unlit.shader" />
      <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingStencilOpaqueZ.shader" />
      <None Include="Assets\Fonts\Razer\razer.txt" />
+     <None Include="Assets\Shaders\Particles Additive Culled.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (SoftClip).shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (SoftClip).shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
@@ -99,8 +101,6 @@
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
       <Project>{E01E4D18-4109-B66F-28B9-A21C1D124946}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
-    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
-      <Project>{F77CBC40-D3D2-7E47-D0F9-29A49CC58AE1}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

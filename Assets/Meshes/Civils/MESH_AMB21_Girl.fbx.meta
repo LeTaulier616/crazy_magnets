@@ -1,0 +1,149 @@
+fileFormatVersion: 2
+guid: 9612c404f9503a7489950d1bfcaa9ecc
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: FILLE_Chest_ctrl
+    100002: FILLE_Chest_jnt
+    100004: FILLE_CONTROLS
+    100006: FILLE_Face_jnt
+    100008: FILLE_GEO
+    100010: FILLE_Head_ctrl
+    100012: FILLE_Head_jnt
+    100014: FILLE_humain
+    100016: FILLE_ikAndle1
+    100018: FILLE_ikAndle1 1
+    100020: FILLE_L_ArmIK_ctrl
+    100022: FILLE_L_ArmIK_grp
+    100024: FILLE_L_ElbowPV_ctrl
+    100026: FILLE_L_FooIK_ctrl
+    100028: FILLE_L_Foot_jnt
+    100030: FILLE_L_Heel_Grp
+    100032: FILLE_L_Hip_jnt
+    100034: FILLE_L_Knee_jnt
+    100036: FILLE_L_KneePV_ctrl
+    100038: FILLE_Neck_ctrl
+    100040: FILLE_Neck_jnt
+    100042: FILLE_R_ArmIK_ctrl
+    100044: FILLE_R_ArmIK_grp
+    100046: FILLE_R_ArmIK_ikhl
+    100048: FILLE_R_ArmIK_ikhl 1
+    100050: FILLE_R_Elbow_jnt
+    100052: FILLE_R_Elbow_jnt 1
+    100054: FILLE_R_ElbowPV_ctrl
+    100056: FILLE_R_FooIK_ctrl
+    100058: FILLE_R_Foot_jnt
+    100060: FILLE_R_Hand_jnt
+    100062: FILLE_R_Hand_jnt 1
+    100064: FILLE_R_Heel_Grp
+    100066: FILLE_R_Hip_jnt
+    100068: FILLE_R_Knee_jnt
+    100070: FILLE_R_KneePV_ctrl
+    100072: FILLE_R_Shouler_jnt
+    100074: FILLE_R_Shouler_jnt1
+    100076: FILLE_R_Wrist_jnt
+    100078: FILLE_R_Wrist_jnt 1
+    100080: FILLE_Root_ctrl
+    100082: FILLE_Root_jnt
+    100084: FILLE_SKELETON
+    100086: FILLE_Ultimate_ctrl
+    100088: //RootNode
+    400000: FILLE_Chest_ctrl
+    400002: FILLE_Chest_jnt
+    400004: FILLE_CONTROLS
+    400006: FILLE_Face_jnt
+    400008: FILLE_GEO
+    400010: FILLE_Head_ctrl
+    400012: FILLE_Head_jnt
+    400014: FILLE_humain
+    400016: FILLE_ikAndle1
+    400018: FILLE_ikAndle1 1
+    400020: FILLE_L_ArmIK_ctrl
+    400022: FILLE_L_ArmIK_grp
+    400024: FILLE_L_ElbowPV_ctrl
+    400026: FILLE_L_FooIK_ctrl
+    400028: FILLE_L_Foot_jnt
+    400030: FILLE_L_Heel_Grp
+    400032: FILLE_L_Hip_jnt
+    400034: FILLE_L_Knee_jnt
+    400036: FILLE_L_KneePV_ctrl
+    400038: FILLE_Neck_ctrl
+    400040: FILLE_Neck_jnt
+    400042: FILLE_R_ArmIK_ctrl
+    400044: FILLE_R_ArmIK_grp
+    400046: FILLE_R_ArmIK_ikhl
+    400048: FILLE_R_ArmIK_ikhl 1
+    400050: FILLE_R_Elbow_jnt
+    400052: FILLE_R_Elbow_jnt 1
+    400054: FILLE_R_ElbowPV_ctrl
+    400056: FILLE_R_FooIK_ctrl
+    400058: FILLE_R_Foot_jnt
+    400060: FILLE_R_Hand_jnt
+    400062: FILLE_R_Hand_jnt 1
+    400064: FILLE_R_Heel_Grp
+    400066: FILLE_R_Hip_jnt
+    400068: FILLE_R_Knee_jnt
+    400070: FILLE_R_KneePV_ctrl
+    400072: FILLE_R_Shouler_jnt
+    400074: FILLE_R_Shouler_jnt1
+    400076: FILLE_R_Wrist_jnt
+    400078: FILLE_R_Wrist_jnt 1
+    400080: FILLE_Root_ctrl
+    400082: FILLE_Root_jnt
+    400084: FILLE_SKELETON
+    400086: FILLE_Ultimate_ctrl
+    400088: //RootNode
+    2300000: FILLE_humain
+    3300000: FILLE_humain
+    4300000: FILLE_humain
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .550000012
+    meshCompression: 0
+    addColliders: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 2
+  userData: 
