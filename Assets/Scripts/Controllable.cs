@@ -315,11 +315,10 @@ public class Controllable : MonoBehaviour
 		{
 			this.Bump(this.jumpForce);
 			
-			if(this.onPFM)
+			/*if(this.onPFM)
 			{
 				this.jumpFromPFM = true;
 				FollowRoad tmpfroad = (this.bodyPFM.UserData as GameObject).GetComponent<FollowRoad>();
-				/*
 				if(tmpfroad.back)
 				{
 					this.pfmVelocity = tmpfroad.roadVerso.vx / Time.deltaTime / 10.0f;
@@ -329,8 +328,7 @@ public class Controllable : MonoBehaviour
 				{
 					this.pfmVelocity = tmpfroad.roadRecto.vx / Time.deltaTime / 10.0f;
 				}
-				*/
-			}
+			}*/
 			
 			GlobalVarScript.instance.blockCamera(Camera.main.transform.position);
 		}

@@ -168,20 +168,19 @@ public class PlayerScript : Controllable
 		else
 			this.renderer.enabled =false;
 		
-		GameObject platforms = GameObject.FindGameObjectWithTag("PlatForms");
-		GameObject interruptors = GameObject.FindGameObjectWithTag("Interruptors");
-		
-		FollowRoad[] roads = platforms.GetComponentsInChildren<FollowRoad>();
-		Interruptor[] buttons = interruptors.GetComponentsInChildren<Interruptor>();
-		
-		foreach(FollowRoad road in roads)
+		foreach(FollowRoad followroad in GameObject.Find("WORLD").GetComponentsInChildren<FollowRoad>())
 		{
-			road.reloadRoad();
+			followroad.reloadRoad();
 		}
 		
-		foreach(Interruptor button in buttons)
+		foreach(Interruptor interruptor in GameObject.Find("WORLD").GetComponentsInChildren<Interruptor>())
 		{
-			//button.reloadInterruptor();
+			interruptor.reloadInterruptor();
+		}
+		
+		foreach(InterruptorReceiver interruptor in GameObject.Find("WORLD").GetComponentsInChildren<InterruptorReceiver>())
+		{
+			interruptor.reloadInterruptor();
 		}
 	}
 	
