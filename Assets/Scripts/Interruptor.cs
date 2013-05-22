@@ -26,12 +26,11 @@ public class Interruptor : MonoBehaviour
 	public float      timeToExecute = 0.0f; // Time Between the Push   and the Activation
 	public float      timeToRevoke  = 0.0f; // Time between the Unpush and the Desactivation
 	public bool       isEnnemy      = false;
+	public  bool      activated     = false;
 	
 	// Engine Datas
 	private float     pushTime      = 0.0f;
 	private float     unpushTime    = 0.0f;
-	[HideInInspector]
-	public  bool      activated     = false;
 	[HideInInspector]
 	public  bool      isPushed      = false;
 	private Body      body          = null;
@@ -99,13 +98,16 @@ public class Interruptor : MonoBehaviour
 	}
 	
 	void FixedUpdate()
-	{		
+	{
 		bool resultat = activated;
 		
 		pushTime   = ((isPushed || unpushTime < 0.1f) ? pushTime   + Time.deltaTime : pushTime  );
 		unpushTime = (!isPushed                       ? unpushTime + Time.deltaTime : unpushTime);
 		
 		bool wasActivated = activated;
+		
+		if(activated && name == "BUTTON1")
+			Debug.Log(activated);
 		
 		if(activated && type == Type.TIMER)
 		{
@@ -143,7 +145,9 @@ public class Interruptor : MonoBehaviour
 		}
 		
 		if(!activated && isPushed && pushTime >= timeToExecute)
+		{
 			activated = true;
+		}
 		
 		if(!wasActivated && activated && type == Type.TIMER)
 		{
@@ -212,7 +216,9 @@ public class Interruptor : MonoBehaviour
 		}
 		
 		if(resultat != activated)
+		{
 			Debug.Log("Push value is : " + (activated ? "Pushed" : "Unpushed"));
+		}
 		
 		if(activated && waitActiveToSetOff)
 		{
@@ -358,7 +364,7 @@ public class Interruptor : MonoBehaviour
 	{
 		if(Application.isEditor)
 		{
-				//TouchTap();
+			//TouchTap();
 			if(this.activator != Activator.TOUCH && this.activator != Activator.ELECTRIC_TOUCH)
 				return;
 			
@@ -403,7 +409,6 @@ public class Interruptor : MonoBehaviour
 				this.GetComponentInChildren<Animation>().animation["press"].speed = 1.0f;
 				this.GetComponentInChildren<Animation>().Play();
 			}
-
 		}	
 		Debug.Log("Set On");
 	}
@@ -419,23 +424,15 @@ public class Interruptor : MonoBehaviour
 	
 	public void reloadInterruptor()
 	{
+		bool wasActivated = activated;
 		pushCounter  = 0;
-		unpushTime   = 0.0f;
+		pushTime     = timeToExecute + 0.1f;
+		unpushTime   = timeToRevoke + 0.1f;
 		isPushed     = false;
 		activated    = false;
-		
-		for(int trg = 0; trg < targets.Length; ++trg)
-		{
-			targets[trg].GetComponent<InterruptorReceiver>().reloadInterruptorFromParent();
-		}
-	}
-	
-	public void reloadInterruptorFromParent()
-	{
-		pushCounter  = 0;
-		unpushTime   = 0.0f;
-		isPushed     = false;
-		activated    = false;
+		waitActiveToSetOff = false;
+		if(wasActivated && !activated)
+			launchAnimation();
 	}
 	
 	private void launchAnimation()

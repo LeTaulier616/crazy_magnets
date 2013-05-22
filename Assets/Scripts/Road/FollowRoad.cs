@@ -176,17 +176,12 @@ public class FollowRoad : MonoBehaviour {
 	
 	public void reloadRoad()
 	{
-		if(roadRecto.activation != Activation.AUTO)
-			roadRecto.reInit();
-		if(roadVerso.activation != Activation.AUTO)
-			roadVerso.reInit();
-		if(roadRecto.activation != Activation.AUTO)
-		{
-			activated = false;
-			pause     = false;
-			back      = false;
-			gameObject.transform.position = roadRecto.keyPoints[0].position;
-		}
+		stopRoad();
+		if(roadRecto.activation == Activation.AUTO)
+			playRoad();
+		roadBody.ResetDynamics();
+		roadRecto.updateRoad();
+		roadBody.Position = new FVector2(roadRecto.currentPosition.x, roadRecto.currentPosition.y);
 	}
 	
 	private void OnTriggerEnter(Collider col)

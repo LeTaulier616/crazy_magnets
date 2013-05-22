@@ -79,6 +79,7 @@ public class GlobalEditor : Editor
 		this.target_.smallEnemyPursuitSpeed = addFloatField (this.target_.smallEnemyPursuitSpeed, "Vitesse de Poursuite", "Vitesse du déplacement de l'enemis en poursuite", "unites/s");
 		this.target_.smallEnemyLocateDistance = addFloatField (this.target_.smallEnemyLocateDistance, "Distance de Reperage", "Distance maximale de reperage du personnage", "unites");
 		this.target_.smallEnemyAlertRange = addFloatField (this.target_.smallEnemyAlertRange, "Distance d'Alerte", "Distance d'abandon de la poursuite", "unites");
+		this.target_.smallEnemyHitTime = addFloatField (this.target_.smallEnemyHitTime, "Temps d'attaque", "Temps d'attente de l'animation avant la frame faisant effet", "secondes");
 		
 		closeBox ();
 		
@@ -92,6 +93,7 @@ public class GlobalEditor : Editor
 		this.target_.bigEnemyPursuitSpeed = addFloatField (this.target_.bigEnemyPursuitSpeed, "Vitesse de Poursuite", "Vitesse du déplacement de l'enemis en poursuite", "unites/s");
 		this.target_.bigEnemyLocateDistance = addFloatField (this.target_.bigEnemyLocateDistance, "Distance de Reperage", "Distance maximale de reperage du personnage", "unites");
 		this.target_.bigEnemyAlertRange = addFloatField (this.target_.bigEnemyAlertRange, "Distance d'Alerte", "Distance d'abandon de la poursuite", "unites");
+		this.target_.bigEnemyHitTime = addFloatField (this.target_.bigEnemyHitTime, "Temps d'attaque", "Temps d'attente de l'animation avant la frame faisant effet", "secondes");
 		
 		closeBox ();
 		

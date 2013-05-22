@@ -18,7 +18,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_STANDALONE;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_0_0;UNITY_4_0;UNITY_STANDALONE_WIN;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_GENERICS;UNITY_ANDROID_API;ENABLE_CLOTH;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;UNITY_4_0_0;UNITY_4_0;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -37,10 +37,10 @@
     <Reference Include="System.XML" />
 	<Reference Include="System.Core" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/4.0/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/4.0/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +54,7 @@
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-weapon.shader" />
      <None Include="Assets\Fonts\Razer.txt" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (AlphaClip) .shader" />
+     <None Include="Assets\FX\Particles\Smoke\Shaders\Particle Alpha Blend (Queue +100).shader" />
      <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingBlur.shader" />
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-animtexture.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />
@@ -71,6 +72,7 @@
      <None Include="Assets\Materials\MAD_SHADER\Environment\Mobile-Lightmap-Unlit.shader" />
      <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingStencilOpaqueZ.shader" />
      <None Include="Assets\Fonts\Razer\razer.txt" />
+     <None Include="Assets\Shaders\Particles Additive Culled.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (SoftClip).shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (SoftClip).shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
@@ -92,9 +94,6 @@
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-cube-env.shader" />
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-Unlit-Scroll2Layers-Mul-skybox.shader" />
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-skybox-transparent.shader" />
- <Reference Include="Assembly-UnityScript-firstpass">
- <HintPath>Library\ScriptAssemblies\Assembly-UnityScript-firstpass.dll</HintPath>
- </Reference>
  <Reference Include="Fabric.Core">
  <HintPath>Assets\Fabric\Fabric.Core.dll</HintPath>
  </Reference>

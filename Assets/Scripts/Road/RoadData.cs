@@ -43,6 +43,9 @@ public class RoadData
 		lastTraveled = 0.0f;
 		pause = false;
 		stop = false;
+		
+		currentAngle = 0.0f;
+		currentWait = 0.0f;
 	}
 	
 	public void initWithDatas(EndBehaviour _endBehaviour, Deplacement _deplacement, Activation _activation, List<KeyPoint> _keyPoints, float _speedTmp, bool _resetAtEnd)

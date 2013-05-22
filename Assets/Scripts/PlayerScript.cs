@@ -21,6 +21,20 @@ public class PlayerScript : Controllable
 	void Start()
 	{
 		base.Start();
+
+		this.playerMesh = GlobalVarScript.instance.playerMesh;
+		
+		if(playerMesh != null)
+		{
+			this.playerMesh.animation["run"].speed = 5.0f;
+			this.playerMesh.animation["jump"].speed = 2.0f;
+			this.playerMesh.animation["fall"].speed = 8.0f;
+			this.playerMesh.animation["idle"].speed = 2.0f;
+			this.playerMesh.animation["power"].speed = 4.0f;
+			this.playerMesh.animation["powerLoop"].speed = 2.0f;
+			this.playerMesh.animation["win"].speed = 2.0f;
+			this.playerMesh.animation.Play("idle");
+		}
 	
 		this.speed = GlobalVarScript.instance.playerSpeed;
 		this.jumpForce = GlobalVarScript.instance.playerJumpForce;
@@ -168,20 +182,19 @@ public class PlayerScript : Controllable
 		else
 			this.renderer.enabled =false;
 		
-		GameObject platforms = GameObject.FindGameObjectWithTag("PlatForms");
-		GameObject interruptors = GameObject.FindGameObjectWithTag("Interruptors");
-		
-		FollowRoad[] roads = platforms.GetComponentsInChildren<FollowRoad>();
-		Interruptor[] buttons = interruptors.GetComponentsInChildren<Interruptor>();
-		
-		foreach(FollowRoad road in roads)
+		foreach(FollowRoad followroad in GameObject.Find("WORLD").GetComponentsInChildren<FollowRoad>())
 		{
-			road.reloadRoad();
+			followroad.reloadRoad();
 		}
 		
-		foreach(Interruptor button in buttons)
+		foreach(Interruptor interruptor in GameObject.Find("WORLD").GetComponentsInChildren<Interruptor>())
 		{
-			//button.reloadInterruptor();
+			interruptor.reloadInterruptor();
+		}
+		
+		foreach(InterruptorReceiver interruptor in GameObject.Find("WORLD").GetComponentsInChildren<InterruptorReceiver>())
+		{
+			interruptor.reloadInterruptor();
 		}
 	}
 	

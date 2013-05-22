@@ -44,11 +44,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Standard Assets\Character Controllers\Sources\Scripts\CharacterMotor.js" />
-     <Compile Include="Assets\Standard Assets\Character Controllers\Sources\Scripts\FPSInputController.js" />
-     <Compile Include="Assets\Standard Assets\Character Controllers\Sources\Scripts\PlatformInputController.js" />
-     <Compile Include="Assets\Standard Assets\Character Controllers\Sources\Scripts\ThirdPersonCamera.js" />
-     <Compile Include="Assets\Standard Assets\Character Controllers\Sources\Scripts\ThirdPersonController.js" />
+     <Compile Include="Assets\Standard Assets\Particles\Legacy Particles\TimedObjectDestructor.js" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Depth Cutout.shader" />
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-lightprobe-VirtualVertexGlossy-Add.shader" />
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-skybox.shader" />
@@ -58,6 +54,7 @@
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-weapon.shader" />
      <None Include="Assets\Fonts\Razer.txt" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (AlphaClip) .shader" />
+     <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
      <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingBlur.shader" />
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-animtexture.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />
