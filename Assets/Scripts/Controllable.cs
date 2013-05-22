@@ -129,12 +129,14 @@ public class Controllable : MonoBehaviour
 		ApplyLinearVelocity();
 		
 		if (this.onGround == false && this.playerBody.LinearVelocity.Y < 0)
-		{			
+		{	
+			
 			if(this.isJumping)
 			{
 				this.isJumping = false;
-				this.isFalling = true;
 			}
+			
+			this.isFalling = true;
 			
 			// pour que le perso tombe plus vite
 			this.playerBody.GravityScale = GlobalVarScript.instance.playerGravityScale;
@@ -163,6 +165,7 @@ public class Controllable : MonoBehaviour
 				playerMesh.animation.CrossFade("jump", 0.1f);
 			}
 		}
+		
 		else
 		{
 			if (this.onGround)
@@ -175,6 +178,7 @@ public class Controllable : MonoBehaviour
 						{
 							playerMesh.animation.CrossFade("idle", 0.1f);
 						}
+						
 						else
 						{
 							playerMesh.animation.CrossFade("idle", 0.25f);
@@ -317,14 +321,17 @@ public class Controllable : MonoBehaviour
 			{
 				this.jumpFromPFM = true;
 				FollowRoad tmpfroad = (this.bodyPFM.UserData as GameObject).GetComponent<FollowRoad>();
+				/*
 				if(tmpfroad.back)
 				{
 					this.pfmVelocity = tmpfroad.roadVerso.vx / Time.deltaTime / 10.0f;
 				}
+				
 				else
 				{
 					this.pfmVelocity = tmpfroad.roadRecto.vx / Time.deltaTime / 10.0f;
 				}
+				*/
 			}
 			
 			GlobalVarScript.instance.blockCamera(Camera.main.transform.position);

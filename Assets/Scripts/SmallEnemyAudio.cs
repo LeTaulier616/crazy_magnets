@@ -4,9 +4,12 @@ using System.Collections;
 public class SmallEnemyAudio : MonoBehaviour 
 {
 	private AudioClip[] stepSounds;
-	
 	private AudioClip step;
 	private AudioClip oldstep;
+	
+	private AudioClip[] chaseSounds;
+	private AudioClip chase;
+	private AudioClip oldchase;
 	
 		// Use this for initialization
 	void Start ()
@@ -14,6 +17,10 @@ public class SmallEnemyAudio : MonoBehaviour
 		this.stepSounds = GlobalVarScript.instance.SmallSounds;
 		this.step = null;
 		this.oldstep = null;
+		
+		this.chaseSounds = GlobalVarScript.instance.SmallChaseSounds;
+		this.chase = null;
+		this.oldchase = null;
 	}
 	
 		// Update is called once per frame
@@ -25,6 +32,7 @@ public class SmallEnemyAudio : MonoBehaviour
 	void LateUpdate()
 	{
 		oldstep = step;
+		oldchase = chase;
 	}
 	
 	public void PlaySteps()
@@ -52,6 +60,40 @@ public class SmallEnemyAudio : MonoBehaviour
 			}
 			
 			audio.clip = step;
+		}
+		
+		if(!audio.isPlaying)
+		{
+			audio.Play();
+		}
+	}
+	
+		public void PlayChase()
+	{
+		int  chaseindex = Random.Range(0, stepSounds.Length -1);
+		
+		chase = chaseSounds[chaseindex];
+		
+		if(oldchase != chase)
+		{
+			audio.clip = chase;
+		}
+		
+		else
+		{
+			if(chaseindex == (chaseSounds.Length - 1))
+			{
+				chaseindex--;
+				chase = chaseSounds[chaseindex];
+			}
+			
+			else
+			{
+				chaseindex++;
+				chase = chaseSounds[chaseindex];
+			}
+			
+			audio.clip = chase;
 		}
 		
 		if(!audio.isPlaying)
