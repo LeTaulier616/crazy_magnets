@@ -96,18 +96,6 @@ public class Controllable : MonoBehaviour
 		
 		this.frictionFactor = 1f;
 		
-		if(playerMesh != null)
-		{
-			this.playerMesh.animation["run"].speed = 5.0f;
-			this.playerMesh.animation["jump"].speed = 2.0f;
-			this.playerMesh.animation["fall"].speed = 8.0f;
-			this.playerMesh.animation["idle"].speed = 2.0f;
-			this.playerMesh.animation["power"].speed = 4.0f;
-			this.playerMesh.animation["powerLoop"].speed = 2.0f;
-			this.playerMesh.animation["win"].speed = 2.0f;
-			this.playerMesh.animation.Play("idle");
-		}
-		
 		this.BroadcastMessage("ConstantParams", Color.cyan, SendMessageOptions.DontRequireReceiver);
 		//this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
 		
