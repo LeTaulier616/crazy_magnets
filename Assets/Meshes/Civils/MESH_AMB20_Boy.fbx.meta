@@ -95,9 +95,10 @@ ModelImporter:
     400088: //RootNode
     4300000: GARS_GEO
     9500000: //RootNode
+    11100000: //RootNode
     13700000: GARS_GEO 1
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
@@ -144,5 +145,5 @@ ModelImporter:
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   additionalBone: 1
-  animationType: 2
+  animationType: 1
   userData: 
