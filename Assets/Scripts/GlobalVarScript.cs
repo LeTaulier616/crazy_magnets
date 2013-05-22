@@ -31,6 +31,7 @@ public class GlobalVarScript : MonoBehaviour
 	public float smallEnemyPursuitSpeed;
 	public float smallEnemyLocateDistance;
 	public float smallEnemyAlertRange;
+	public float smallEnemyHitTime;
 
 	public float bigEnemySpeed;
 	public float bigEnemyJumpForce;
@@ -40,6 +41,7 @@ public class GlobalVarScript : MonoBehaviour
 	public float bigEnemyPursuitSpeed;
 	public float bigEnemyLocateDistance;
 	public float bigEnemyAlertRange;
+	public float bigEnemyHitTime;
 	
 	public Vector3 cameraFixedPos = Vector3.zero;
 	public int cameraFree = 0; // 0 : forcee sur la target; 1 : libre; 2 : libre avec controles joueur bloques

@@ -95,20 +95,6 @@ public class Controllable : MonoBehaviour
 		this.decelerationFactor = GlobalVarScript.instance.decelerationFactor;
 		
 		this.frictionFactor = 1f;
-				
-		this.playerMesh = GlobalVarScript.instance.playerMesh;
-		
-		if(playerMesh != null)
-		{
-			this.playerMesh.animation["run"].speed = 5.0f;
-			this.playerMesh.animation["jump"].speed = 2.0f;
-			this.playerMesh.animation["fall"].speed = 8.0f;
-			this.playerMesh.animation["idle"].speed = 2.0f;
-			this.playerMesh.animation["power"].speed = 4.0f;
-			this.playerMesh.animation["powerLoop"].speed = 2.0f;
-			this.playerMesh.animation["win"].speed = 2.0f;
-			this.playerMesh.animation.Play("idle");
-		}
 		
 		this.BroadcastMessage("ConstantParams", Color.cyan, SendMessageOptions.DontRequireReceiver);
 		//this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
@@ -317,11 +303,10 @@ public class Controllable : MonoBehaviour
 		{
 			this.Bump(this.jumpForce);
 			
-			if(this.onPFM)
+			/*if(this.onPFM)
 			{
 				this.jumpFromPFM = true;
 				FollowRoad tmpfroad = (this.bodyPFM.UserData as GameObject).GetComponent<FollowRoad>();
-				/*
 				if(tmpfroad.back)
 				{
 					this.pfmVelocity = tmpfroad.roadVerso.vx / Time.deltaTime / 10.0f;
@@ -331,8 +316,7 @@ public class Controllable : MonoBehaviour
 				{
 					this.pfmVelocity = tmpfroad.roadRecto.vx / Time.deltaTime / 10.0f;
 				}
-				*/
-			}
+			}*/
 			
 			GlobalVarScript.instance.blockCamera(Camera.main.transform.position);
 		}
@@ -489,6 +473,7 @@ public class Controllable : MonoBehaviour
 				powerLoop = false;
 				this.canMove = false;
 				this.canJump = false;
+				this.walkVelocity = FVector2.Zero;
 			}
 			
 			if(grab.x < this.transform.position.x)
