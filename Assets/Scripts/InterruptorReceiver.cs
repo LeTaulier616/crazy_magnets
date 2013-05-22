@@ -49,17 +49,7 @@ public class InterruptorReceiver : MonoBehaviour
 		this.interruptorCount = 0;	
 		this.isOpen = false;
 		this.isActivated = false;
-		for(int trg = 0; trg < targets.Length; ++trg)
-		{
-			targets[trg].GetComponent<Interruptor>().reloadInterruptorFromParent();
-		} 
-	}
-	
-	public void reloadInterruptorFromParent()
-	{
-		this.interruptorCount = 0;	
-		this.isOpen = false;
-		this.isActivated = false;
+		OnDesactivate();
 	}
 	
 	public void OnActivate()
@@ -189,8 +179,8 @@ public class InterruptorReceiver : MonoBehaviour
 			
 			if(audio != null)
 			{
-			audio.clip = GlobalVarScript.instance.DoorCloseSound;
-			audio.Play();
+				audio.clip = GlobalVarScript.instance.DoorCloseSound;
+				audio.Play();
 			}
 		}
 		
