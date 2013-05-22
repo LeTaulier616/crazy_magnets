@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9612c404f9503a7489950d1bfcaa9ecc
+guid: cc7d79b8f65f433428002192428f92d1
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -16,8 +16,8 @@ ModelImporter:
     100020: FILLE_L_ArmIK_ctrl
     100022: FILLE_L_ArmIK_grp
     100024: FILLE_L_ElbowPV_ctrl
-    100026: FILLE_L_FooIK_ctrl
-    100028: FILLE_L_Foot_jnt
+    100026: FILLE_L_Foot_jnt
+    100028: FILLE_L_FootIK_ctrl
     100030: FILLE_L_Heel_Grp
     100032: FILLE_L_Hip_jnt
     100034: FILLE_L_Knee_jnt
@@ -31,8 +31,8 @@ ModelImporter:
     100050: FILLE_R_Elbow_jnt
     100052: FILLE_R_Elbow_jnt 1
     100054: FILLE_R_ElbowPV_ctrl
-    100056: FILLE_R_FooIK_ctrl
-    100058: FILLE_R_Foot_jnt
+    100056: FILLE_R_Foot_jnt
+    100058: FILLE_R_FootIK_ctrl
     100060: FILLE_R_Hand_jnt
     100062: FILLE_R_Hand_jnt 1
     100064: FILLE_R_Heel_Grp
@@ -61,8 +61,8 @@ ModelImporter:
     400020: FILLE_L_ArmIK_ctrl
     400022: FILLE_L_ArmIK_grp
     400024: FILLE_L_ElbowPV_ctrl
-    400026: FILLE_L_FooIK_ctrl
-    400028: FILLE_L_Foot_jnt
+    400026: FILLE_L_Foot_jnt
+    400028: FILLE_L_FootIK_ctrl
     400030: FILLE_L_Heel_Grp
     400032: FILLE_L_Hip_jnt
     400034: FILLE_L_Knee_jnt
@@ -76,8 +76,8 @@ ModelImporter:
     400050: FILLE_R_Elbow_jnt
     400052: FILLE_R_Elbow_jnt 1
     400054: FILLE_R_ElbowPV_ctrl
-    400056: FILLE_R_FooIK_ctrl
-    400058: FILLE_R_Foot_jnt
+    400056: FILLE_R_Foot_jnt
+    400058: FILLE_R_FootIK_ctrl
     400060: FILLE_R_Hand_jnt
     400062: FILLE_R_Hand_jnt 1
     400064: FILLE_R_Heel_Grp
@@ -93,13 +93,11 @@ ModelImporter:
     400084: FILLE_SKELETON
     400086: FILLE_Ultimate_ctrl
     400088: //RootNode
-    2300000: FILLE_humain
-    3300000: FILLE_humain
-    4300000: FILLE_humain
+    7400000: Take 001
     9500000: //RootNode
     11100000: //RootNode
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:
@@ -118,7 +116,7 @@ ModelImporter:
     meshCompression: 0
     addColliders: 0
     swapUVChannels: 0
-    generateSecondaryUV: 1
+    generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
     secondaryUVAngleDistortion: 8
