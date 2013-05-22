@@ -48,8 +48,8 @@ public class InterruptorReceiver : MonoBehaviour
 	{
 		this.interruptorCount = 0;	
 		this.isOpen = false;
-		this.isActivated = false;
-		OnDesactivate();
+		if(isActivated)
+			OnDesactivate();
 	}
 	
 	public void OnActivate()

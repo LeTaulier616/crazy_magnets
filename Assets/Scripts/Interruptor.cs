@@ -424,15 +424,16 @@ public class Interruptor : MonoBehaviour
 	
 	public void reloadInterruptor()
 	{
-		bool wasActivated = activated;
-		pushCounter  = 0;
-		pushTime     = timeToExecute + 0.1f;
-		unpushTime   = timeToRevoke + 0.1f;
-		isPushed     = false;
-		activated    = false;
-		waitActiveToSetOff = false;
-		if(wasActivated && !activated)
+		if(activated)
+		{
+			pushCounter  = 0;
+			pushTime     = timeToExecute + 0.1f;
+			unpushTime   = timeToRevoke + 0.1f;
+			isPushed     = false;
+			activated    = false;
+			waitActiveToSetOff = false;
 			launchAnimation();
+		}
 	}
 	
 	private void launchAnimation()
