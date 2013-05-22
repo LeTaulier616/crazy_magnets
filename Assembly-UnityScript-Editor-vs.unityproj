@@ -5,11 +5,11 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{F77CBC40-D3D2-7E47-D0F9-29A49CC58AE1}</ProjectGuid>
+	<ProjectGuid>{FE30A83F-7410-0037-A2FE-D417F0A9A5E4}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
-	<AssemblyName>Assembly-UnityScript-firstpass</AssemblyName>
+	<AssemblyName>Assembly-UnityScript-Editor</AssemblyName>
 	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,7 +44,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Standard Assets\Particles\Legacy Particles\TimedObjectDestructor.js" />
+     <Compile Include="Assets\CubemapMaker\Source\Editor\CubemapMakerEditor.js" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Depth Cutout.shader" />
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-lightprobe-VirtualVertexGlossy-Add.shader" />
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-skybox.shader" />
@@ -54,7 +54,7 @@
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-weapon.shader" />
      <None Include="Assets\Fonts\Razer.txt" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (AlphaClip) .shader" />
-     <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
+     <None Include="Assets\FX\Particles\Smoke\Shaders\Particle Alpha Blend (Queue +100).shader" />
      <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingBlur.shader" />
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-animtexture.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />
@@ -72,6 +72,7 @@
      <None Include="Assets\Materials\MAD_SHADER\Environment\Mobile-Lightmap-Unlit.shader" />
      <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingStencilOpaqueZ.shader" />
      <None Include="Assets\Fonts\Razer\razer.txt" />
+     <None Include="Assets\Shaders\Particles Additive Culled.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (SoftClip).shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (SoftClip).shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
@@ -93,9 +94,26 @@
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-cube-env.shader" />
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-Unlit-Scroll2Layers-Mul-skybox.shader" />
      <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-skybox-transparent.shader" />
+ <Reference Include="Assembly-UnityScript">
+ <HintPath>Library\ScriptAssemblies\Assembly-UnityScript.dll</HintPath>
+ </Reference>
  <Reference Include="Fabric.Core">
  <HintPath>Assets\Fabric\Fabric.Core.dll</HintPath>
  </Reference>
+ <Reference Include="Fabric.Core.Editor">
+ <HintPath>Assets\Fabric\Editor\Fabric.Core.Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.Graphs">
+ <HintPath>C:\Program Files (x86)\Unity\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
+      <Project>{E01E4D18-4109-B66F-28B9-A21C1D124946}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
+    <ProjectReference Include="Assembly-CSharp-vs.csproj">
+      <Project>{E677A474-87AD-1FDB-62D9-0CE1A5CD867A}</Project>      <Name>Assembly-CSharp-vs</Name>    </ProjectReference>
+    <ProjectReference Include="Assembly-CSharp-Editor-firstpass-vs.csproj">
+      <Project>{41167120-88A0-C20C-365E-12C516A50325}</Project>      <Name>Assembly-CSharp-Editor-firstpass-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
