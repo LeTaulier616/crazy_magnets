@@ -96,9 +96,17 @@ public class GlobalVarScript : MonoBehaviour
 	public int BigSoundsSize = 1;
 	public AudioClip[] BigSounds;
 	
+	public bool BigChaseSoundsExpand = true;
+	public int BigChaseSoundsSize = 1;
+	public AudioClip[] BigChaseSounds;
+	
 	public bool SmallSoundsExpand = true;
 	public int SmallSoundsSize = 1;
 	public AudioClip[] SmallSounds;
+	
+	public bool SmallChaseSoundsExpand = true;
+	public int SmallChaseSoundsSize = 1;
+	public AudioClip[] SmallChaseSounds;
 	
 	public static GlobalVarScript instance;
 	
