@@ -13,11 +13,14 @@ public class InterruptorReceiver : MonoBehaviour
 	private int interruptorCount;
 	private bool isOpen;
 	
+	private bool firstUse;
+	
 	void Start()
 	{
 		this.gameObject.GetComponent<FSBodyComponent>().PhysicsBody.UserData = this.gameObject;
 		this.interruptorCount = 0;	
 		this.isOpen = false;
+		this.firstUse = false;
 	}
 	
 	void Update()
@@ -49,12 +52,20 @@ public class InterruptorReceiver : MonoBehaviour
 		this.interruptorCount = 0;	
 		this.isOpen = false;
 		this.isActivated = false;
+			
+			if(firstUse)
 		OnDesactivate();
 	}
 	
 	public void OnActivate()
 	{
 		isActivated = true;
+		
+		if((!firstUse))
+		{
+			firstUse = true;
+		}
+		
 		// Call the correct function or do something
 		
 		if(this.gameObject.tag == "Platform")
