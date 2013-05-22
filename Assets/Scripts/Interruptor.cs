@@ -363,7 +363,7 @@ public class Interruptor : MonoBehaviour
 				return;
 			
 			if(!(this.activator == Activator.ELECTRIC_TOUCH && !isElectrified)
-				&& Vector3.Distance(GameObject.FindGameObjectWithTag("PlayerObject").transform.position, gameObject.transform.position) < (isElectrified ? tmpPorteeElec : tmpPorteeNorm) )
+				&& (Vector3.Distance(GameObject.FindGameObjectWithTag("PlayerObject").transform.position, gameObject.transform.position) < (isElectrified ? tmpPorteeElec : tmpPorteeNorm) || isEnnemy) )
 			{
 				if(this.activator == Activator.ELECTRIC_TOUCH)
 				{
@@ -415,6 +415,27 @@ public class Interruptor : MonoBehaviour
 		isPushed     = false;
 		
 		Debug.Log("Set Off");
+	}
+	
+	public void reloadInterruptor()
+	{
+		pushCounter  = 0;
+		unpushTime   = 0.0f;
+		isPushed     = false;
+		activated    = false;
+		
+		for(int trg = 0; trg < targets.Length; ++trg)
+		{
+			targets[trg].GetComponent<InterruptorReceiver>().reloadInterruptorFromParent();
+		}
+	}
+	
+	public void reloadInterruptorFromParent()
+	{
+		pushCounter  = 0;
+		unpushTime   = 0.0f;
+		isPushed     = false;
+		activated    = false;
 	}
 	
 	private void launchAnimation()

@@ -57,9 +57,6 @@ public class FollowRoad : MonoBehaviour {
 		
 		lastRoadPosition = new FVector2(roadRecto.currentPosition.x, roadRecto.currentPosition.y);
 		
-		roadBody.OnCollision  += OnCollisionEvent;
-		roadBody.OnSeparation += OnSeparationEvent;
-		
 		this.gameObject.GetComponent<FSBodyComponent>().PhysicsBody.UserData = this.gameObject;
 	}
 	
@@ -177,46 +174,19 @@ public class FollowRoad : MonoBehaviour {
 		gameObject.transform.position = roadRecto.currentPosition;
 	}
 	
-	private bool OnCollisionEvent(Fixture fixtureA, Fixture fixtureB, Contact contact)
+	public void reloadRoad()
 	{
-		/*
-		Body bodyA = fixtureA.Body;
-		Body bodyB = fixtureB.Body;
-		
-		if((bodyB.UserTag == "PlayerObject") && !jointConnected)
+		if(roadRecto.activation != Activation.AUTO)
+			roadRecto.reInit();
+		if(roadVerso.activation != Activation.AUTO)
+			roadVerso.reInit();
+		if(roadRecto.activation != Activation.AUTO)
 		{
-			FVector2 colNorm = contact.Manifold.LocalNormal;
-			if (colNorm.Y > 0 || bodyB.UserFSBodyComponent.transform.position.y > this.transform.position.y)
-			{
-				playerScript.onGround = true;
-				playerScript.onPFM = true;
-				playerScript.bodyPFM = bodyA;
-				lastRoadPosition = roadBody.Position;
-				jointConnected = true;
-				
-				if(roadRecto.activation == Activation.PLAYER)
-				{
-					playRoad();
-				}
-			}
+			activated = false;
+			pause     = false;
+			back      = false;
+			gameObject.transform.position = roadRecto.keyPoints[0].position;
 		}
-		else if(bodyB.UserTag == "Bloc")
-		{
-			FVector2 colNorm = contact.Manifold.LocalNormal;
-			if (colNorm.Y > 0 || bodyB.UserFSBodyComponent.transform.position.y > this.transform.position.y)
-			{
-				cube               = bodyB.UserFSBodyComponent.gameObject;
-				cubeBody           = bodyB;
-				cubejointConnected = true;
-			}
-		}
-		*/
-		return true;
-	}
-	
-	private void OnSeparationEvent(Fixture fixtureA, Fixture fixtureB)
-	{
-
 	}
 	
 	private void OnTriggerEnter(Collider col)

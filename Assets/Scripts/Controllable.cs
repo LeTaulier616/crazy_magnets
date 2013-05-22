@@ -129,12 +129,14 @@ public class Controllable : MonoBehaviour
 		ApplyLinearVelocity();
 		
 		if (this.onGround == false && this.playerBody.LinearVelocity.Y < 0)
-		{			
+		{	
+			
 			if(this.isJumping)
 			{
 				this.isJumping = false;
-				this.isFalling = true;
 			}
+			
+			this.isFalling = true;
 			
 			// pour que le perso tombe plus vite
 			this.playerBody.GravityScale = GlobalVarScript.instance.playerGravityScale;
@@ -163,6 +165,7 @@ public class Controllable : MonoBehaviour
 				playerMesh.animation.CrossFade("jump", 0.1f);
 			}
 		}
+		
 		else
 		{
 			if (this.onGround)
@@ -175,6 +178,7 @@ public class Controllable : MonoBehaviour
 						{
 							playerMesh.animation.CrossFade("idle", 0.1f);
 						}
+						
 						else
 						{
 							playerMesh.animation.CrossFade("idle", 0.25f);
@@ -317,19 +321,22 @@ public class Controllable : MonoBehaviour
 			{
 				this.jumpFromPFM = true;
 				FollowRoad tmpfroad = (this.bodyPFM.UserData as GameObject).GetComponent<FollowRoad>();
+				/*
 				if(tmpfroad.back)
 				{
 					this.pfmVelocity = tmpfroad.roadVerso.vx / Time.deltaTime / 10.0f;
 				}
+				
 				else
 				{
 					this.pfmVelocity = tmpfroad.roadRecto.vx / Time.deltaTime / 10.0f;
 				}
+				*/
 			}
 			
 			GlobalVarScript.instance.blockCamera(Camera.main.transform.position);
 		}
-	}			
+	}
 	
 	public void Attract(float distance)
 	{
@@ -411,8 +418,8 @@ public class Controllable : MonoBehaviour
 	{
 		Camera.main.gameObject.SendMessageUpwards("Reset", SendMessageOptions.DontRequireReceiver);
 		
-		if (GlobalVarScript.instance.groundTags.Contains(ground.tag) && this.isFalling)
-		{			
+		if (GlobalVarScript.instance.groundTags.Contains(ground.tag))
+		{
 			this.onGround = true;
 			
 			if(this.isFalling)
@@ -444,7 +451,7 @@ public class Controllable : MonoBehaviour
 			if (this.canMove && GlobalVarScript.instance.cameraTarget.GetInstanceID() == this.target.GetInstanceID() && Application.loadedLevelName != "CM_Level_0")
 			{
 				// reset la camera uniquement si elle est fixee au controllable
-				GlobalVarScript.instance.resetCamera();
+				GlobalVarScript.instance.resetCamera(false);
 			}
 		}
 	}
@@ -531,6 +538,7 @@ public class Controllable : MonoBehaviour
 		this.walkVelocity = FVector2.Zero;
 		this.canMove = false;
 		this.canJump = false;
+		GlobalVarScript.instance.player.GetComponent<ControllerMain>().canMagnet = false;
 		this.playerBody.Mass = 100f;
 	}
 	
@@ -539,6 +547,7 @@ public class Controllable : MonoBehaviour
 		this.playerBody.ResetDynamics();
 		this.canMove = true;
 		this.canJump = true;
+		GlobalVarScript.instance.player.GetComponent<ControllerMain>().canMagnet = true;
 		this.playerBody.Mass = 1f;
 	}
 }

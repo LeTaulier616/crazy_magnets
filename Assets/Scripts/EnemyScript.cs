@@ -26,7 +26,9 @@ public class PatrolState : State
 		this.enemy = it.GetComponent<EnemyScript>();
 		
 		if(this.enemy.enemyMesh != null)
-			this.enemy.enemyMesh.animation.CrossFade("patrol", 0.5f);
+		{
+			this.enemy.enemyMesh.animation.CrossFade("run", 0.5f);
+		}
 	}
 
 	override public void UpdateState(GameObject it)
@@ -172,10 +174,11 @@ public class ControlledState : State
 
 	public override void EnterState (GameObject it)
 	{
-		GlobalVarScript.instance.SetCameraTarget(this.target);
+		GlobalVarScript.instance.SetCameraTarget(this.target, true);
 		GlobalVarScript.instance.cameraFree = 0;
 		Interruptor button = it.gameObject.GetComponentInChildren<Interruptor>();
 		button.activator = Interruptor.Activator.TOUCH;
+		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.Mass = 1.0f;
 		it.GetComponent<Controllable>().isAlive = true;
 		//it.GetComponent<Controllable>().canMove = true;
 		//it.GetComponent<Controllable>().canJump = true;
@@ -183,8 +186,8 @@ public class ControlledState : State
 
 	public override void ExitState (GameObject it)
 	{
-		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.Mass = 1.0f;
-		GlobalVarScript.instance.resetCamera();
+		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.Mass = 100.0f;
+		GlobalVarScript.instance.resetCamera(true);
 		it.GetComponent<Controllable>().isAlive = false;
 		//it.GetComponent<Controllable>().canMove = false;
 		//it.GetComponent<Controllable>().canJump = false;
@@ -239,6 +242,9 @@ public class EnemyScript : StateMachine
 		this.playerBody.Mass = 100f;
 		Controllable controllable = this.GetComponent<Controllable>();
 		controllable.isAlive = false;
+		
+		controllable.playerMesh = enemyMesh;
+		
 		if (this.type == EnemyType.Small)
 		{
 			this.patrolingSpeed = GlobalVarScript.instance.smallEnemyPatrolSpeed;
@@ -262,7 +268,7 @@ public class EnemyScript : StateMachine
 			controllable.jumpForce = GlobalVarScript.instance.bigEnemyJumpForce;
 			this.playerBody.LinearDamping = GlobalVarScript.instance.bigEnemyDamping;
 			
-			this.enemyMesh.animation["patrol"].speed = 2.0f;
+			this.enemyMesh.animation["run"].speed = 2.0f;
 			this.enemyMesh.animation["chase"].speed = 2.0f;
 			this.enemyMesh.animation["idle"].speed = 2.0f;
 		}

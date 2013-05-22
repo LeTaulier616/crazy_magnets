@@ -23,7 +23,7 @@ public class EndLevelScript : MonoBehaviour
 	{
 		player.GetComponent<PlayerScript>().hasWon = true;
 		
-		GlobalVarScript.instance.SetCameraTarget(player.GetComponent<PlayerScript>().transform);
+		GlobalVarScript.instance.SetCameraTarget(player.GetComponent<PlayerScript>().transform, true);
 		player.GetComponent<PlayerScript>().canMove = false;
 		player.GetComponent<PlayerScript>().canJump = false;
 				
