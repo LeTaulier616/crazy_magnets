@@ -106,9 +106,6 @@ public class Interruptor : MonoBehaviour
 		
 		bool wasActivated = activated;
 		
-		if(activated && name == "BUTTON1")
-			Debug.Log(activated);
-		
 		if(activated && type == Type.TIMER)
 		{
 			if (audio2 != null)
