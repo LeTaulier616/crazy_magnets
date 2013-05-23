@@ -31,6 +31,9 @@ public class GoldBoltScript : MonoBehaviour {
 			endLevel = endGameObject.GetComponent<EndLevelScript>();
 		
 		pickedUp = false;
+		
+		SendMessage("ConstantParams", Color.yellow, SendMessageOptions.DontRequireReceiver);
+		SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
 	}
 	
 	// Update is called once per frame

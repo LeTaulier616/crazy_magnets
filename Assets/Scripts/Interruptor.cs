@@ -86,9 +86,9 @@ public class Interruptor : MonoBehaviour
 			clockSound3 = GlobalVarScript.instance.ClockSounds[2];
 			clockSound4 = GlobalVarScript.instance.ClockSounds[3];
 
-		SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
 		SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
-		
+		SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
+
 		foreach(AudioSource source in this.GetComponents<AudioSource>())
 		{
 			if(source.loop)
@@ -245,12 +245,16 @@ public class Interruptor : MonoBehaviour
 			{
 				if (Vector3.Distance(GameObject.FindGameObjectWithTag("PlayerObject").transform.position, gameObject.transform.position) < tmpPorteeNorm)
 				{
-					SendMessage("ConstantParams", Color.green, SendMessageOptions.DontRequireReceiver);
+					if(!isPushed && type != Type.TIMER)
+						SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
+					
+					SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
 				}
 				
 				else
 				{
-					SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
+					if(!isPushed)
+						SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
 				}
 			}
 			
@@ -258,12 +262,13 @@ public class Interruptor : MonoBehaviour
 			{
 				if (Vector3.Distance(GameObject.FindGameObjectWithTag("PlayerObject").transform.position, gameObject.transform.position) < tmpPorteeElec)
 				{
-					SendMessage("ConstantParams", Color.green, SendMessageOptions.DontRequireReceiver);
+					SendMessage("ConstantParams", Color.cyan, SendMessageOptions.DontRequireReceiver);
+					SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
 				}
 				
 				else
 				{
-					SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
+					SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
 				}	
 			}
 		}
@@ -435,6 +440,9 @@ public class Interruptor : MonoBehaviour
 				}
 			}
 		}
+		
+		SendMessage("ConstantParams", Color.green, SendMessageOptions.DontRequireReceiver);
+
 		Debug.Log("Set On");
 	}
 	
@@ -490,5 +498,8 @@ public class Interruptor : MonoBehaviour
 				}
 			}
 		}
+		
+		SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
+
 	}
 }
