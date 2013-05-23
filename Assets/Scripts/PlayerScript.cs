@@ -96,6 +96,11 @@ public class PlayerScript : Controllable
 				this.canMove = false;
 			}
 		}
+		
+		if(!this.canMove)
+		{
+			playerMesh.animation.CrossFade("idle", 0.25f);
+		}
 	}
 	
 	void LateUpdate()
