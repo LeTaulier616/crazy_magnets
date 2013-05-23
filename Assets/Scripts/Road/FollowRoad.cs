@@ -113,12 +113,14 @@ public class FollowRoad : MonoBehaviour {
 		{
 			playerScript.playerBody.Position = new FVector2(playerScript.playerBody.Position.X + roadBody.Position.X - lastRoadPosition.X,
 										   					playerScript.playerBody.Position.Y + roadBody.Position.Y - lastRoadPosition.Y);
+			playerScript.playerBody.ApplyLinearImpulse(new FVector2(0.001f, 0.0f));
 		}
 		
 		if(cubejointConnected)
 		{
 			cubeBody.Position  =new FVector2(cubeBody.Position.X + roadBody.Position.X - lastRoadPosition.X,
 										   	cubeBody.Position.Y + roadBody.Position.Y - lastRoadPosition.Y);
+			cubeBody.ApplyLinearImpulse(new FVector2(0.001f, 0.0f));
 		}
 		lastRoadPosition = roadBody.Position;
 	}
@@ -199,7 +201,7 @@ public class FollowRoad : MonoBehaviour {
 				playRoad();
 			}
 		}
-		else if(col.tag == "Bloc" && col.name != "Hitbox" && col.transform.position.y > this.transform.position.y)
+		else if(col.tag == "Bloc" && col.name == "Hitbox" && col.transform.position.y > this.transform.position.y)
 		{
 			cube               = col.transform.parent.gameObject;
 			cubeBody           = col.transform.parent.gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
@@ -216,7 +218,7 @@ public class FollowRoad : MonoBehaviour {
 			playerScript.bodyPFM  = null;
 			jointConnected        = false;
 		}
-		else if(col.tag == "Bloc" && col.name != "Hitbox")
+		else if(col.tag == "Bloc" && col.name == "Hitbox")
 		{
 			cube               = null;
 			cubeBody           = null;
