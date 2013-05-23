@@ -215,14 +215,14 @@ public class Tutorial : MonoBehaviour
 			Rect rightBorder = new Rect(viewportWidthRight.x, 0.0f, Screen.width - viewportWidthRight.x, Screen.height);
 			
 			if(playerScript.lastDir == 1)
-				GUI.DrawTexture(leftBorder, GreenControlTexture);
-			else
 				GUI.DrawTexture(leftBorder, RedControlTexture);
+			else
+				GUI.DrawTexture(leftBorder, GreenControlTexture);
 			
 			if(playerScript.lastDir == -1)
-				GUI.DrawTexture(rightBorder, GreenControlTexture);
-			else
 				GUI.DrawTexture(rightBorder, RedControlTexture);
+			else
+				GUI.DrawTexture(rightBorder, GreenControlTexture);
 		}
 	}
 }
