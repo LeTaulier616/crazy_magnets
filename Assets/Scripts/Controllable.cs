@@ -418,17 +418,13 @@ public class Controllable : MonoBehaviour
 			
 			// Gestion surface glissante
 			this.frictionFactor = 1f;
-						
-			if (ground.tag == "Slippery" || ground.tag == "Slippery")
-			{
-				this.frictionFactor = GlobalVarScript.instance.slipperyFactor;
-			}
 			
 			if (ground.tag == "Bumper")
 			{
 				BumperScript bs = ground.transform.gameObject.GetComponent<BumperScript>();
 				if (bs != null)
 				{
+					this.playerBody.Mass = 1f;
 					Bump(bs.bumperForce);
 					bs.PlayAnimation();
 				}
@@ -453,6 +449,11 @@ public class Controllable : MonoBehaviour
 		{
 			this.onGround = true;
 			this.playerBody.GravityScale = 1f;
+			
+			if (ground.tag == "Slippery" || ground.tag == "Slippery")
+			{
+				this.frictionFactor = GlobalVarScript.instance.slipperyFactor;
+			}
 		}
 	}
 	

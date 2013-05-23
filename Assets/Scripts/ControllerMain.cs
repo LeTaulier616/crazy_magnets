@@ -71,6 +71,15 @@ public class ControllerMain : MonoBehaviour
 							touchObj.startTime = Time.time;
 							touchObj.leftTouched = touchPos.x < GlobalVarScript.instance.hudLimitX;
 							touchObj.rightTouched = touchPos.x > 1 - GlobalVarScript.instance.hudLimitX;
+							if (touchObj.leftTouched || touchObj.rightTouched)
+							{
+								float tapTime = Time.time - touchObj.startTime;
+								if (tapTime < GlobalVarScript.instance.maxTapTime && this.touchesTab.Count > 1)
+								{
+									// tap : saut
+									StartCoroutine(ResetTouch());
+								}
+							}
 						break;
 						
 						case TouchPhase.Stationary:
@@ -96,15 +105,6 @@ public class ControllerMain : MonoBehaviour
 						break;					
 						
 						case TouchPhase.Ended:
-							if (touchObj.leftTouched || touchObj.rightTouched)
-							{
-								float tapTime = Time.time - touchObj.startTime;
-								if (tapTime < GlobalVarScript.instance.maxTapTime && this.touchesTab.Count > 1)
-								{
-									// tap : saut
-									StartCoroutine(ResetTouch());
-								}
-							}
 							touchesToRemove.Add(touchObj);
 						break;
 					}
