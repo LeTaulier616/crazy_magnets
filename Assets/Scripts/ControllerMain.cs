@@ -71,6 +71,15 @@ public class ControllerMain : MonoBehaviour
 							touchObj.startTime = Time.time;
 							touchObj.leftTouched = touchPos.x < GlobalVarScript.instance.hudLimitX;
 							touchObj.rightTouched = touchPos.x > 1 - GlobalVarScript.instance.hudLimitX;
+							if (touchObj.leftTouched || touchObj.rightTouched)
+							{
+								float tapTime = Time.time - touchObj.startTime;
+								if (tapTime < GlobalVarScript.instance.maxTapTime && this.touchesTab.Count > 1)
+								{
+									// tap : saut
+									StartCoroutine(ResetTouch());
+								}
+							}
 						break;
 						
 						case TouchPhase.Stationary:
@@ -96,15 +105,6 @@ public class ControllerMain : MonoBehaviour
 						break;					
 						
 						case TouchPhase.Ended:
-							if (touchObj.leftTouched || touchObj.rightTouched)
-							{
-								float tapTime = Time.time - touchObj.startTime;
-								if (tapTime < GlobalVarScript.instance.maxTapTime && this.touchesTab.Count > 1)
-								{
-									// tap : saut
-									StartCoroutine(ResetTouch());
-								}
-							}
 							touchesToRemove.Add(touchObj);
 						break;
 					}
@@ -270,17 +270,14 @@ public class ControllerMain : MonoBehaviour
 			}
 			else if (Input.GetMouseButtonUp(0))
 			{
-				if (this.canMagnet)
+				if (mouseObject.selectedObject != null)
 				{
-					if (mouseObject.selectedObject != null)
-					{
-						mouseObject.selectedObject.SendMessageUpwards("UnselectObject", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
-					}
-					if (this.selectedObject != null)
-					{
-						this.selectedObject.SendMessageUpwards("UnselectObject", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
-						this.selectedObject = null;
-					}
+					mouseObject.selectedObject.SendMessageUpwards("UnselectObject", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
+				}
+				if (this.selectedObject != null)
+				{
+					this.selectedObject.SendMessageUpwards("UnselectObject", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
+					this.selectedObject = null;
 				}
 				mouseObject.selectedObject = null;
 				resetTouch(0);
@@ -290,6 +287,20 @@ public class ControllerMain : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
 			StartCoroutine(ResetTouch());
+		}
+		
+		if (!this.canMagnet)
+		{
+			// pour relacher le bloc si la desactivation se fait pendant un drag
+			if (mouseObject.selectedObject != null)
+			{
+				mouseObject.selectedObject.SendMessageUpwards("UnselectObject", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
+			}
+			if (this.selectedObject != null)
+			{
+				this.selectedObject.SendMessageUpwards("UnselectObject", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
+				this.selectedObject = null;
+			}
 		}
 		
 		checkTouched();

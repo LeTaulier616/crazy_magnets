@@ -180,6 +180,7 @@ public class PlayerScript : Controllable
 	
 	protected override void Kill()
 	{
+		this.ReleaseFocus();
 		this.isAlive = false;
 		this.playerBody.BodyType = BodyType.Static;
 		this.playerBody.Enabled = false;
