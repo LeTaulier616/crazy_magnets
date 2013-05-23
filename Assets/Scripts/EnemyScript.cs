@@ -244,7 +244,7 @@ public class EnemyScript : StateMachine
 		controllable.isAlive = false;
 		
 		controllable.playerMesh = enemyMesh;
-
+		
 		this.patrol = new PatrolState();
 		this.pursuit = new PursuitState();
 		this.attack = new AttackState();
@@ -261,6 +261,12 @@ public class EnemyScript : StateMachine
 			controllable.speed = GlobalVarScript.instance.smallEnemySpeed;
 			controllable.jumpForce = GlobalVarScript.instance.smallEnemyJumpForce;
 			this.playerBody.LinearDamping = GlobalVarScript.instance.smallEnemyDamping;
+			
+			if(enemyMesh != null)
+			{
+				this.enemyMesh.animation["run"].speed = 2.0f;
+				this.enemyMesh.animation["chase"].speed = 2.0f;
+			}
 		}
 		
 		else// if (this.type == EnemyType.Big)
@@ -275,9 +281,12 @@ public class EnemyScript : StateMachine
 			controllable.jumpForce = GlobalVarScript.instance.bigEnemyJumpForce;
 			this.playerBody.LinearDamping = GlobalVarScript.instance.bigEnemyDamping;
 			
-			this.enemyMesh.animation["run"].speed = 2.0f;
-			this.enemyMesh.animation["chase"].speed = 2.0f;
-			this.enemyMesh.animation["idle"].speed = 2.0f;
+			if(enemyMesh != null)
+			{
+				this.enemyMesh.animation["run"].speed = 2.0f;
+				this.enemyMesh.animation["chase"].speed = 2.0f;
+				this.enemyMesh.animation["idle"].speed = 2.0f;
+			}
 		}
 
 		this.controlled = new ControlledState();
