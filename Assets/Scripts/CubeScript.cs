@@ -183,8 +183,9 @@ public class CubeScript : MonoBehaviour
 		SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
 	}
 	
-	public void Attract(float force)
+	public void Attract(float distance)
 	{
+		float force = distance < 1f ? 15f : 10f;
 		this.body.ApplyForce(new FVector2(0, force));
 		SendMessage("ConstantOn", Color.blue, SendMessageOptions.DontRequireReceiver);
 	}
