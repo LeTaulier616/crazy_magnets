@@ -451,13 +451,36 @@ public class Interruptor : MonoBehaviour
 	{
 		if(activated)
 		{
-			pushCounter  = 0;
-			pushTime     = timeToExecute + 0.1f;
-			unpushTime   = timeToRevoke + 0.1f;
-			isPushed     = false;
-			activated    = false;
-			waitActiveToSetOff = false;
-			launchAnimation();
+			for(int trg = 0; trg < targets.Length; ++trg)
+			{
+				if(targets[trg].tag == "Platform")
+				{
+					pushCounter  = 0;
+					pushTime     = timeToExecute + 0.1f;
+					unpushTime   = timeToRevoke + 0.1f;
+					isPushed     = false;
+					activated    = false;
+					waitActiveToSetOff = false;
+					launchAnimation();
+				}
+			}	
+			if(activator == Activator.PLAYER_OR_CUBE && activated && pushCounter > 0)
+			{
+				if(/*Is pushed by player*/true)
+				{
+					pushCounter--;
+					if(pushCounter == 0)
+					{
+						pushCounter  = 0;
+						pushTime     = timeToExecute + 0.1f;
+						unpushTime   = timeToRevoke + 0.1f;
+						isPushed     = false;
+						activated    = false;
+						waitActiveToSetOff = false;
+						launchAnimation();
+					}
+				}
+			}
 		}
 	}
 	
