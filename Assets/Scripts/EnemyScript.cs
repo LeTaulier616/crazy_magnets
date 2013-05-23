@@ -180,17 +180,14 @@ public class ControlledState : State
 		button.activator = Interruptor.Activator.TOUCH;
 		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.Mass = 1.0f;
 		it.GetComponent<Controllable>().isAlive = true;
-		//it.GetComponent<Controllable>().canMove = true;
-		//it.GetComponent<Controllable>().canJump = true;
 	}
 
 	public override void ExitState (GameObject it)
 	{
+		//button.activator = Interruptor.Activator.ELECTRIC_TOUCH;
 		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.Mass = 100.0f;
 		GlobalVarScript.instance.resetCamera(true);
 		it.GetComponent<Controllable>().isAlive = false;
-		//it.GetComponent<Controllable>().canMove = false;
-		//it.GetComponent<Controllable>().canJump = false;
 	}
 }
 
@@ -342,8 +339,8 @@ public class EnemyScript : StateMachine
 	
 	public void Control()
 	{
-		if (this.curState == this.idle)
-			return;
+		//if (this.curState == this.idle)
+		//	return;
 		this.isControlled = !this.isControlled;
 		State nextState = (this.isControlled ? this.controlled : this.idle);
 		this.SwitchState(nextState);

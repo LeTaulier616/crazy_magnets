@@ -15,6 +15,8 @@ public class PlayerScript : Controllable
 	private bool canResurrect;
 	private List<Vector3> checkpoints = new List<Vector3>();
 	private int checkpointIndex;
+
+	private List<GoldBoltScript> boltsToValidate = new List<GoldBoltScript>();
 	
 	public bool hasWon;
 	
@@ -111,6 +113,7 @@ public class PlayerScript : Controllable
 	{
 		if(checkpointIndex <= checkpoints.Count - 1)
 			this.checkpointIndex++;
+		this.boltsToValidate.Clear();
 	}
 	
 	private void GetCheckpoints()
@@ -132,6 +135,11 @@ public class PlayerScript : Controllable
 		
 		Vector3 currentCheckpoint = checkpoints[checkpointIndex];
 		this.playerBody.Position = new FVector2(currentCheckpoint.x, currentCheckpoint.y);
+	}
+	
+	public void GetBolt(GoldBoltScript bolt)
+	{
+		this.boltsToValidate.Add(bolt);
 	}
 	
 	public override void Tap ()
@@ -196,6 +204,11 @@ public class PlayerScript : Controllable
 		foreach(InterruptorReceiver interruptor in GameObject.Find("WORLD").GetComponentsInChildren<InterruptorReceiver>())
 		{
 			interruptor.reloadInterruptor();
+		}
+		
+		foreach (GoldBoltScript bolt in this.boltsToValidate)
+		{
+			bolt.Reset();
 		}
 	}
 	
