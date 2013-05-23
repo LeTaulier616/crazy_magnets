@@ -324,15 +324,17 @@ public class Controllable : MonoBehaviour
 	
 	public void Attract(float distance)
 	{
-		float force = distance < 1f ? 30f : 15f;
+		float force = distance < 1f ? 15f : 10f;
 		this.angle += Time.deltaTime * 400f / (distance/2f);
+		this.playerBody.GravityScale = 2f;
+		playerBody.ApplyForce(new FVector2(0, force));
 		if (distance < 0.5f)
 		{
 			this.angle = 180f;
 		}
 		if (this.angle < 180)
 		{
-			playerBody.ApplyForce(new FVector2(0, force));
+			//playerMesh.animation.CrossFade("fall", 0.25f);
 		}
 		this.attraction = true;
 	}

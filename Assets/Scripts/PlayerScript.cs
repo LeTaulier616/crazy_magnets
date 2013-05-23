@@ -15,6 +15,8 @@ public class PlayerScript : Controllable
 	private bool canResurrect;
 	private List<Vector3> checkpoints = new List<Vector3>();
 	private int checkpointIndex;
+
+	private List<GoldBoltScript> boltsToValidate = new List<GoldBoltScript>();
 	
 	public bool hasWon;
 	
@@ -111,6 +113,7 @@ public class PlayerScript : Controllable
 	{
 		if(checkpointIndex <= checkpoints.Count - 1)
 			this.checkpointIndex++;
+		this.boltsToValidate.Clear();
 	}
 	
 	private void GetCheckpoints()
@@ -134,6 +137,11 @@ public class PlayerScript : Controllable
 		this.playerBody.Position = new FVector2(currentCheckpoint.x, currentCheckpoint.y);
 	}
 	
+	public void GetBolt(GoldBoltScript bolt)
+	{
+		this.boltsToValidate.Add(bolt);
+	}
+	
 	public override void Tap ()
 	{
 		if (this.canResurrect && this.checkpoints.Count > 0)
@@ -152,6 +160,8 @@ public class PlayerScript : Controllable
 		this.playerBody.ResetDynamics();
 		this.playerBody.Mass = 1f;
 		GlobalVarScript.instance.resetCamera(true);
+		// pour teleporter la camera et faire un leger dezoom
+		Camera.main.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, Camera.main.transform.position.z / 2f);
 		
 		if(playerMesh != null)
 			this.playerMesh.SetActiveRecursively(true);
@@ -170,6 +180,7 @@ public class PlayerScript : Controllable
 	
 	protected override void Kill()
 	{
+		this.ReleaseFocus();
 		this.isAlive = false;
 		this.playerBody.BodyType = BodyType.Static;
 		this.playerBody.Enabled = false;
@@ -194,6 +205,11 @@ public class PlayerScript : Controllable
 		{
 			interruptor.reloadInterruptor();
 		}
+		
+		foreach (GoldBoltScript bolt in this.boltsToValidate)
+		{
+			bolt.Reset();
+		}
 	}
 	
 	private void CollisionHead(GameObject ceiling)
@@ -215,7 +231,7 @@ public class PlayerScript : Controllable
 			this.playerBody.IgnoreGravity = true;
 		}
 		*/
-		if (this.angle > 0)
+		if (this.attraction && this.angle > 0)
 		{
 			this.angle = 180;
 		}

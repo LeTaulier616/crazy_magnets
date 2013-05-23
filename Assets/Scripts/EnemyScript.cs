@@ -180,17 +180,14 @@ public class ControlledState : State
 		button.activator = Interruptor.Activator.TOUCH;
 		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.Mass = 1.0f;
 		it.GetComponent<Controllable>().isAlive = true;
-		//it.GetComponent<Controllable>().canMove = true;
-		//it.GetComponent<Controllable>().canJump = true;
 	}
 
 	public override void ExitState (GameObject it)
 	{
+		//button.activator = Interruptor.Activator.ELECTRIC_TOUCH;
 		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.Mass = 100.0f;
 		GlobalVarScript.instance.resetCamera(true);
 		it.GetComponent<Controllable>().isAlive = false;
-		//it.GetComponent<Controllable>().canMove = false;
-		//it.GetComponent<Controllable>().canJump = false;
 	}
 }
 
@@ -244,7 +241,7 @@ public class EnemyScript : StateMachine
 		controllable.isAlive = false;
 		
 		controllable.playerMesh = enemyMesh;
-
+		
 		this.patrol = new PatrolState();
 		this.pursuit = new PursuitState();
 		this.attack = new AttackState();
@@ -261,6 +258,12 @@ public class EnemyScript : StateMachine
 			controllable.speed = GlobalVarScript.instance.smallEnemySpeed;
 			controllable.jumpForce = GlobalVarScript.instance.smallEnemyJumpForce;
 			this.playerBody.LinearDamping = GlobalVarScript.instance.smallEnemyDamping;
+			
+			if(enemyMesh != null)
+			{
+				this.enemyMesh.animation["run"].speed = 2.0f;
+				this.enemyMesh.animation["chase"].speed = 2.0f;
+			}
 		}
 		
 		else// if (this.type == EnemyType.Big)
@@ -275,9 +278,12 @@ public class EnemyScript : StateMachine
 			controllable.jumpForce = GlobalVarScript.instance.bigEnemyJumpForce;
 			this.playerBody.LinearDamping = GlobalVarScript.instance.bigEnemyDamping;
 			
-			this.enemyMesh.animation["run"].speed = 2.0f;
-			this.enemyMesh.animation["chase"].speed = 2.0f;
-			this.enemyMesh.animation["idle"].speed = 2.0f;
+			if(enemyMesh != null)
+			{
+				this.enemyMesh.animation["run"].speed = 2.0f;
+				this.enemyMesh.animation["chase"].speed = 2.0f;
+				this.enemyMesh.animation["idle"].speed = 2.0f;
+			}
 		}
 
 		this.controlled = new ControlledState();
@@ -333,8 +339,8 @@ public class EnemyScript : StateMachine
 	
 	public void Control()
 	{
-		if (this.curState == this.idle)
-			return;
+		//if (this.curState == this.idle)
+		//	return;
 		this.isControlled = !this.isControlled;
 		State nextState = (this.isControlled ? this.controlled : this.idle);
 		this.SwitchState(nextState);

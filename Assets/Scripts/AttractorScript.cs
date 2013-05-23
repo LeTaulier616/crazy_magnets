@@ -16,7 +16,7 @@ public class AttractorScript : MonoBehaviour
 	
 	private GameObject player;
 	
-	private ParticleSystem particles;
+	private GameObject particles;
 	
 	
 	void Start ()
@@ -39,9 +39,13 @@ public class AttractorScript : MonoBehaviour
 			SendMessage("ConstantParams", Color.red, SendMessageOptions.DontRequireReceiver);
 			SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
 					
-			particles = this.GetComponentInChildren<ParticleSystem>();
-			particles.transform.position = this.transform.position - new Vector3(0.0f, Range, 0.0f);
-			particles.transform.localScale = new Vector3(this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
+			particles = this.transform.FindChild("ATTRACTOR_FX").gameObject;
+			Debug.Log(particles);
+			
+			if(this.enabled)
+			{
+				particles.SetActive(true);
+			}
 		}
 	}
 	
@@ -53,7 +57,7 @@ public class AttractorScript : MonoBehaviour
 			Vector3 pos = transform.position;
 			if ((transform.position.x - size / 2f) + 1f < transform.position.x + size / 2f)
 			{
-				for (float newX = (transform.position.x - size / 2f) + 1f; newX < transform.position.x + size / 2f; newX += 1f)
+				for (float newX = (transform.position.x - size / 2f) + 1f; newX < transform.position.x + size / 2f; newX += 0.5f)
 				{
 					pos.x = newX;
 			        if (Physics.Raycast(pos, Vector3.down, out hit, Range))
@@ -111,20 +115,17 @@ public class AttractorScript : MonoBehaviour
 	
 	void OnEnable()
 	{
-		if(type == "attract")
+		if(type == "attract" && particles != null)
 		{
-			SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
-			particles = this.GetComponentInChildren<ParticleSystem>();
-			particles.Play(true);
+			particles.SetActive(true);
 		}
 	}
 	
 	void OnDisable()
 	{
-		if(type == "attract")
+		if(type == "attract" && particles != null)
 		{
-			SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
-			particles.Stop(true);
+			particles.SetActive(false);
 		}
 	}
 }
