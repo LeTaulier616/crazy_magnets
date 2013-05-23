@@ -57,7 +57,7 @@ public class AttractorScript : MonoBehaviour
 			Vector3 pos = transform.position;
 			if ((transform.position.x - size / 2f) + 1f < transform.position.x + size / 2f)
 			{
-				for (float newX = (transform.position.x - size / 2f) + 1f; newX < transform.position.x + size / 2f; newX += 1f)
+				for (float newX = (transform.position.x - size / 2f) + 1f; newX < transform.position.x + size / 2f; newX += 0.5f)
 				{
 					pos.x = newX;
 			        if (Physics.Raycast(pos, Vector3.down, out hit, Range))

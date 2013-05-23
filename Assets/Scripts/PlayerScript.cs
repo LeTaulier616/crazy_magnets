@@ -217,7 +217,7 @@ public class PlayerScript : Controllable
 			this.playerBody.IgnoreGravity = true;
 		}
 		*/
-		if (this.angle > 0)
+		if (this.attraction && this.angle > 0)
 		{
 			this.angle = 180;
 		}
