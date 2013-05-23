@@ -55,11 +55,22 @@ public class GoldBoltScript : MonoBehaviour {
 			}
 			
 			if(boltMesh != null)
-				Destroy(boltMesh);
+				//Destroy(boltMesh);
+				boltMesh.SetActive(false);
 			
 			pickedUp = true;
-		}	
+			GlobalVarScript.instance.player.GetComponent<PlayerScript>().GetBolt(this);
+		}
 		
 		return false;
+	}
+
+	public void Reset()
+	{
+		if(endLevel != null && endLevel.boltCount > 0)
+			endLevel.boltCount--;
+		this.pickedUp = false;
+		if(boltMesh != null)
+			boltMesh.SetActive(true);
 	}
 }
