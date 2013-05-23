@@ -28,6 +28,8 @@ public class Interruptor : MonoBehaviour
 	public bool       isEnnemy      = false;
 	public  bool      activated     = false;
 	
+	public GameObject Pipes;
+	
 	// Engine Datas
 	private float     pushTime      = 0.0f;
 	private float     unpushTime    = 0.0f;
@@ -95,6 +97,18 @@ public class Interruptor : MonoBehaviour
 			else
 				audio1 = source;
 		}
+		
+		if(Pipes != null)
+		{
+			foreach(Transform child in Pipes.transform)
+			{
+				if(child.GetComponent<HighlightableObject>() != null)
+				{
+					child.gameObject.AddComponent<HighlightableObject>();
+					child.gameObject.GetComponent<HighlightableObject>().ConstantParams(Color.green);
+				}
+			}
+		}
 	}
 	
 	void FixedUpdate()
@@ -105,9 +119,6 @@ public class Interruptor : MonoBehaviour
 		unpushTime = (!isPushed                       ? unpushTime + Time.deltaTime : unpushTime);
 		
 		bool wasActivated = activated;
-		
-		if(activated && name == "BUTTON1")
-			Debug.Log(activated);
 		
 		if(activated && type == Type.TIMER)
 		{
@@ -393,9 +404,12 @@ public class Interruptor : MonoBehaviour
 	{
 		pushCounter  = pushCounter + 1;
 		unpushTime   = 0.0f;
+		
 		if(!isPushed)
 			pushTime = 0.0f;
+		
 		isPushed     = true;
+		
 		if(animation != null || this.GetComponentInChildren<Animation>() != null)
 		{
 			if(activator == Activator.TOUCH)
@@ -409,7 +423,18 @@ public class Interruptor : MonoBehaviour
 				this.GetComponentInChildren<Animation>().animation["press"].speed = 1.0f;
 				this.GetComponentInChildren<Animation>().Play();
 			}
-		}	
+		}
+		
+		if(Pipes != null)
+		{
+			foreach(Transform child in Pipes.transform)
+			{
+				if(child.GetComponent<HighlightableObject>() != null)
+				{
+					child.gameObject.GetComponent<HighlightableObject>().ConstantOn();
+				}
+			}
+		}
 		Debug.Log("Set On");
 	}
 	
@@ -424,15 +449,16 @@ public class Interruptor : MonoBehaviour
 	
 	public void reloadInterruptor()
 	{
-		bool wasActivated = activated;
-		pushCounter  = 0;
-		pushTime     = timeToExecute + 0.1f;
-		unpushTime   = timeToRevoke + 0.1f;
-		isPushed     = false;
-		activated    = false;
-		waitActiveToSetOff = false;
-		if(wasActivated && !activated)
+		if(activated)
+		{
+			pushCounter  = 0;
+			pushTime     = timeToExecute + 0.1f;
+			unpushTime   = timeToRevoke + 0.1f;
+			isPushed     = false;
+			activated    = false;
+			waitActiveToSetOff = false;
 			launchAnimation();
+		}
 	}
 	
 	private void launchAnimation()
@@ -451,6 +477,17 @@ public class Interruptor : MonoBehaviour
 				this.GetComponentInChildren<Animation>().animation["press"].speed = -1.0f;
 				this.GetComponentInChildren<Animation>().animation["press"].time = this.transform.GetComponentInChildren<Animation>().animation["press"].length;
 				this.GetComponentInChildren<Animation>().Play();
+			}
+		}
+		
+		if(Pipes != null)
+		{
+			foreach(Transform child in Pipes.transform)
+			{
+				if(child.GetComponent<HighlightableObject>() != null)
+				{
+					child.gameObject.GetComponent<HighlightableObject>().ConstantOff();
+				}
 			}
 		}
 	}

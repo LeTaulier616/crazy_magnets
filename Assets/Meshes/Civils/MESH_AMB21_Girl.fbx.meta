@@ -97,8 +97,9 @@ ModelImporter:
     3300000: FILLE_humain
     4300000: FILLE_humain
     9500000: //RootNode
+    11100000: //RootNode
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
@@ -145,5 +146,5 @@ ModelImporter:
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   additionalBone: 1
-  animationType: 2
+  animationType: 1
   userData: 

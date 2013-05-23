@@ -37,63 +37,63 @@
     <Reference Include="System.XML" />
 	<Reference Include="System.Core" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files (x86)/Unity/4.0/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/3D/Unity 4.0/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files (x86)/Unity/4.0/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/3D/Unity 4.0/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\CubemapMaker\Source\Editor\CubemapMakerEditor.js" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Depth Cutout.shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-lightprobe-VirtualVertexGlossy-Add.shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-skybox.shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Particles Additive Culled.shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-Lightmap-Unlit-Wind.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-lightprobe-VirtualVertexGlossy-Add.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-skybox.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Particles Additive Culled.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-Lightmap-Unlit-Wind.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Masked Colored.shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-weapon.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-weapon.shader" />
      <None Include="Assets\Fonts\Razer.txt" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (AlphaClip) .shader" />
      <None Include="Assets\FX\Particles\Smoke\Shaders\Particle Alpha Blend (Queue +100).shader" />
      <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingBlur.shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-animtexture.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-animtexture.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-god-rays.shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-Unlit-Scroll2Layers-Sine-AlphaBlend.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-god-rays.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-Unlit-Scroll2Layers-Sine-AlphaBlend.shader" />
      <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingStencilTransparent.shader" />
      <None Include="Assets\Fonts\Calibri.txt" />
      <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingInclude.cginc" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Transparent Colored (AlphaClip).shader" />
-     <None Include="Assets\Materials\MAD_SHADER\TextureSimple.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\TextureSimple.shader" />
      <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingComposite.shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-billboarded-blinking-god-rays.shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Particle Alpha Blend.shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-Unlit-Scroll2Layers-Mul-Sine.shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Environment\Mobile-Lightmap-Unlit.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-billboarded-blinking-god-rays.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Particle Alpha Blend.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-Unlit-Scroll2Layers-Mul-Sine.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Environment\Mobile-Lightmap-Unlit.shader" />
      <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingStencilOpaqueZ.shader" />
      <None Include="Assets\Fonts\Razer\razer.txt" />
      <None Include="Assets\Shaders\Particles Additive Culled.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (SoftClip).shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (SoftClip).shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-blinking-god-rays.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-blinking-god-rays.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Transparent Colored Overlay.shader" />
      <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingStencilOpaque.shader" />
      <None Include="Assets\Fabric\Revision.txt" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed).shader" />
      <None Include="Assets\Fabric\Readme.txt" />
-     <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-Lightmap-Unlit-VirtualVertexGlossy-Add.shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Characters\Mobile-TexPseudoBRDF-WrapAround.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-Lightmap-Unlit-VirtualVertexGlossy-Add.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Characters\Mobile-TexPseudoBRDF-WrapAround.shader" />
      <None Include="Assets\Fabric\License.txt" />
      <None Include="Assets\Plugins\FarseerComponents\Base\FarseerDebugViewUnity\FDView.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Additive Colored.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Depth.shader" />
      <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingStencilTransparentZ.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Transparent Colored (SoftClip).shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-cube-env.shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-Unlit-Scroll2Layers-Mul-skybox.shader" />
-     <None Include="Assets\Materials\MAD_SHADER\Environment\MADFINGER-skybox-transparent.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-cube-env.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-Unlit-Scroll2Layers-Mul-skybox.shader" />
+     <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-skybox-transparent.shader" />
  <Reference Include="Fabric.Core">
  <HintPath>Assets\Fabric\Fabric.Core.dll</HintPath>
  </Reference>
@@ -101,7 +101,7 @@
  <HintPath>Assets\Fabric\Editor\Fabric.Core.Editor.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
- <HintPath>C:\Program Files (x86)\Unity\4.0\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
+ <HintPath>C:\Program Files (x86)\3D\Unity 4.0\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
