@@ -17,6 +17,12 @@ public class InterruptorReceiver : MonoBehaviour
 	{
 		this.gameObject.GetComponent<FSBodyComponent>().PhysicsBody.UserData = this.gameObject;
 		this.interruptorCount = 0;
+		
+		if(this.CompareTag("Ground"))
+		{
+			this.animation["open"].speed = 2.0f;
+		}
+		
 		if (isOpen)
 		{
 			if(animation != null)
@@ -24,6 +30,7 @@ public class InterruptorReceiver : MonoBehaviour
 				animation["open"].time = animation["open"].length;
 				animation.Play();
 			}
+			
 			else
 				this.gameObject.active = !isOpen;
 			this.GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = true;
