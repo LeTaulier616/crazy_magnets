@@ -112,10 +112,15 @@ public class InterruptorReceiver : MonoBehaviour
 
 			if(animation != null)
 			{
-				animation["open"].speed = (isOpen ? 1.0f : -1.0f);
-				if (!isOpen)
-					animation["open"].time = animation["open"].length;
-				animation.Play();
+				if (gameObject.CompareTag("Door") || gameObject.CompareTag("MultiDoor"))
+				{
+					animation["open"].speed = (isOpen ? 1.0f : -1.0f);
+					if (!isOpen)
+						animation["open"].time = animation["open"].length;
+					animation.Play();
+				}
+				else
+					animation.Play((isOpen ? "open" : "close"));
 			}
 			else 
 			{
