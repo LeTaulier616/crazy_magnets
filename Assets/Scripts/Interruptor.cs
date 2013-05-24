@@ -197,6 +197,12 @@ public class Interruptor : MonoBehaviour
 		if (!(this.activator == Activator.ELECTRIC_TOUCH && !GlobalVarScript.instance.player.GetComponent<PlayerScript>().IsCharged())
 			&& (Vector3.Distance(GlobalVarScript.instance.player.transform.position, gameObject.transform.position) < (this.activator == Activator.ELECTRIC_TOUCH ? tmpPorteeElec : tmpPorteeNorm) || isEnnemy) )
 		{
+			if(this.activator == Activator.ELECTRIC_TOUCH)
+			{
+				GlobalVarScript.instance.player.SendMessageUpwards("SetSparkPoint", this.transform.position, SendMessageOptions.DontRequireReceiver);
+				GlobalVarScript.instance.player.SendMessageUpwards("Discharge", SendMessageOptions.DontRequireReceiver);
+			}
+
 			if (!activated)
 			{
 				setOn();
@@ -205,12 +211,6 @@ public class Interruptor : MonoBehaviour
 			}
 			else if (type == Type.ONOFF)
 				setOff();
-
-			if(this.activator == Activator.ELECTRIC_TOUCH)
-			{
-				GlobalVarScript.instance.player.SendMessageUpwards("SetSparkPoint", this.transform.position, SendMessageOptions.DontRequireReceiver);
-				GlobalVarScript.instance.player.SendMessageUpwards("Discharge", SendMessageOptions.DontRequireReceiver);
-			}
 		}
 	}
 	
