@@ -396,7 +396,7 @@ public class ControllerMain : MonoBehaviour
 		resetSlide();
 	}
 	
-	void ResetControls()
+	public void ResetControls()
 	{
 		this.touchesTab.Clear();
 	}
