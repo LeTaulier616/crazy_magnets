@@ -395,9 +395,4 @@ public class ControllerMain : MonoBehaviour
 	    yield return new WaitForSeconds(0.2f);
 		resetSlide();
 	}
-	
-	void ResetControls()
-	{
-		this.touchesTab.Clear();
-	}
 }
