@@ -68,9 +68,9 @@ public class InterruptorReceiver : MonoBehaviour
 		interruptorCount++;
 		Debug.Log("PRESSCOUNT : " + interruptorCount);
 
-		if (gameObject.CompareTag("MultiDoor") && !isActivated)
+		if (gameObject.CompareTag("MultiDoor"))
 		{
-			if (interruptorCount >= InterruptorsNeeded)
+			if (!isActivated && interruptorCount >= InterruptorsNeeded)
 				ChangeState();
 		}
 		else
@@ -79,16 +79,16 @@ public class InterruptorReceiver : MonoBehaviour
 	
 	public void OnDesactivate()
 	{
-		interruptorCount--;
-		Debug.Log("PRESSCOUNT : " + interruptorCount);
-		
-		if (gameObject.CompareTag("MultiDoor") && isActivated)
+		if (gameObject.CompareTag("MultiDoor"))
 		{
-			if (interruptorCount < InterruptorsNeeded)
+			if (isActivated && interruptorCount >= InterruptorsNeeded)
 				ChangeState();
 		}
 		else
 			ChangeState();
+
+		interruptorCount--;
+		Debug.Log("PRESSCOUNT : " + interruptorCount);
 	}
 
 	private void ChangeState()
