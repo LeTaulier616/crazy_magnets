@@ -34,6 +34,7 @@ public class Interruptor : MonoBehaviour
 	private int       pushCounter   = 0;
 	private float     tmpPorteeElec;
 	private float     tmpPorteeNorm;
+	private bool      pushedByPlayer = false;
 	
 	private AudioClip interruptorSound;
 	private AudioClip interruptorReleaseSound;
@@ -164,6 +165,9 @@ public class Interruptor : MonoBehaviour
 				setOff();
 
 			pushCounter++;
+			
+			if(bodyB.UserTag == "PlayerObject")
+				pushedByPlayer = true;
 		}
 		return true;
 	}
@@ -186,6 +190,9 @@ public class Interruptor : MonoBehaviour
 				else if (type == Type.TIMER)
 					this.unpushTime = Time.time + this.timeToRevoke;
 			}
+			
+			if(bodyB.UserTag == "PlayerObject")
+				pushedByPlayer = false;
 		}
 	}
 	
@@ -315,15 +322,26 @@ public class Interruptor : MonoBehaviour
 	public void reloadInterruptor()
 	{
 		if(activated)
-		{/*
-			pushCounter  = 0;
-			pushTime     = timeToExecute + 0.1f;
-			unpushTime   = timeToRevoke + 0.1f;
-			isPushed     = false;
-			activated    = false;
-			waitActiveToSetOff = false;
-			launchAnimation();*/
-			setOff();
+		{
+			for(int trg = 0; trg < targets.Length; ++trg)
+			{
+				if(targets[trg].tag == "Platform")
+				{
+					setOff();
+				}
+			}	
+			if(activator == Activator.PLAYER_OR_CUBE && activated && pushCounter > 0)
+			{
+				if(this.pushedByPlayer)
+				{
+					this.pushCounter--;
+					this.pushedByPlayer = false;
+					if(pushCounter == 0)
+					{
+						setOff();
+					}
+				}
+			}
 		}
 	}
 	

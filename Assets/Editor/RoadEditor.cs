@@ -18,8 +18,7 @@ public class RoadEditor : Editor
 	
 	static string[] methods;
     static string[] ignoreMethods = new string[] { "Start", "Update", "OnEnable", "OnInspectorGUI", "Gen", "BuildSpline", 
-												   "BuildSegment", "BuildMesh", "OnDrawGizmos", "GetSpline", "Activate",
-												   "ActivatedWithPlayer", "UpdateRoad", "getRoadLength", "getSmoothPosition"};
+												   "BuildSegment", "BuildMesh", "OnDrawGizmos", "GetSpline", "UpdateRoad"};
 
     static RoadEditor()
     {

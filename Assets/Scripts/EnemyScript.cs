@@ -155,7 +155,7 @@ public class AttackState : State
 				Ray sight = new Ray(it.transform.position, it.transform.right);
 				RaycastHit hit = new RaycastHit();
 		
-				if (Physics.Raycast(sight, out hit, 2f) && hit.transform.tag == "Player" && GlobalVarScript.instance.player.GetComponent<PlayerScript>().isAlive)
+				if (Physics.Raycast(sight, out hit, 0.7f) && hit.transform.tag == "Player" && GlobalVarScript.instance.player.GetComponent<PlayerScript>().isAlive)
 				{
 					this.player.SendMessageUpwards("Kill", SendMessageOptions.DontRequireReceiver);
 				}

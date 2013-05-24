@@ -135,6 +135,23 @@ public class ControllerMain : MonoBehaviour
 					}
 				}
 				*/
+				if (Mathf.Abs(touch.position.y - touchObj.startPos.y) <= GlobalVarScript.instance.comfortZone) 
+				{
+					float swipeTime = Time.time - touchObj.slideStart;
+					float swipeDist = (new Vector3(touch.position.x, 0, 0) - new Vector3(touchObj.startPos.x, 0, 0)).magnitude;
+					
+					if ((swipeTime > 0 && swipeTime < GlobalVarScript.instance.maxSwipeTime) && (swipeDist > GlobalVarScript.instance.minSwipeDist)) 
+					{
+						float swipeValue = Mathf.Sign(touch.position.x - touchObj.startPos.x);
+						
+						if (swipeValue > 0)
+						{
+							touchObj.slideStart = Time.time;
+							touchObj.startPos = touch.position;
+							StartCoroutine(ResetTouch());
+						}
+					}
+				}
 
 				// intérieur de l'écran : active seulement si on a le controle du joueur
 				switch (touch.phase) 
@@ -192,7 +209,7 @@ public class ControllerMain : MonoBehaviour
 									else if (cHitInfo.transform.gameObject.tag == "Grab")
 									{
 										touchObj.selectedObject = cHitInfo.transform.gameObject;
-										gameObject.SendMessage("Grab", touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+										gameObject.SendMessage("Grab", touchesTab[touch.fingerId].selectedObject.transform, SendMessageOptions.DontRequireReceiver);
 									}
 								}
 							}
@@ -200,6 +217,19 @@ public class ControllerMain : MonoBehaviour
 					break;
 					
 					case TouchPhase.Ended:
+						if (touchObj.selectedObject != null)
+						{
+							touchObj.selectedObject.SendMessageUpwards("UnselectObject", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
+						}
+						if (this.selectedObject != null)
+						{
+							this.selectedObject.SendMessageUpwards("UnselectObject", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
+							this.selectedObject = null;
+						}
+						touchesToRemove.Add(touchObj);
+					break;
+					
+					case TouchPhase.Canceled:
 						if (touchObj.selectedObject != null)
 						{
 							touchObj.selectedObject.SendMessageUpwards("UnselectObject", gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
@@ -262,7 +292,7 @@ public class ControllerMain : MonoBehaviour
 							else if (cHitInfo.transform.gameObject.tag == "Grab")
 							{
 								mouseObject.selectedObject = cHitInfo.transform.gameObject;
-								gameObject.SendMessage("Grab", mouseObject.selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+								gameObject.SendMessage("Grab", mouseObject.selectedObject.transform, SendMessageOptions.DontRequireReceiver);
 							}
 						}
 					}
@@ -392,6 +422,13 @@ public class ControllerMain : MonoBehaviour
 	IEnumerator ResetTouch()
 	{
 		GlobalVarScript.instance.cameraTarget.SendMessageUpwards("Jump", SendMessageOptions.DontRequireReceiver);
+	    yield return new WaitForSeconds(0.2f);
+		resetSlide();
+	}
+	
+	IEnumerator HorizontalSlide()
+	{
+		GlobalVarScript.instance.cameraTarget.SendMessageUpwards("SlideMenu", SendMessageOptions.DontRequireReceiver);
 	    yield return new WaitForSeconds(0.2f);
 		resetSlide();
 	}
