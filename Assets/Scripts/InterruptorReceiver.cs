@@ -19,8 +19,14 @@ public class InterruptorReceiver : MonoBehaviour
 		this.interruptorCount = 0;
 		if (isOpen)
 		{
-		//	isOpen = false;
-			this.OnActivate();
+			if(animation != null)
+			{
+				animation["open"].time = animation["open"].length;
+				animation["open"].speed = 1.0f;
+				animation.Play();
+			}
+			else
+				this.gameObject.active = !isOpen;
 		}
 	}
 	
