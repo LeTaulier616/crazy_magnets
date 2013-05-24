@@ -126,7 +126,8 @@ public class Interruptor : MonoBehaviour
 				if (Time.time > this.unpushTime)
 				{
 					this.setOff();
-					audio2.Stop();
+					if (audio2 != null)
+						audio2.Stop();
 				}
 				else if (audio2 != null)
 				{
@@ -274,13 +275,6 @@ public class Interruptor : MonoBehaviour
 				audio1.clip = interruptorSound;
 				audio1.Play();
 			}
-		}
-		
-					
-		else if (activator == Activator.PLAYER_OR_CUBE)
-		{
-			audio1.clip = interruptorSound;
-			audio1.Play();
 		}
 		
 		Debug.Log("Set On");
