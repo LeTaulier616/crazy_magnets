@@ -9,6 +9,7 @@ public class Tutorial : MonoBehaviour
 	public GameObject EndLabel;
 	
 	public GameObject CubePrefab;
+	public Transform CubePosition;
 	
 	public Texture RedControlTexture;
 	public Texture GreenControlTexture;
@@ -58,7 +59,7 @@ public class Tutorial : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () 
-	{
+	{		
 		if(checkDistance)
 		{
 			if(!playerScript.isWalking)
@@ -127,12 +128,15 @@ public class Tutorial : MonoBehaviour
 		ToggleMagnetismLabel();
 		
 		GameObject cubeInstance = Instantiate(CubePrefab,
-			playerScript.transform.position + playerScript.playerMesh.transform.forward * 5.0f,
-			Quaternion.identity) as GameObject;
+		CubePosition.position,
+		Quaternion.identity) as GameObject;
 		
+		GlobalVarScript.instance.cameraTarget = cubeInstance.transform;
+		
+		Invoke("ResetCamera" , 3.0f);
 		Invoke("ToggleControls", 3.0f);
 		Invoke("ToggleMagnetismLabel", 3.0f);
-		Invoke("EndTutorial", 15.0f);
+		Invoke("EndTutorial", 20.0f);
 	}
 	
 	void ToggleBorders()
@@ -146,11 +150,11 @@ public class Tutorial : MonoBehaviour
 	
 	void ToggleControls()
 	{
-		if(GlobalVarScript.instance.cameraFree == 0)
-			GlobalVarScript.instance.cameraFree = 2;
+		if(playerScript.canMove)
+			playerScript.canMove = false;
 		
 		else
-			GlobalVarScript.instance.cameraFree = 0;
+			playerScript.canMove = true;
 	}
 	
 	void ToggleControlLabel()
@@ -198,6 +202,10 @@ public class Tutorial : MonoBehaviour
 			checkJumps = true;
 	}
 	
+	void ResetCamera()
+	{
+		GlobalVarScript.instance.cameraTarget = player.transform.FindChild("TARGET");
+	}
 	void EndTutorial()
 	{
 		EndLabel.SetActive(true);
@@ -215,14 +223,14 @@ public class Tutorial : MonoBehaviour
 			Rect rightBorder = new Rect(viewportWidthRight.x, 0.0f, Screen.width - viewportWidthRight.x, Screen.height);
 			
 			if(playerScript.lastDir == 1)
-				GUI.DrawTexture(leftBorder, GreenControlTexture);
-			else
 				GUI.DrawTexture(leftBorder, RedControlTexture);
+			else
+				GUI.DrawTexture(leftBorder, GreenControlTexture);
 			
 			if(playerScript.lastDir == -1)
-				GUI.DrawTexture(rightBorder, GreenControlTexture);
-			else
 				GUI.DrawTexture(rightBorder, RedControlTexture);
+			else
+				GUI.DrawTexture(rightBorder, GreenControlTexture);
 		}
 	}
 }

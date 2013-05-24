@@ -112,4 +112,10 @@ public class CameraScript : MonoBehaviour
 		theTransform.position = endPosition;
 		c = null;
 	}
+	
+	private void ResetPosition(Vector3 pos)
+	{
+		this.transform.position = pos;
+		this.lastPos = pos;
+	}
 }
