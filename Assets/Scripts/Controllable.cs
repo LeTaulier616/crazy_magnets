@@ -14,6 +14,8 @@ public class Controllable : MonoBehaviour
 	
 	private float accelerationFactor;
 	private float decelerationFactor;
+	
+	private AudioClip jumpSound;
 
 	[HideInInspector]
 	public float speed;
@@ -69,6 +71,8 @@ public class Controllable : MonoBehaviour
 		
 		playerBody.FixedRotation = true;
 		playerBody.Mass = 1f;
+		
+		this.jumpSound = GlobalVarScript.instance.JumpSound;
 		
 		this.isAlive	= true;
 		this.isWalking  = false;
@@ -301,6 +305,8 @@ public class Controllable : MonoBehaviour
 	{	
 		if (this.canJump && this.onGround)
 		{
+			audio.clip = this.jumpSound;
+			audio.Play();
 			this.Bump(this.jumpForce);
 			
 			/*if(this.onPFM)
@@ -440,13 +446,13 @@ public class Controllable : MonoBehaviour
 	
 	private void StayGround(GameObject ground)
 	{
-		if (this.canMove)
-		{
-			Camera.main.gameObject.SendMessageUpwards("Reset", SendMessageOptions.DontRequireReceiver);
-		}
-		
 		if (GlobalVarScript.instance.groundTags.Contains(ground.tag))
 		{
+			/*if (this.canMove)
+			{
+				Camera.main.gameObject.SendMessageUpwards("Reset", SendMessageOptions.DontRequireReceiver);
+			}*/
+			
 			this.onGround = true;
 			this.playerBody.GravityScale = 1f;
 			

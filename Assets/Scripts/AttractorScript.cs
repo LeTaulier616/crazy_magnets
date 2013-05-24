@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework;
 
 public class AttractorScript : MonoBehaviour
 {	
+	private AudioClip grabSound;
+	
 	public string type = "default";
 	
 	public float Range;
@@ -21,6 +23,8 @@ public class AttractorScript : MonoBehaviour
 	
 	void Start ()
 	{
+		this.grabSound = GlobalVarScript.instance.GrabSound;
+		
 		MeshFilter mf = GetComponentInChildren(typeof(MeshFilter)) as MeshFilter;
 		Mesh mesh = mf.sharedMesh;
 		Vector3 scale = transform.localScale;
@@ -126,6 +130,23 @@ public class AttractorScript : MonoBehaviour
 		if(type == "attract" && particles != null)
 		{
 			particles.SetActive(false);
+		}
+	}
+	
+	void PlaySound()
+	{
+		if (!audio.isPlaying)
+		{
+			audio.clip = this.grabSound;
+			audio.Play();
+		}
+	}
+	
+	void StopSound()
+	{
+		if (audio.isPlaying)
+		{
+			audio.Stop();
 		}
 	}
 }
