@@ -99,7 +99,7 @@ public class AttractorScript : MonoBehaviour
 	{
 		if(renderer != null)
 			transform.renderer.material.color = Color.red;
-		SendMessage("ConstantParams", Color.red, SendMessageOptions.DontRequireReceiver);
+		SendMessage("ConstantParams", Color.green, SendMessageOptions.DontRequireReceiver);
 	}
 	
 	void UnselectObject()

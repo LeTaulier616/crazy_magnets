@@ -430,7 +430,7 @@ public class Controllable : MonoBehaviour
 				}
 			}
 			
-			if (this.canMove && GlobalVarScript.instance.cameraTarget.GetInstanceID() == this.target.GetInstanceID() && Application.loadedLevelName != "CM_Level_0")
+			if (this.canMove && GlobalVarScript.instance.cameraTarget.GetInstanceID() == this.target.GetInstanceID())
 			{
 				// reset la camera uniquement si elle est fixee au controllable
 				GlobalVarScript.instance.resetCamera(false);
@@ -526,6 +526,7 @@ public class Controllable : MonoBehaviour
 		this.walkVelocity = FVector2.Zero;
 		this.canMove = false;
 		this.canJump = false;
+		this.isWalking = false;
 		GlobalVarScript.instance.player.GetComponent<ControllerMain>().canMagnet = false;
 		this.playerBody.Mass = 100f;
 	}

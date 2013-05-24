@@ -130,6 +130,11 @@ public class GlobalVarScript : MonoBehaviour
 			cameraTarget.SendMessageUpwards("ReleaseFocus", SendMessageOptions.DontRequireReceiver);
 		}
 		cameraTarget = target;
+		if (cameraTarget.GetInstanceID() != cameraTargetDefault.GetInstanceID())
+		{
+			cameraFree = 2;
+		}
+		cameraFixedPos = Vector3.zero;
 		if (throwFocus)
 		{
 			cameraTarget.SendMessageUpwards("Focus", SendMessageOptions.DontRequireReceiver);

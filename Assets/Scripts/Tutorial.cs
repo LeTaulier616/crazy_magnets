@@ -9,6 +9,7 @@ public class Tutorial : MonoBehaviour
 	public GameObject EndLabel;
 	
 	public GameObject CubePrefab;
+	public Transform CubePosition;
 	
 	public Texture RedControlTexture;
 	public Texture GreenControlTexture;
@@ -53,25 +54,19 @@ public class Tutorial : MonoBehaviour
 		
 		walkDistance = 0.0f;
 		
-		ShowMoveControls();	
+		playerPosition = player.transform.position;
+		
+		ShowMoveControls();
 	}
 	
 	// Update is called once per frame
 	void Update () 
-	{
+	{		
 		if(checkDistance)
 		{
-			if(!playerScript.isWalking)
-			{
-				playerPosition = player.transform.position;
-			}
+			walkDistance = Vector3.Distance(playerPosition, player.transform.position);
 			
-			else
-			{
-				walkDistance += Vector3.Distance(playerPosition, player.transform.position);
-			}
-			
-			if(walkDistance >= 1000.0f)
+			if(walkDistance >= 18.0f)
 			{
 				checkDistance = false;
 				playerScript.canJump = true;
@@ -81,7 +76,7 @@ public class Tutorial : MonoBehaviour
 		
 		if(checkJumps)
 		{
-			if (canCheckJump && playerScript.onGround == false)
+			if (canCheckJump && playerScript.isJumping && playerScript.onGround == false)
 			{
 				jumpCount++;
 				canCheckJump = false;
@@ -90,7 +85,7 @@ public class Tutorial : MonoBehaviour
 			{
 				canCheckJump = true;
 			}
-			if(jumpCount >= 4 && playerScript.onGround)
+			if(jumpCount >= 5 && playerScript.onGround)
 			{
 				checkJumps = false;
 				ShowMagnetismControls();
@@ -126,13 +121,14 @@ public class Tutorial : MonoBehaviour
 		ToggleBorders();
 		ToggleMagnetismLabel();
 		
-		GameObject cubeInstance = Instantiate(CubePrefab,
-			playerScript.transform.position + playerScript.playerMesh.transform.forward * 5.0f,
-			Quaternion.identity) as GameObject;
+		GameObject cubeInstance = Instantiate(CubePrefab, CubePosition.position, Quaternion.identity) as GameObject;
 		
+		GlobalVarScript.instance.SetCameraTarget(cubeInstance.transform, true);
+		
+		Invoke("ResetCamera" , 3.0f);
 		Invoke("ToggleControls", 3.0f);
 		Invoke("ToggleMagnetismLabel", 3.0f);
-		Invoke("EndTutorial", 15.0f);
+		Invoke("EndTutorial", 20.0f);
 	}
 	
 	void ToggleBorders()
@@ -146,11 +142,10 @@ public class Tutorial : MonoBehaviour
 	
 	void ToggleControls()
 	{
-		if(GlobalVarScript.instance.cameraFree == 0)
-			GlobalVarScript.instance.cameraFree = 2;
-		
+		if(playerScript.canMove)
+			playerScript.ReleaseFocus();
 		else
-			GlobalVarScript.instance.cameraFree = 0;
+			playerScript.Focus();
 	}
 	
 	void ToggleControlLabel()
@@ -198,6 +193,10 @@ public class Tutorial : MonoBehaviour
 			checkJumps = true;
 	}
 	
+	void ResetCamera()
+	{
+		GlobalVarScript.instance.cameraTarget = player.transform.FindChild("TARGET");
+	}
 	void EndTutorial()
 	{
 		EndLabel.SetActive(true);
@@ -215,14 +214,14 @@ public class Tutorial : MonoBehaviour
 			Rect rightBorder = new Rect(viewportWidthRight.x, 0.0f, Screen.width - viewportWidthRight.x, Screen.height);
 			
 			if(playerScript.lastDir == 1)
-				GUI.DrawTexture(leftBorder, GreenControlTexture);
-			else
 				GUI.DrawTexture(leftBorder, RedControlTexture);
+			else
+				GUI.DrawTexture(leftBorder, GreenControlTexture);
 			
 			if(playerScript.lastDir == -1)
-				GUI.DrawTexture(rightBorder, GreenControlTexture);
-			else
 				GUI.DrawTexture(rightBorder, RedControlTexture);
+			else
+				GUI.DrawTexture(rightBorder, GreenControlTexture);
 		}
 	}
 }
