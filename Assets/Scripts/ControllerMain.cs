@@ -192,7 +192,7 @@ public class ControllerMain : MonoBehaviour
 									else if (cHitInfo.transform.gameObject.tag == "Grab")
 									{
 										touchObj.selectedObject = cHitInfo.transform.gameObject;
-										gameObject.SendMessage("Grab", touchesTab[touch.fingerId].selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+										gameObject.SendMessage("Grab", touchesTab[touch.fingerId].selectedObject.transform, SendMessageOptions.DontRequireReceiver);
 									}
 								}
 							}
@@ -262,7 +262,7 @@ public class ControllerMain : MonoBehaviour
 							else if (cHitInfo.transform.gameObject.tag == "Grab")
 							{
 								mouseObject.selectedObject = cHitInfo.transform.gameObject;
-								gameObject.SendMessage("Grab", mouseObject.selectedObject.transform.position, SendMessageOptions.DontRequireReceiver);
+								gameObject.SendMessage("Grab", mouseObject.selectedObject.transform, SendMessageOptions.DontRequireReceiver);
 							}
 						}
 					}
@@ -394,5 +394,10 @@ public class ControllerMain : MonoBehaviour
 		GlobalVarScript.instance.cameraTarget.SendMessageUpwards("Jump", SendMessageOptions.DontRequireReceiver);
 	    yield return new WaitForSeconds(0.2f);
 		resetSlide();
+	}
+	
+	void ResetControls()
+	{
+		this.touchesTab.Clear();
 	}
 }

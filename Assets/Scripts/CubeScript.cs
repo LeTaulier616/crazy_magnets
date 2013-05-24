@@ -194,7 +194,9 @@ public class CubeScript : MonoBehaviour
 	public void ResetPosition()
 	{
 		//Debug.Log("There");
+		this.UnselectObject();
 		this.body.SetTransform(new FVector2(startPosition.x, startPosition.y), 0.0f);
+		this.body.ResetDynamics();
 	}
 	
 	public void UpdateMouseWorld()
