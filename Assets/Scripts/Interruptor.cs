@@ -193,36 +193,24 @@ public class Interruptor : MonoBehaviour
 	{
 		if (this.activator != Activator.TOUCH && this.activator != Activator.ELECTRIC_TOUCH)
 			return;
-		
-		float dist = Vector3.Distance(GlobalVarScript.instance.player.transform.position, gameObject.transform.position);
+
 		if (!(this.activator == Activator.ELECTRIC_TOUCH && !GlobalVarScript.instance.player.GetComponent<PlayerScript>().IsCharged())
-			&& (dist < (this.activator == Activator.ELECTRIC_TOUCH ? tmpPorteeElec : tmpPorteeNorm) || isEnnemy) )
+			&& (Vector3.Distance(GlobalVarScript.instance.player.transform.position, gameObject.transform.position) < (this.activator == Activator.ELECTRIC_TOUCH ? tmpPorteeElec : tmpPorteeNorm) || isEnnemy) )
 		{
-			Vector3 rayTest = new Vector3(GlobalVarScript.instance.player.transform.position.x - transform.position.x
-				, GlobalVarScript.instance.player.transform.position.y - transform.position.y
-				, GlobalVarScript.instance.player.transform.position.z - transform.position.z);
-			RaycastHit hit;
-			if (Physics.Raycast(transform.position, rayTest.normalized, out hit, dist) && hit.transform.name != "HITBOX")
+			if(this.activator == Activator.ELECTRIC_TOUCH)
 			{
-				//Debug.Log(hit.transform.name);
+				GlobalVarScript.instance.player.SendMessageUpwards("SetSparkPoint", this.transform.position, SendMessageOptions.DontRequireReceiver);
+				GlobalVarScript.instance.player.SendMessageUpwards("Discharge", SendMessageOptions.DontRequireReceiver);
 			}
-			else
+
+			if (!activated)
 			{
-				if(this.activator == Activator.ELECTRIC_TOUCH)
-				{
-					GlobalVarScript.instance.player.SendMessageUpwards("SetSparkPoint", this.transform.position, SendMessageOptions.DontRequireReceiver);
-					GlobalVarScript.instance.player.SendMessageUpwards("Discharge", SendMessageOptions.DontRequireReceiver);
-				}
-	
-				if (!activated)
-				{
-					setOn();
-					if (type == Type.TIMER)
-						this.unpushTime = Time.time + this.timeToRevoke;
-				}
-				else if (type == Type.ONOFF)
-					setOff();
+				setOn();
+				if (type == Type.TIMER)
+					this.unpushTime = Time.time + this.timeToRevoke;
 			}
+			else if (type == Type.ONOFF)
+				setOff();
 		}
 	}
 	
