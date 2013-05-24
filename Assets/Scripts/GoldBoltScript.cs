@@ -31,6 +31,9 @@ public class GoldBoltScript : MonoBehaviour {
 			endLevel = endGameObject.GetComponent<EndLevelScript>();
 		
 		pickedUp = false;
+		
+		SendMessage("ConstantParams", Color.yellow, SendMessageOptions.DontRequireReceiver);
+		SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
 	}
 	
 	// Update is called once per frame
@@ -55,11 +58,22 @@ public class GoldBoltScript : MonoBehaviour {
 			}
 			
 			if(boltMesh != null)
-				Destroy(boltMesh);
+				//Destroy(boltMesh);
+				boltMesh.SetActive(false);
 			
 			pickedUp = true;
-		}	
+			GlobalVarScript.instance.player.GetComponent<PlayerScript>().GetBolt(this);
+		}
 		
 		return false;
+	}
+
+	public void Reset()
+	{
+		if(endLevel != null && endLevel.boltCount > 0)
+			endLevel.boltCount--;
+		this.pickedUp = false;
+		if(boltMesh != null)
+			boltMesh.SetActive(true);
 	}
 }

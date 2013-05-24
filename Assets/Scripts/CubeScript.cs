@@ -78,7 +78,7 @@ public class CubeScript : MonoBehaviour
 			}
 			else if (dir == -1)
 			{
-				SendMessage("ConstantParams", Color.red, SendMessageOptions.DontRequireReceiver);
+				SendMessage("ConstantParams", Color.green, SendMessageOptions.DontRequireReceiver);
 			}
 		}
 		else if (this.selected == -1)
@@ -92,7 +92,7 @@ public class CubeScript : MonoBehaviour
 			}
 			else if (dir == -1)
 			{
-				SendMessage("ConstantParams", Color.red, SendMessageOptions.DontRequireReceiver);
+				SendMessage("ConstantParams", Color.green, SendMessageOptions.DontRequireReceiver);
 			}
 		}
 		else if (this.body.LinearVelocity.X > 0.1f)
@@ -138,7 +138,8 @@ public class CubeScript : MonoBehaviour
 	{
 		this.body.GravityScale = 1f;
 		if(renderer != null)
-			transform.renderer.material.color = Color.red;
+			transform.renderer.material.color = Color.green;
+		
 		if (this.selected == 0)
 		{
 			SendMessage("ConstantParams", Color.green, SendMessageOptions.DontRequireReceiver);
@@ -169,7 +170,7 @@ public class CubeScript : MonoBehaviour
 			audio.clip = RepulsionSound;
 			audio.Play();
 		}
-		SendMessage("ConstantOn", Color.red, SendMessageOptions.DontRequireReceiver);
+		SendMessage("ConstantOn", Color.green, SendMessageOptions.DontRequireReceiver);
 	}
 	
 	void UnselectObject()
@@ -183,8 +184,9 @@ public class CubeScript : MonoBehaviour
 		SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
 	}
 	
-	public void Attract(float force)
+	public void Attract(float distance)
 	{
+		float force = distance < 1f ? 15f : 10f;
 		this.body.ApplyForce(new FVector2(0, force));
 		SendMessage("ConstantOn", Color.blue, SendMessageOptions.DontRequireReceiver);
 	}

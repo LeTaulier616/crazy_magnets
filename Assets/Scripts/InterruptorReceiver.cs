@@ -6,21 +6,32 @@ public class InterruptorReceiver : MonoBehaviour
 	// Customisable Datas
 	public GameObject[] targets;
 
-	public bool isActivated    = false;
+	public bool isActivated = false;
 	
 	public  int InterruptorsNeeded;
 	
 	private int interruptorCount;
-	private bool isOpen;
+	public bool isOpen;
 	
 	void Start()
 	{
 		this.gameObject.GetComponent<FSBodyComponent>().PhysicsBody.UserData = this.gameObject;
-		this.interruptorCount = 0;	
-		this.isOpen = false;
+		this.interruptorCount = 0;
+		if (isOpen)
+		{
+			if(animation != null)
+			{
+				animation["open"].time = animation["open"].length;
+				animation.Play();
+			}
+			else
+				this.gameObject.active = !isOpen;
+			this.GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = true;
+		}
 	}
 	
-	void Update()
+//	void Update()
+	public void InputChangeState()
 	{
 		bool oneIsActivated = false;
 		for(int trg = 0; trg < targets.Length; ++trg)
@@ -29,7 +40,7 @@ public class InterruptorReceiver : MonoBehaviour
 			{
 				oneIsActivated = true;
 				OnActivate();
-			} 
+			}
 		}
 		if(!oneIsActivated && isActivated)
 		{
@@ -54,39 +65,61 @@ public class InterruptorReceiver : MonoBehaviour
 	
 	public void OnActivate()
 	{
-		isActivated = true;
-		// Call the correct function or do something
+		interruptorCount++;
+		Debug.Log("PRESSCOUNT : " + interruptorCount);
+
+		if (gameObject.CompareTag("MultiDoor") && !isActivated)
+		{
+			if (interruptorCount >= InterruptorsNeeded)
+				ChangeState();
+		}
+		else
+			ChangeState();
+	}
+	
+	public void OnDesactivate()
+	{
+		interruptorCount--;
+		Debug.Log("PRESSCOUNT : " + interruptorCount);
 		
+		if (gameObject.CompareTag("MultiDoor") && isActivated)
+		{
+			if (interruptorCount < InterruptorsNeeded)
+				ChangeState();
+		}
+		else
+			ChangeState();
+	}
+
+	private void ChangeState()
+	{
+		this.isActivated = !this.isActivated;
 		if(this.gameObject.tag == "Platform")
 		{
 			this.gameObject.GetComponent<FollowRoad>().playRoad();
 		}
 		
-		
-		if(gameObject.CompareTag("Door") || gameObject.CompareTag("Ground"))
+		if(gameObject.CompareTag("MultiDoor") || gameObject.CompareTag("Door") || gameObject.CompareTag("Ground"))
 		{
-			if(gameObject.CompareTag("Door"))
+			isOpen = !isOpen;
+			if(gameObject.CompareTag("Door") || gameObject.CompareTag("MultiDoor"))
 			{	
 				audio.clip = GlobalVarScript.instance.DoorOpenSound;
 				audio.Play();
 			}
 			
+			this.GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = isOpen;
+
 			if(animation != null)
 			{
-				animation["open"].speed = 1.0f;
+				animation["open"].speed = (isOpen ? 1.0f : -1.0f);
+				if (!isOpen)
+					animation["open"].time = animation["open"].length;
 				animation.Play();
-				this.GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = true;
 			}
-			
 			else 
 			{
-				if(gameObject.active)
-					gameObject.active = false;
-				
-				else
-					this.gameObject.active = true;
-						
-				this.GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = !this.gameObject.active;
+				this.gameObject.active = !isOpen;
 			}
 		}
 
@@ -101,147 +134,7 @@ public class InterruptorReceiver : MonoBehaviour
 		{
 			AttractorScript attractor = gameObject.GetComponent<AttractorScript>();
 			
-			if(attractor.enabled)
-			{
-				attractor.enabled = false;
-			}
-			
-			else
-			{
-				attractor.enabled = true;
-			}
+			attractor.enabled = !attractor.enabled;
 		}
-		
-		if(gameObject.CompareTag("MultiDoor"))
-		{
-			interruptorCount++;
-			Debug.Log("PRESSCOUNT : " + interruptorCount);
-			
-			if(interruptorCount >= InterruptorsNeeded)
-			{
-				isOpen = true;
-				if(animation != null)
-				{
-					animation["open"].speed = 1.0f;
-					animation.Play();
-					this.GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = true;
-				}
-				
-				else 
-				{
-					if(gameObject.active)
-						gameObject.active = false;
-					
-					else
-						this.gameObject.active = true;
-							
-					this.GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = !this.gameObject.active;
-				}
-
-				audio.clip = GlobalVarScript.instance.DoorOpenSound;
-				audio.Play();
-			}
-		}
-	}
-	
-	public void OnDesactivate()
-	{
-		isActivated = false;
-		// Call the correct function or do something
-			
-		if(gameObject.CompareTag("Door") || gameObject.CompareTag("Ground"))
-		{
-			
-			if(animation != null)
-			{
-					animation["open"].speed = -1.0f;
-					animation["open"].time =animation["open"].length;
-					animation.Play();
-				
-					this.GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = false;
-			}
-			
-			else
-			{						
-				if(gameObject.active)
-				{
-					gameObject.active = false;
-				}
-				
-				else
-				{
-					gameObject.active = true;
-				}
-				
-				GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = !gameObject.active;
-				
-			}
-			
-			if(audio != null)
-			{
-				audio.clip = GlobalVarScript.instance.DoorCloseSound;
-				audio.Play();
-			}
-		}
-		
-		if(gameObject.CompareTag("Attractor"))
-		{
-			AttractorScript attractor = gameObject.GetComponent<AttractorScript>();
-			
-			if(attractor.enabled)
-			{
-				attractor.enabled = false;
-			}
-			
-			else
-			{
-				attractor.enabled = true;
-			}
-		}
-		
-		if(gameObject.CompareTag("MultiDoor"))
-		{
-			interruptorCount--;
-			Debug.Log("PRESSCOUNT : " + interruptorCount);
-			
-			if(interruptorCount < InterruptorsNeeded && isOpen)
-			{
-				isOpen = false;
-				
-				if(animation != null)
-				{
-						animation["open"].speed = -1.0f;
-						animation["open"].time =animation["open"].length;
-						animation.Play();
-					
-						this.GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = false;
-				}
-				
-				else
-				{						
-					if(gameObject.active)
-					{
-						gameObject.active = false;
-					}
-					
-					else
-					{
-						gameObject.active = true;
-					}
-					
-					GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = !gameObject.active;
-					
-				}
-		
-				if(gameObject.CompareTag("Door"))
-				{
-					
-					audio.clip = GlobalVarScript.instance.DoorCloseSound;
-					audio.Play();
-				}
-			}
-
-		}
-
 	}
 }

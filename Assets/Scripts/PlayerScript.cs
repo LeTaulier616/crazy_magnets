@@ -15,6 +15,8 @@ public class PlayerScript : Controllable
 	private bool canResurrect;
 	private List<Vector3> checkpoints = new List<Vector3>();
 	private int checkpointIndex;
+
+	private List<GoldBoltScript> boltsToValidate = new List<GoldBoltScript>();
 	
 	public bool hasWon;
 	
@@ -94,6 +96,11 @@ public class PlayerScript : Controllable
 				this.canMove = false;
 			}
 		}
+		
+		if(!this.canMove)
+		{
+			playerMesh.animation.CrossFade("idle", 0.25f);
+		}
 	}
 	
 	void LateUpdate()
@@ -111,6 +118,7 @@ public class PlayerScript : Controllable
 	{
 		if(checkpointIndex <= checkpoints.Count - 1)
 			this.checkpointIndex++;
+		this.boltsToValidate.Clear();
 	}
 	
 	private void GetCheckpoints()
@@ -134,6 +142,11 @@ public class PlayerScript : Controllable
 		this.playerBody.Position = new FVector2(currentCheckpoint.x, currentCheckpoint.y);
 	}
 	
+	public void GetBolt(GoldBoltScript bolt)
+	{
+		this.boltsToValidate.Add(bolt);
+	}
+	
 	public override void Tap ()
 	{
 		if (this.canResurrect && this.checkpoints.Count > 0)
@@ -153,7 +166,7 @@ public class PlayerScript : Controllable
 		this.playerBody.Mass = 1f;
 		GlobalVarScript.instance.resetCamera(true);
 		// pour teleporter la camera et faire un leger dezoom
-		Camera.main.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, Camera.main.transform.position.z / 2f);
+		Camera.main.SendMessage("ResetPosition", new Vector3(this.target.transform.position.x, this.target.transform.position.y, Camera.main.transform.position.z / 2f), SendMessageOptions.DontRequireReceiver);
 		
 		if(playerMesh != null)
 			this.playerMesh.SetActiveRecursively(true);
@@ -172,6 +185,7 @@ public class PlayerScript : Controllable
 	
 	protected override void Kill()
 	{
+		this.ReleaseFocus();
 		this.isAlive = false;
 		this.playerBody.BodyType = BodyType.Static;
 		this.playerBody.Enabled = false;
@@ -195,6 +209,11 @@ public class PlayerScript : Controllable
 		foreach(InterruptorReceiver interruptor in GameObject.Find("WORLD").GetComponentsInChildren<InterruptorReceiver>())
 		{
 			interruptor.reloadInterruptor();
+		}
+		
+		foreach (GoldBoltScript bolt in this.boltsToValidate)
+		{
+			bolt.Reset();
 		}
 	}
 	

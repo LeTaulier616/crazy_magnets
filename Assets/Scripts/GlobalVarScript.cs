@@ -120,7 +120,7 @@ public class GlobalVarScript : MonoBehaviour
 		cameraTargetDefault = cameraTarget;
 		cameraSmoothDefault = cameraSmooth;
 		groundTags = new List<string>();
-		groundTags.AddRange(new string[]{"Ground", "Slippery", "Bumper", "Bloc", "Attractor", "Platform", "Door", "MultiDoor"});
+		groundTags.AddRange(new string[]{"Ground", "Slippery", "Bumper", "Bloc", "Attractor", "Platform", "Door", "MultiDoor", "Enemy"});
 	}
 	
 	public void SetCameraTarget(Transform target, bool throwFocus)
@@ -130,6 +130,11 @@ public class GlobalVarScript : MonoBehaviour
 			cameraTarget.SendMessageUpwards("ReleaseFocus", SendMessageOptions.DontRequireReceiver);
 		}
 		cameraTarget = target;
+		if (cameraTarget.GetInstanceID() != cameraTargetDefault.GetInstanceID())
+		{
+			cameraFree = 2;
+		}
+		cameraFixedPos = Vector3.zero;
 		if (throwFocus)
 		{
 			cameraTarget.SendMessageUpwards("Focus", SendMessageOptions.DontRequireReceiver);
