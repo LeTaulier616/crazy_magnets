@@ -22,11 +22,11 @@ public class InterruptorReceiver : MonoBehaviour
 			if(animation != null)
 			{
 				animation["open"].time = animation["open"].length;
-				animation["open"].speed = 1.0f;
 				animation.Play();
 			}
 			else
 				this.gameObject.active = !isOpen;
+			this.GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = true;
 		}
 	}
 	
@@ -67,17 +67,14 @@ public class InterruptorReceiver : MonoBehaviour
 	{
 		interruptorCount++;
 		Debug.Log("PRESSCOUNT : " + interruptorCount);
-		
-		if (!isActivated)
+
+		if (gameObject.CompareTag("MultiDoor") && !isActivated)
 		{
-			if (gameObject.CompareTag("MultiDoor"))
-			{
-				if (interruptorCount >= InterruptorsNeeded)
-					ChangeState();
-			}
-			else
+			if (interruptorCount >= InterruptorsNeeded)
 				ChangeState();
 		}
+		else
+			ChangeState();
 	}
 	
 	public void OnDesactivate()
@@ -85,16 +82,13 @@ public class InterruptorReceiver : MonoBehaviour
 		interruptorCount--;
 		Debug.Log("PRESSCOUNT : " + interruptorCount);
 		
-		if (isActivated)
+		if (gameObject.CompareTag("MultiDoor") && isActivated)
 		{
-			if (gameObject.CompareTag("MultiDoor"))
-			{
-				if (interruptorCount < InterruptorsNeeded)
-					ChangeState();
-			}
-			else
+			if (interruptorCount < InterruptorsNeeded)
 				ChangeState();
 		}
+		else
+			ChangeState();
 	}
 
 	private void ChangeState()
@@ -119,6 +113,8 @@ public class InterruptorReceiver : MonoBehaviour
 			if(animation != null)
 			{
 				animation["open"].speed = (isOpen ? 1.0f : -1.0f);
+				if (!isOpen)
+					animation["open"].time = animation["open"].length;
 				animation.Play();
 			}
 			else 
