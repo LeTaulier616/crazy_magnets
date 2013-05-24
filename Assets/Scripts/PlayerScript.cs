@@ -177,6 +177,21 @@ public class PlayerScript : Controllable
 		
 		this.canResurrect = false;
 		this.isAlive = true;
+		
+		foreach(FollowRoad followroad in GameObject.Find("WORLD").GetComponentsInChildren<FollowRoad>())
+		{
+			followroad.reloadRoad();
+		}
+		
+		foreach(Interruptor interruptor in GameObject.Find("WORLD").GetComponentsInChildren<Interruptor>())
+		{
+			interruptor.reloadInterruptor();
+		}
+		
+		foreach (GoldBoltScript bolt in this.boltsToValidate)
+		{
+			bolt.Reset();
+		}
 	}
 	
 	private void AbleResurrection()
@@ -196,26 +211,6 @@ public class PlayerScript : Controllable
 			this.playerMesh.SetActiveRecursively(false);
 		else
 			this.renderer.enabled =false;
-		
-		foreach(FollowRoad followroad in GameObject.Find("WORLD").GetComponentsInChildren<FollowRoad>())
-		{
-			followroad.reloadRoad();
-		}
-		
-		foreach(Interruptor interruptor in GameObject.Find("WORLD").GetComponentsInChildren<Interruptor>())
-		{
-			interruptor.reloadInterruptor();
-		}
-		
-		foreach(InterruptorReceiver interruptor in GameObject.Find("WORLD").GetComponentsInChildren<InterruptorReceiver>())
-		{
-			interruptor.reloadInterruptor();
-		}
-		
-		foreach (GoldBoltScript bolt in this.boltsToValidate)
-		{
-			bolt.Reset();
-		}
 	}
 	
 	private void CollisionHead(GameObject ceiling)
