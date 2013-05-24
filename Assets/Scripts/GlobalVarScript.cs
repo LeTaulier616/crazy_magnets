@@ -120,7 +120,7 @@ public class GlobalVarScript : MonoBehaviour
 		cameraTargetDefault = cameraTarget;
 		cameraSmoothDefault = cameraSmooth;
 		groundTags = new List<string>();
-		groundTags.AddRange(new string[]{"Ground", "Slippery", "Bumper", "Bloc", "Attractor", "Platform", "Door", "MultiDoor"});
+		groundTags.AddRange(new string[]{"Ground", "Slippery", "Bumper", "Bloc", "Attractor", "Platform", "Door", "MultiDoor", "Enemy"});
 	}
 	
 	public void SetCameraTarget(Transform target, bool throwFocus)
