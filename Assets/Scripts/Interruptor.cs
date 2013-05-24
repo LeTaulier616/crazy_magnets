@@ -124,32 +124,27 @@ public class Interruptor : MonoBehaviour
 			if (this.activated)
 			{
 				if (Time.time > this.unpushTime)
+				{
 					this.setOff();
+					if (audio2 != null)
+						audio2.Stop();
+				}
 				else if (audio2 != null)
 				{
-				/*	if(unpushTime / timeToRevoke >= 0.75f)
-					{
+					float timeLeft = (this.unpushTime - Time.time) / timeToRevoke;
+
+					if (timeLeft < 0.25f)
 						audio2.clip = clockSound4;
-					}
-					
-					else if(unpushTime / timeToRevoke >= 0.5f)
-					{
+					else if (timeLeft < 0.5f)
 						audio2.clip = clockSound3;
-					}
-					
-					else if(unpushTime / timeToRevoke >= 0.25f)
-					{
+					else if (timeLeft < 0.75f)
 						audio2.clip = clockSound2;
-					}
-					
-					else if(unpushTime / timeToRevoke >= 0.0f)
-					{
+					else// if (timeLeft < 1.0f)
 						audio2.clip = clockSound1;
-					}
-					
+
 					if(!audio2.isPlaying)
 						audio2.Play();
-				*/}
+				}
 			}
 		}
 	}
@@ -202,16 +197,20 @@ public class Interruptor : MonoBehaviour
 		if (!(this.activator == Activator.ELECTRIC_TOUCH && !GlobalVarScript.instance.player.GetComponent<PlayerScript>().IsCharged())
 			&& (Vector3.Distance(GlobalVarScript.instance.player.transform.position, gameObject.transform.position) < (this.activator == Activator.ELECTRIC_TOUCH ? tmpPorteeElec : tmpPorteeNorm) || isEnnemy) )
 		{
-			if (!activated)
-				setOn();
-			else if (type == Type.ONOFF)
-				setOff();
-
 			if(this.activator == Activator.ELECTRIC_TOUCH)
 			{
 				GlobalVarScript.instance.player.SendMessageUpwards("SetSparkPoint", this.transform.position, SendMessageOptions.DontRequireReceiver);
 				GlobalVarScript.instance.player.SendMessageUpwards("Discharge", SendMessageOptions.DontRequireReceiver);
 			}
+
+			if (!activated)
+			{
+				setOn();
+				if (type == Type.TIMER)
+					this.unpushTime = Time.time + this.timeToRevoke;
+			}
+			else if (type == Type.ONOFF)
+				setOff();
 		}
 	}
 	
@@ -276,13 +275,6 @@ public class Interruptor : MonoBehaviour
 				audio1.clip = interruptorSound;
 				audio1.Play();
 			}
-		}
-		
-					
-		else if (activator == Activator.PLAYER_OR_CUBE)
-		{
-			audio1.clip = interruptorSound;
-			audio1.Play();
 		}
 		
 		Debug.Log("Set On");

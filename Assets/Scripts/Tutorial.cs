@@ -54,7 +54,9 @@ public class Tutorial : MonoBehaviour
 		
 		walkDistance = 0.0f;
 		
-		ShowMoveControls();	
+		playerPosition = player.transform.position;
+		
+		ShowMoveControls();
 	}
 	
 	// Update is called once per frame
@@ -62,17 +64,9 @@ public class Tutorial : MonoBehaviour
 	{		
 		if(checkDistance)
 		{
-			if(!playerScript.isWalking)
-			{
-				playerPosition = player.transform.position;
-			}
+			walkDistance = Vector3.Distance(playerPosition, player.transform.position);
 			
-			else
-			{
-				walkDistance += Vector3.Distance(playerPosition, player.transform.position);
-			}
-			
-			if(walkDistance >= 1000.0f)
+			if(walkDistance >= 18.0f)
 			{
 				checkDistance = false;
 				playerScript.canJump = true;
@@ -82,7 +76,7 @@ public class Tutorial : MonoBehaviour
 		
 		if(checkJumps)
 		{
-			if (canCheckJump && playerScript.onGround == false)
+			if (canCheckJump && playerScript.isJumping && playerScript.onGround == false)
 			{
 				jumpCount++;
 				canCheckJump = false;
@@ -91,7 +85,7 @@ public class Tutorial : MonoBehaviour
 			{
 				canCheckJump = true;
 			}
-			if(jumpCount >= 4 && playerScript.onGround)
+			if(jumpCount >= 5 && playerScript.onGround)
 			{
 				checkJumps = false;
 				ShowMagnetismControls();
@@ -127,11 +121,9 @@ public class Tutorial : MonoBehaviour
 		ToggleBorders();
 		ToggleMagnetismLabel();
 		
-		GameObject cubeInstance = Instantiate(CubePrefab,
-		CubePosition.position,
-		Quaternion.identity) as GameObject;
+		GameObject cubeInstance = Instantiate(CubePrefab, CubePosition.position, Quaternion.identity) as GameObject;
 		
-		GlobalVarScript.instance.cameraTarget = cubeInstance.transform;
+		GlobalVarScript.instance.SetCameraTarget(cubeInstance.transform, true);
 		
 		Invoke("ResetCamera" , 3.0f);
 		Invoke("ToggleControls", 3.0f);
@@ -151,10 +143,9 @@ public class Tutorial : MonoBehaviour
 	void ToggleControls()
 	{
 		if(playerScript.canMove)
-			playerScript.canMove = false;
-		
+			playerScript.ReleaseFocus();
 		else
-			playerScript.canMove = true;
+			playerScript.Focus();
 	}
 	
 	void ToggleControlLabel()

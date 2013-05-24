@@ -184,7 +184,8 @@ public class ControlledState : State
 
 	public override void ExitState (GameObject it)
 	{
-		//button.activator = Interruptor.Activator.ELECTRIC_TOUCH;
+		Interruptor button = it.gameObject.GetComponentInChildren<Interruptor>();
+		button.activator = Interruptor.Activator.ELECTRIC_TOUCH;
 		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.Mass = 100.0f;
 		GlobalVarScript.instance.resetCamera(true);
 		it.GetComponent<Controllable>().isAlive = false;
