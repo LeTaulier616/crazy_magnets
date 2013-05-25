@@ -117,7 +117,7 @@ public class PlayerScript : Controllable
 	
 	public void CheckpointReached()
 	{
-		if(checkpointIndex <= checkpoints.Count - 1)
+		if(checkpointIndex < checkpoints.Count - 1)
 			this.checkpointIndex++;
 		
 		else

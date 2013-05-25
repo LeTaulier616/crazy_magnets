@@ -249,6 +249,11 @@ public class EnemyScript : StateMachine
 		this.attack = new AttackState();
 		this.idle = new State();
 		
+		if(this.enemyMesh != null)
+		{ 
+			this.enemyMesh.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
+		}
+		
 		if (this.type == EnemyType.Small)
 		{
 			this.patrolingSpeed = GlobalVarScript.instance.smallEnemyPatrolSpeed;
