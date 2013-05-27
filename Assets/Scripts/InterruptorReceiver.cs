@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
+using Microsoft.Xna.Framework;
+
 public class InterruptorReceiver : MonoBehaviour
 {
 	// Customisable Datas

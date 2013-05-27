@@ -35,6 +35,7 @@ public class Interruptor : MonoBehaviour
 	private float     tmpPorteeElec;
 	private float     tmpPorteeNorm;
 	private bool      pushedByPlayer = false;
+	private bool      pushedByEnnemi = false;
 	
 	private AudioClip interruptorSound;
 	private AudioClip interruptorReleaseSound;
@@ -168,6 +169,8 @@ public class Interruptor : MonoBehaviour
 			
 			if(bodyB.UserTag == "PlayerObject")
 				pushedByPlayer = true;
+			if(bodyB.UserTag == "Enemy")
+				pushedByEnnemi = true;
 		}
 		return true;
 	}
@@ -193,6 +196,8 @@ public class Interruptor : MonoBehaviour
 			
 			if(bodyB.UserTag == "PlayerObject")
 				pushedByPlayer = false;
+			if(bodyB.UserTag == "Enemy")
+				pushedByEnnemi = false;
 		}
 	}
 	
@@ -325,7 +330,7 @@ public class Interruptor : MonoBehaviour
 		{
 			for(int trg = 0; trg < targets.Length; ++trg)
 			{
-				if(targets[trg].tag == "Platform")
+				if(targets[trg].tag == "Platform" && !this.pushedByEnnemi)
 				{
 					setOff();
 				}
