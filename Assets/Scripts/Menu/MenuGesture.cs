@@ -78,7 +78,12 @@ public class MenuGesture : MonoBehaviour {
         {
 			if(widget.name != "Menu_Background" || lastScreen == ScreenMenu.NONE || nextScreen == ScreenMenu.NONE)
 			{
-				if(setVisible)
+				if(widget.name == "PAUSE_BACKGROUND")
+				{
+					widget.alpha   = 0.5f;
+					widget.color   = new Color(0.5f,0.5f,0.5f,0.5f);
+				}
+				else if(setVisible)
 				{
 					widget.alpha   = lerpValue;
 					widget.color   = new Color(lerpValue,lerpValue,lerpValue,lerpValue);
