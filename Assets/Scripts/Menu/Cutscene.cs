@@ -59,6 +59,8 @@ public class Cutscene : MonoBehaviour {
 	
 	void FixedUpdate () 
 	{
+		if(doNothing)
+			return;
 		if(isSliding && currentSlide < cutscene.Length - 1)
 		{
 			if(slideDirection == 1)
@@ -129,7 +131,7 @@ public class Cutscene : MonoBehaviour {
 	
     IEnumerator LoadLevelToLoad() {
         AsyncOperation async = Application.LoadLevelAsync(Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld + Datas.sharedDatas().datas.selectedLevel + 1);
-        yield return async;
+		yield return async;
     }
 	
 	void Update ()

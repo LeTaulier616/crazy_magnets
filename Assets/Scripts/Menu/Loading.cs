@@ -19,6 +19,7 @@ public class Loading : MonoBehaviour {
 	
 	void Update () 
 	{
+		Debug.Log("Update");
 		frame++;
 		int speed = 8;
 		if(frame%speed == 0)
