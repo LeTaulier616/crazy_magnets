@@ -171,37 +171,4 @@ public class Road : MonoBehaviour
 			}
 		}
 	}
-	
-    public void Activate()
-	{
-		activated = true;
-	}
-	
-    bool ActivatedWithPlayer()
-	{
-		return playerActivation;
-	}
-	
-	float smoothStep(float alpha, float beta, float teta)
-	{
-		if(teta < alpha) return alpha;
-		if(teta > beta) return beta;
-		return alpha + (teta*teta*(3.0f-2.0f*teta))*(beta - alpha);
-	}
-	
-	float getRoadLength()
-	{
-		return 0;
-	}
-	
-	float getSmoothPosition()
-	{
-		float roadTraveled = 0;
-		return roadTraveled / getRoadLength();
-	}
-	
-	public void UpdateRoad ()
-	{
-	    if(!activated) return;
-	}
 }

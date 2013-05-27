@@ -8,8 +8,8 @@ using FarseerPhysics.Common;
 using FarseerPhysics.Dynamics.Contacts;
 
 public class PlayerScript : Controllable
-{
-	private Vector3   grabTarget;
+{	
+	private UnityEngine.Transform   grabTarget;
 	private float grabRange;
 	
 	private bool canResurrect;
@@ -42,7 +42,7 @@ public class PlayerScript : Controllable
 		this.jumpForce = GlobalVarScript.instance.playerJumpForce;
 		this.playerBody.LinearDamping = GlobalVarScript.instance.playerDamping;
 		
-		this.grabTarget = Vector3.zero;
+		this.grabTarget = null;
 		this.grabRange = GlobalVarScript.instance.GrabRadius;
 		
 		this.canResurrect = false;
@@ -71,29 +71,34 @@ public class PlayerScript : Controllable
 			return;
 		}
 		
-		if (this.grabTarget != Vector3.zero)
+		if (this.grabTarget != null)
 		{
-			if (Vector3.Distance(this.transform.position, grabTarget) < grabRange)
+			if (Vector3.Distance(this.transform.position, grabTarget.position) < grabRange)
 			{
-				float dist = Vector3.Distance(transform.position, this.grabTarget);
-				Vector3 rayTest = new Vector3(this.grabTarget.x - transform.position.x, this.grabTarget.y - transform.position.y, this.grabTarget.z - transform.position.z);
+				float dist = Vector3.Distance(transform.position, this.grabTarget.position);
+				Vector3 rayTest = new Vector3(this.grabTarget.position.x - transform.position.x, this.grabTarget.position.y - transform.position.y, this.grabTarget.position.z - transform.position.z);
 				RaycastHit hit;
 				if (Physics.Raycast(transform.position, rayTest.normalized, out hit, dist) && hit.transform.tag != "Grab"
 					// cas particulier
 					&& hit.transform.name != "HEAD_HITBOX")
 				{
-					this.grabTarget = Vector3.zero;
+					this.grabTarget = null;
+					this.canMove = true;
+					this.playerBody.IgnoreGravity = false;
 				}
 				else
 				{
 					FVector2 grabForce = new FVector2(rayTest.x, rayTest.y) * 13.0f * this.playerBody.Mass * this.playerBody.GravityScale * Time.deltaTime;
-					playerBody.ApplyLinearImpulse(new FVector2(grabForce.X * 25f, grabForce.Y));
+					playerBody.ApplyLinearImpulse(new FVector2(grabForce.X * 13f, grabForce.Y));
+					this.grabTarget.SendMessageUpwards("PlaySound", SendMessageOptions.DontRequireReceiver);
+					this.playerBody.IgnoreGravity = true;
 				}
 			}
 			else
 			{
-				this.grabTarget = Vector3.zero;
-				this.canMove = false;
+				this.grabTarget = null;
+				this.canMove = true;
+				this.playerBody.IgnoreGravity = false;
 			}
 		}
 		
@@ -108,7 +113,7 @@ public class PlayerScript : Controllable
 		base.LateUpdate();
 	}
 	
-	public void Grab(Vector3 target)
+	public void Grab(UnityEngine.Transform target)
 	{
 		this.grabTarget = target;
 		this.canMove = false;
@@ -116,8 +121,14 @@ public class PlayerScript : Controllable
 	
 	public void CheckpointReached()
 	{
-		if(checkpointIndex <= checkpoints.Count - 1)
+		if(checkpointIndex < checkpoints.Count - 1)
 			this.checkpointIndex++;
+		
+		else
+			this.checkpointIndex = checkpoints.Count - 1;
+		
+		Debug.Log("Checkpoint index : " + checkpointIndex);
+		
 		this.boltsToValidate.Clear();
 	}
 	
@@ -134,9 +145,6 @@ public class PlayerScript : Controllable
 	public void ToNextCheckPoint()
 	{
 		CheckpointReached();
-		
-		if(checkpointIndex > checkpoints.Count)
-			checkpointIndex = checkpoints.Count - 1;
 		
 		Vector3 currentCheckpoint = checkpoints[checkpointIndex];
 		this.playerBody.Position = new FVector2(currentCheckpoint.x, currentCheckpoint.y);
@@ -176,6 +184,21 @@ public class PlayerScript : Controllable
 		
 		this.canResurrect = false;
 		this.isAlive = true;
+		
+		foreach(FollowRoad followroad in GameObject.Find("WORLD").GetComponentsInChildren<FollowRoad>())
+		{
+			followroad.reloadRoad();
+		}
+		
+		foreach(Interruptor interruptor in GameObject.Find("WORLD").GetComponentsInChildren<Interruptor>())
+		{
+			interruptor.reloadInterruptor();
+		}
+		
+		foreach (GoldBoltScript bolt in this.boltsToValidate)
+		{
+			bolt.Reset();
+		}
 	}
 	
 	private void AbleResurrection()
@@ -195,26 +218,6 @@ public class PlayerScript : Controllable
 			this.playerMesh.SetActiveRecursively(false);
 		else
 			this.renderer.enabled =false;
-		
-		foreach(FollowRoad followroad in GameObject.Find("WORLD").GetComponentsInChildren<FollowRoad>())
-		{
-			followroad.reloadRoad();
-		}
-		
-		foreach(Interruptor interruptor in GameObject.Find("WORLD").GetComponentsInChildren<Interruptor>())
-		{
-			interruptor.reloadInterruptor();
-		}
-		
-		foreach(InterruptorReceiver interruptor in GameObject.Find("WORLD").GetComponentsInChildren<InterruptorReceiver>())
-		{
-			interruptor.reloadInterruptor();
-		}
-		
-		foreach (GoldBoltScript bolt in this.boltsToValidate)
-		{
-			bolt.Reset();
-		}
 	}
 	
 	private void CollisionHead(GameObject ceiling)
@@ -240,10 +243,12 @@ public class PlayerScript : Controllable
 		{
 			this.angle = 180;
 		}
-		if (this.grabTarget != Vector3.zero)
+		if (this.grabTarget != null)
 		{
-			this.grabTarget = Vector3.zero;
+			this.grabTarget.SendMessageUpwards("StopSound", SendMessageOptions.DontRequireReceiver);
+			this.grabTarget = null;
 			this.canMove = true;
+			this.playerBody.IgnoreGravity = false;
 		}
 	}
 	

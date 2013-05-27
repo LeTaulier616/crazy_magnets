@@ -155,7 +155,7 @@ public class AttackState : State
 				Ray sight = new Ray(it.transform.position, it.transform.right);
 				RaycastHit hit = new RaycastHit();
 		
-				if (Physics.Raycast(sight, out hit, 2f) && hit.transform.tag == "Player" && GlobalVarScript.instance.player.GetComponent<PlayerScript>().isAlive)
+				if (Physics.Raycast(sight, out hit, 0.7f) && hit.transform.tag == "Player" && GlobalVarScript.instance.player.GetComponent<PlayerScript>().isAlive)
 				{
 					this.player.SendMessageUpwards("Kill", SendMessageOptions.DontRequireReceiver);
 				}
@@ -227,6 +227,7 @@ public class EnemyScript : StateMachine
 	private Ray		ray;
 	private float	floorDist;
 	private Vector3	startPosition;
+	private Vector3	dimension;
 	
 	public PatrolState		patrol;
 	public PursuitState		pursuit;
@@ -247,6 +248,11 @@ public class EnemyScript : StateMachine
 		this.pursuit = new PursuitState();
 		this.attack = new AttackState();
 		this.idle = new State();
+		
+		if(this.enemyMesh != null)
+		{ 
+			this.enemyMesh.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
+		}
 		
 		if (this.type == EnemyType.Small)
 		{
@@ -300,14 +306,13 @@ public class EnemyScript : StateMachine
 
 
 		FSCapsuleShape capsule = this.GetComponent<FSCapsuleShape>();
-		Vector3 size;
 		if (capsule.direction == FSCapsuleShape.Diretion.Y)
-			size = new Vector3(2f * capsule.radius, capsule.length, 0f);
+			this.dimension = new Vector3(capsule.radius, capsule.length / 2f, 0f);
 		else
-			size = new Vector3(capsule.length, 2f * capsule.radius, 0f);
-		Vector3 direction = this.transform.right * size.x - this.transform.up * size.y;
+			this.dimension = new Vector3(capsule.length / 2f, capsule.radius, 0f);
+		Vector3 direction = new Vector3(0.1f, 0f, 0f) - this.transform.up;
 		direction.Normalize();
-		this.ray = new Ray(this.transform.position + new Vector3(0f, 0.1f, .0f), direction);
+		this.ray = new Ray(new Vector3(this.transform.position.x + Mathf.Sign(this.transform.right.x) * this.dimension.x, this.transform.position.y, this.transform.position.z), direction);
 		RaycastHit hit = new RaycastHit();
 		Physics.Raycast(this.ray, out hit);
 		this.floorDist = hit.distance;
@@ -317,7 +322,7 @@ public class EnemyScript : StateMachine
 
 	public bool CanMove()
 	{
-		this.ray.origin = new Vector3(this.transform.position.x, this.ray.origin.y, this.ray.origin.z);
+		this.ray.origin = new Vector3(this.transform.position.x + Mathf.Sign(this.transform.right.x) * this.dimension.x, this.ray.origin.y, this.ray.origin.z);
 		if (Mathf.Sign(this.ray.direction.x) != Mathf.Sign(this.transform.right.x))
 			this.ray.direction = new Vector3(-this.ray.direction.x, this.ray.direction.y, this.ray.direction.z);
 		RaycastHit hit = new RaycastHit();

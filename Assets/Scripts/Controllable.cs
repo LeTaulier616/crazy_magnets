@@ -14,6 +14,8 @@ public class Controllable : MonoBehaviour
 	
 	private float accelerationFactor;
 	private float decelerationFactor;
+	
+	private AudioClip jumpSound;
 
 	[HideInInspector]
 	public float speed;
@@ -70,6 +72,8 @@ public class Controllable : MonoBehaviour
 		playerBody.FixedRotation = true;
 		playerBody.Mass = 1f;
 		
+		this.jumpSound = GlobalVarScript.instance.JumpSound;
+		
 		this.isAlive	= true;
 		this.isWalking  = false;
 		this.isJumping  = false;
@@ -97,7 +101,7 @@ public class Controllable : MonoBehaviour
 		this.frictionFactor = 1f;
 		
 		this.BroadcastMessage("ConstantParams", Color.cyan, SendMessageOptions.DontRequireReceiver);
-		//this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
+		this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
 		
 		this.canMove = true;
 		this.canCharge = true;
@@ -301,6 +305,8 @@ public class Controllable : MonoBehaviour
 	{	
 		if (this.canJump && this.onGround)
 		{
+			audio.clip = this.jumpSound;
+			audio.Play();
 			this.Bump(this.jumpForce);
 			
 			/*if(this.onPFM)
@@ -349,6 +355,7 @@ public class Controllable : MonoBehaviour
 		if (this.canCharge)
 		{
 			this.isCharged = true;
+			this.BroadcastMessage("OccluderOff", SendMessageOptions.DontRequireReceiver);
 			this.BroadcastMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
 		}
 	}
@@ -361,6 +368,8 @@ public class Controllable : MonoBehaviour
 			Invoke("DisableSpark", 0.5f);
 			this.isCharged = false;
 			this.BroadcastMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
+			this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
+
 		}
 	}
 	
@@ -440,13 +449,13 @@ public class Controllable : MonoBehaviour
 	
 	private void StayGround(GameObject ground)
 	{
-		if (this.canMove)
-		{
-			Camera.main.gameObject.SendMessageUpwards("Reset", SendMessageOptions.DontRequireReceiver);
-		}
-		
 		if (GlobalVarScript.instance.groundTags.Contains(ground.tag))
 		{
+			/*if (this.canMove)
+			{
+				Camera.main.gameObject.SendMessageUpwards("Reset", SendMessageOptions.DontRequireReceiver);
+			}*/
+			
 			this.onGround = true;
 			this.playerBody.GravityScale = 1f;
 			
