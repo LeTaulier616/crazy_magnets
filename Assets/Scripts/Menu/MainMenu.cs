@@ -29,6 +29,8 @@ public class MainMenu : MenuScreen {
 		newgame_button_go.SetActive(Datas.sharedDatas().datas.isNewGame);
 		continue_button_go.SetActive(!Datas.sharedDatas().datas.isNewGame);
 		
+		credits_button_go.SetActive(true);
+		
 		datas_button_go.SetActive(MyDefines.developmentMode);
 		
 		exitScreen = false;
