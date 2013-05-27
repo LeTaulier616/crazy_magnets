@@ -9,6 +9,7 @@ public class MainMenu : MenuScreen {
 	public GameObject levels_button_go;
 	public GameObject datas_button_go;
 	public GameObject demo_button_go;
+	public GameObject credits_button_go;
 
 	void Start () 
 	{
@@ -18,6 +19,7 @@ public class MainMenu : MenuScreen {
   	 	UIEventListener.Get(levels_button_go).onClick   = levels;
   	 	UIEventListener.Get(datas_button_go).onClick    = resetDatas;
   	 	UIEventListener.Get(demo_button_go).onClick     = unlockDemo;
+  	 	UIEventListener.Get(credits_button_go).onClick  = credits;
 	}
 	
 	public override void activateMenu()
@@ -103,5 +105,10 @@ public class MainMenu : MenuScreen {
 	{
 		Datas.sharedDatas().datas.tutoDone  = true;
 		Datas.sharedDatas().datas.lastLevel = 4;
+	}
+	
+	private void credits(GameObject go)
+	{
+		
 	}
 }

@@ -87,7 +87,7 @@ public class Cutscene : MonoBehaviour {
 					currentSlide++;
 				}
 			}
-			else
+			else if(currentSlide > 0)
 			{
 				cutscene[currentSlide].position   = new Vector3(cutscene[currentSlide].position.x+0.05f*scrollSpeed, cutscene[currentSlide].position.y, cutscene[currentSlide].position.z);
 				cutscene[currentSlide-1].position = new Vector3(cutscene[currentSlide-1].position.x+0.05f*scrollSpeed, cutscene[currentSlide-1].position.y, cutscene[currentSlide-1].position.z);
@@ -234,16 +234,19 @@ public class Cutscene : MonoBehaviour {
 					float swipeTime = Time.time - swipeTimer;
 					float swipeDist = (new Vector3(currentSlidePosition.x, 0, 0) - new Vector3(startSlidePosition.x, 0, 0)).magnitude;
 					
-					if (swipeTime > 0 && swipeTime < 2 && swipeDist > 100 && !isSliding && canSlide)
+					if(!(currentSlide == 0 && startSlidePosition.x < currentSlidePosition.x))
 					{
-						if(startSlidePosition.x > currentSlidePosition.x)
-							slideDirection = 1;
-						else
-							slideDirection = -1;
-						swipeTimer = Time.time;
-						startSlidePosition = currentSlidePosition;
-						StartCoroutine(HorizontalSlide());
-						canSlide = false;
+						if (swipeTime > 0 && swipeTime < 2 && swipeDist > 100 && !isSliding && canSlide)
+						{
+							if(startSlidePosition.x > currentSlidePosition.x)
+								slideDirection = 1;
+							else
+								slideDirection = -1;
+							swipeTimer = Time.time;
+							startSlidePosition = currentSlidePosition;
+							StartCoroutine(HorizontalSlide());
+							canSlide = false;
+						}
 					}
 				}
 			}

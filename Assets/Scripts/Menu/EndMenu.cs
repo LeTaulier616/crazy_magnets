@@ -146,7 +146,7 @@ public class EndMenu : MenuScreen
 	{
 		Debug.Log("Quit");
 		exitScreen = true;
-		screenToGo = MenuGesture.ScreenMenu.MAIN;
+		screenToGo = MenuGesture.ScreenMenu.LEVELS;
 		Datas.sharedDatas().datas.selectedLevel = Datas.sharedDatas().datas.currentLevel;
 		Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
 	}
