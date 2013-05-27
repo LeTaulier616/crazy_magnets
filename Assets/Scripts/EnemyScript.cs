@@ -8,7 +8,8 @@ public class PatrolState : State
 {
 	public EnemyScript enemy;
 	public float speed;
-	public float playerDist;
+	public float frontSpottingDist;
+	public float backSpottingDist;
 
 	public GameObject leftWayPoint = null;
 	public GameObject rightWayPoint = null;
@@ -33,10 +34,13 @@ public class PatrolState : State
 
 	override public void UpdateState(GameObject it)
 	{
-		Ray sight = new Ray(it.transform.position, it.transform.right);
+		Ray frontSight = new Ray(it.transform.position, it.transform.right);
+		Ray backSight = new Ray(it.transform.position, -it.transform.right);
 		RaycastHit hit = new RaycastHit();
 		
-		if (Physics.Raycast(sight, out hit, this.playerDist) && hit.transform.tag == "Player" && GlobalVarScript.instance.player.GetComponent<PlayerScript>().isAlive)
+		if (GlobalVarScript.instance.player.GetComponent<PlayerScript>().isAlive && 
+			(Physics.Raycast(frontSight, out hit, this.frontSpottingDist) && hit.transform.tag == "Player" ||
+			 Physics.Raycast(backSight, out hit, this.backSpottingDist) && hit.transform.tag == "Player"))
 		{
 			PursuitState pursuit = it.GetComponent<EnemyScript>().pursuit;
 			this.machine.SwitchState(pursuit);
@@ -63,6 +67,7 @@ public class PursuitState : State
 	public EnemyScript enemy;
 	public float speed;
 	public float playerDist;
+	public float reach;
 	public bool	 stopped;
 
 	public override void EnterState (GameObject it)
@@ -77,20 +82,20 @@ public class PursuitState : State
 
 	override public void UpdateState(GameObject it)
 	{
-		if (Vector3.Distance(it.transform.position, GlobalVarScript.instance.player.transform.position) > this.playerDist)
-		{
-			PatrolState patrol = it.GetComponent<EnemyScript>().patrol;
-			this.machine.SwitchState(patrol);
-			return;
-		}
-
 		if (((GlobalVarScript.instance.player.transform.position.x - it.transform.position.x) > 0) != (it.transform.right.x > 0))
 		{
 			//it.transform.Rotate(it.transform.up, 180);
 			it.GetComponent<Controllable>().lastDir *= -1;
 		}
 
-		if (Vector3.Distance(GlobalVarScript.instance.player.transform.position, it.transform.position) < 2f)
+		float distance = Vector3.Distance(it.transform.position, GlobalVarScript.instance.player.transform.position);
+		if (distance > this.playerDist)
+		{
+			PatrolState patrol = it.GetComponent<EnemyScript>().patrol;
+			this.machine.SwitchState(patrol);
+			return;
+		}
+		else if (distance < this.reach)
 		{
 			AttackState attack = it.GetComponent<EnemyScript>().attack;
 			this.machine.SwitchState(attack);
@@ -126,7 +131,8 @@ public class AttackState : State
 {
 	private EnemyScript enemy;
 	private GameObject player;
-	
+
+	public float reach;
 	public float hitTime;
 
 	private float endTime;
@@ -155,7 +161,8 @@ public class AttackState : State
 				Ray sight = new Ray(it.transform.position, it.transform.right);
 				RaycastHit hit = new RaycastHit();
 		
-				if (Physics.Raycast(sight, out hit, 0.7f) && hit.transform.tag == "Player" && GlobalVarScript.instance.player.GetComponent<PlayerScript>().isAlive)
+				if (GlobalVarScript.instance.player.GetComponent<PlayerScript>().isAlive &&
+					Physics.Raycast(sight, out hit, this.reach) && hit.transform.tag == "Player")
 				{
 					this.player.SendMessageUpwards("Kill", SendMessageOptions.DontRequireReceiver);
 				}
@@ -198,8 +205,7 @@ public class EnemyScript : StateMachine
 	public enum EnemyType
 	{
 		Small,
-		Big,
-		Whatever
+		Big
 	}
 
 	public EnemyType type = EnemyType.Big;
@@ -211,17 +217,6 @@ public class EnemyScript : StateMachine
 	public Transform	target;
 
 	public Body			playerBody;
-
-	[HideInInspector]
-	public float	patrolingSpeed = 1;
-	[HideInInspector]
-	public float	viewDepth = 2;
-	[HideInInspector]
-	public float	pursuitSpeed = 3;
-	[HideInInspector]
-	public float	alertRange = 4;
-	[HideInInspector]
-	public float	waitingTime = 1;
 	
 	private bool	isControlled = false;
 	private Ray		ray;
@@ -239,32 +234,27 @@ public class EnemyScript : StateMachine
 	{
 		this.playerBody = this.GetComponent<FSBodyComponent>().PhysicsBody;
 		this.playerBody.Mass = 100f;
+		this.playerBody.OnCollision += OnCollisionEvent;
 		Controllable controllable = this.GetComponent<Controllable>();
 		controllable.isAlive = false;
 		
 		controllable.playerMesh = enemyMesh;
-		
-		this.patrol = new PatrolState();
-		this.pursuit = new PursuitState();
-		this.attack = new AttackState();
-		this.idle = new State();
-		
 		if(this.enemyMesh != null)
 		{ 
 			this.enemyMesh.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
 		}
 		
+		this.patrol = new PatrolState();
+		this.pursuit = new PursuitState();
+		this.attack = new AttackState();
+		this.controlled = new ControlledState();
+		this.idle = new State();
+
+		GlobalVarScript.EnemyInfo enemyInfo;
+
 		if (this.type == EnemyType.Small)
 		{
-			this.patrolingSpeed = GlobalVarScript.instance.smallEnemyPatrolSpeed;
-			this.viewDepth = GlobalVarScript.instance.smallEnemyLocateDistance;
-			this.pursuitSpeed = GlobalVarScript.instance.smallEnemyPursuitSpeed;
-			this.alertRange = GlobalVarScript.instance.smallEnemyAlertRange;
-			this.waitingTime = 0; // unused
-			this.attack.hitTime = GlobalVarScript.instance.smallEnemyHitTime;
-			controllable.speed = GlobalVarScript.instance.smallEnemySpeed;
-			controllable.jumpForce = GlobalVarScript.instance.smallEnemyJumpForce;
-			this.playerBody.LinearDamping = GlobalVarScript.instance.smallEnemyDamping;
+			enemyInfo = GlobalVarScript.instance.smallEnemy;
 			
 			if(enemyMesh != null)
 			{
@@ -275,15 +265,7 @@ public class EnemyScript : StateMachine
 		
 		else// if (this.type == EnemyType.Big)
 		{
-			this.patrolingSpeed = GlobalVarScript.instance.bigEnemyPatrolSpeed;
-			this.viewDepth = GlobalVarScript.instance.bigEnemyLocateDistance;
-			this.pursuitSpeed = GlobalVarScript.instance.bigEnemyPursuitSpeed;
-			this.alertRange = GlobalVarScript.instance.bigEnemyAlertRange;
-			this.waitingTime = 0; // unused
-			this.attack.hitTime = GlobalVarScript.instance.bigEnemyHitTime;
-			controllable.speed = GlobalVarScript.instance.bigEnemySpeed;
-			controllable.jumpForce = GlobalVarScript.instance.bigEnemyJumpForce;
-			this.playerBody.LinearDamping = GlobalVarScript.instance.bigEnemyDamping;
+			enemyInfo = GlobalVarScript.instance.bigEnemy;
 			
 			if(enemyMesh != null)
 			{
@@ -292,18 +274,22 @@ public class EnemyScript : StateMachine
 				this.enemyMesh.animation["idle"].speed = 2.0f;
 			}
 		}
+		controllable.speed = enemyInfo.speed;
+		controllable.jumpForce = enemyInfo.jumpForce;
+		this.playerBody.LinearDamping = enemyInfo.damping;
+		this.patrol.speed = enemyInfo.patrolSpeed;
+		this.patrol.frontSpottingDist = enemyInfo.frontSpottingDistance;
+		this.patrol.backSpottingDist = enemyInfo.backSpottingDistance;
+		this.pursuit.speed = enemyInfo.pursuitSpeed;
+		this.pursuit.reach = enemyInfo.reach;
+		this.pursuit.playerDist = enemyInfo.alertRange;
+		this.attack.reach = enemyInfo.hitDistance;
+		this.attack.hitTime = enemyInfo.hitTime;
 
-		this.controlled = new ControlledState();
-		this.patrol.speed = this.patrolingSpeed;
-		this.patrol.playerDist = this.viewDepth;
 		this.patrol.leftWayPoint = this.leftWayPoint;
 		this.patrol.rightWayPoint = this.rightWayPoint;
-
-		this.pursuit.speed = this.pursuitSpeed;
-		this.pursuit.playerDist = this.alertRange;
 		
 		this.controlled.target = this.target;
-
 
 		FSCapsuleShape capsule = this.GetComponent<FSCapsuleShape>();
 		if (capsule.direction == FSCapsuleShape.Diretion.Y)
@@ -358,5 +344,17 @@ public class EnemyScript : StateMachine
 		this.playerBody.SetTransform(new FVector2(startPosition.x, startPosition.y), 0.0f);
 		this.SwitchState(this.patrol);
 	}
+	
+	private bool OnCollisionEvent(Fixture fixtureA, Fixture fixtureB, Contact contact)
+	{
+		/*Body bodyB = fixtureB.Body;
 
+		if(bodyB.UserTag == "PlayerObject" && this.curState != this.idle && this.curState != this.controlled)
+		{
+			bodyB.UserFSBodyComponent.gameObject.SendMessageUpwards("Kill", SendMessageOptions.DontRequireReceiver);
+			//audio.clip = killSound;
+			//audio.Play();
+		}*/
+		return true;
+	}
 }

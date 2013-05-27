@@ -22,26 +22,26 @@ public class GlobalVarScript : MonoBehaviour
 	public float accelerationFactor;
 	public float decelerationFactor;
 	public float slipperyFactor;
-
-	public float smallEnemySpeed;
-	public float smallEnemyJumpForce;
-	public float smallEnemyDamping;
-	public float smallEnemyGravityScale;
-	public float smallEnemyPatrolSpeed;
-	public float smallEnemyPursuitSpeed;
-	public float smallEnemyLocateDistance;
-	public float smallEnemyAlertRange;
-	public float smallEnemyHitTime;
-
-	public float bigEnemySpeed;
-	public float bigEnemyJumpForce;
-	public float bigEnemyDamping;
-	public float bigEnemyGravityScale;
-	public float bigEnemyPatrolSpeed;
-	public float bigEnemyPursuitSpeed;
-	public float bigEnemyLocateDistance;
-	public float bigEnemyAlertRange;
-	public float bigEnemyHitTime;
+	
+	[System.Serializable]
+	public class EnemyInfo
+	{
+		public float speed;
+		public float jumpForce;
+		public float damping;
+		public float gravityScale;
+		public float patrolSpeed;
+		public float frontSpottingDistance;
+		public float backSpottingDistance;
+		public float pursuitSpeed;
+		public float reach;
+		public float alertRange;
+		public float hitDistance;
+		public float hitTime;
+	}
+	
+	public EnemyInfo smallEnemy = new EnemyInfo();
+	public EnemyInfo bigEnemy = new EnemyInfo();
 	
 	public Vector3 cameraFixedPos = Vector3.zero;
 	public int cameraFree = 0; // 0 : forcee sur la target; 1 : libre; 2 : libre avec controles joueur bloques
