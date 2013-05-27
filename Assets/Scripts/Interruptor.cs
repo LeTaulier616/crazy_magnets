@@ -50,8 +50,12 @@ public class Interruptor : MonoBehaviour
 	private AudioSource audio1;
 	private AudioSource audio2;
 	
+	private GameObject player;
+	
 	void Start()
 	{
+		player = GlobalVarScript.instance.player;
+		
 		activated = false;
 		isPushed = false;
 		
@@ -61,6 +65,7 @@ public class Interruptor : MonoBehaviour
 		unpushTime = timeToRevoke + 0.1f;
 
 		FSBodyComponent bodyComponent = gameObject.GetComponent<FSBodyComponent>();
+		
 		if (bodyComponent != null)
 		{
 			body = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
@@ -80,9 +85,14 @@ public class Interruptor : MonoBehaviour
 			clockSound2 = GlobalVarScript.instance.ClockSounds[1];
 			clockSound3 = GlobalVarScript.instance.ClockSounds[2];
 			clockSound4 = GlobalVarScript.instance.ClockSounds[3];
+		
+		if(activator == Activator.ELECTRIC_TOUCH)
+			SendMessage("ConstantParams", Color.cyan, SendMessageOptions.DontRequireReceiver);
+		
+		else
+			SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
 
 		SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
-		SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
 		
 		foreach(AudioSource source in this.GetComponents<AudioSource>())
 		{
@@ -147,6 +157,32 @@ public class Interruptor : MonoBehaviour
 					if(!audio2.isPlaying)
 						audio2.Play();
 				}
+			}
+		}
+		
+		if(this.activator == Activator.ELECTRIC_TOUCH && !activated)
+		{
+			if(Vector3.Distance(this.transform.position, player.transform.position) <= tmpPorteeElec && player.GetComponent<PlayerScript>().IsCharged())
+			{
+				SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
+			}
+			
+			else
+			{
+				SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
+			}
+		}
+		
+		else if(this.activator == Activator.TOUCH && !activated)
+		{
+			if(Vector3.Distance(this.transform.position, player.transform.position) <= tmpPorteeNorm)
+			{
+				SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
+			}
+			
+			else
+			{
+				SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
 			}
 		}
 	}
@@ -261,6 +297,7 @@ public class Interruptor : MonoBehaviour
 				}
 			}
 		}
+		
 		SendMessage("ConstantParams", Color.green, SendMessageOptions.DontRequireReceiver);
 
 		for(int trg = 0; trg < targets.Length; ++trg)
