@@ -83,18 +83,22 @@ public class PlayerScript : Controllable
 					&& hit.transform.name != "HEAD_HITBOX")
 				{
 					this.grabTarget = null;
+					this.canMove = true;
+					this.playerBody.IgnoreGravity = false;
 				}
 				else
 				{
 					FVector2 grabForce = new FVector2(rayTest.x, rayTest.y) * 13.0f * this.playerBody.Mass * this.playerBody.GravityScale * Time.deltaTime;
-					playerBody.ApplyLinearImpulse(new FVector2(grabForce.X * 25f, grabForce.Y));
+					playerBody.ApplyLinearImpulse(new FVector2(grabForce.X * 13f, grabForce.Y));
 					this.grabTarget.SendMessageUpwards("PlaySound", SendMessageOptions.DontRequireReceiver);
+					this.playerBody.IgnoreGravity = true;
 				}
 			}
 			else
 			{
 				this.grabTarget = null;
 				this.canMove = true;
+				this.playerBody.IgnoreGravity = false;
 			}
 		}
 		
@@ -244,6 +248,7 @@ public class PlayerScript : Controllable
 			this.grabTarget.SendMessageUpwards("StopSound", SendMessageOptions.DontRequireReceiver);
 			this.grabTarget = null;
 			this.canMove = true;
+			this.playerBody.IgnoreGravity = false;
 		}
 	}
 	
