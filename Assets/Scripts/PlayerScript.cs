@@ -101,11 +101,6 @@ public class PlayerScript : Controllable
 				this.playerBody.IgnoreGravity = false;
 			}
 		}
-		
-		if(!this.canMove)
-		{
-			playerMesh.animation.CrossFade("idle", 0.25f);
-		}
 	}
 	
 	void LateUpdate()
