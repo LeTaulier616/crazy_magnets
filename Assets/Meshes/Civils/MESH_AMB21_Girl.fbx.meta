@@ -48,6 +48,8 @@ ModelImporter:
     100084: FILLE_SKELETON
     100086: FILLE_Ultimate_ctrl
     100088: //RootNode
+    100090: FILLE_L_FootIK_ctrl
+    100092: FILLE_R_FootIK_ctrl
     400000: FILLE_Chest_ctrl
     400002: FILLE_Chest_jnt
     400004: FILLE_CONTROLS
@@ -93,11 +95,14 @@ ModelImporter:
     400084: FILLE_SKELETON
     400086: FILLE_Ultimate_ctrl
     400088: //RootNode
+    400090: FILLE_L_FootIK_ctrl
+    400092: FILLE_R_FootIK_ctrl
     2300000: FILLE_humain
     3300000: FILLE_humain
     4300000: FILLE_humain
     9500000: //RootNode
     11100000: //RootNode
+    13700000: FILLE_humain
   materials:
     importMaterials: 0
     materialName: 0
