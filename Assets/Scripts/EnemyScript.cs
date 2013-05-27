@@ -239,6 +239,10 @@ public class EnemyScript : StateMachine
 		controllable.isAlive = false;
 		
 		controllable.playerMesh = enemyMesh;
+		if(this.enemyMesh != null)
+		{ 
+			this.enemyMesh.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
+		}
 		
 		this.patrol = new PatrolState();
 		this.pursuit = new PursuitState();
@@ -247,6 +251,7 @@ public class EnemyScript : StateMachine
 		this.idle = new State();
 
 		GlobalVarScript.EnemyInfo enemyInfo;
+
 		if (this.type == EnemyType.Small)
 		{
 			enemyInfo = GlobalVarScript.instance.smallEnemy;

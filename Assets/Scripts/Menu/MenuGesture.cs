@@ -173,6 +173,7 @@ public class MenuGesture : MonoBehaviour {
 				screen = GameObject.Find("Menus").GetComponent<MainMenu>();
 			break;
 			case ScreenMenu.WORLDS :
+				//screen = GameObject.Find("Menus").GetComponent<Cutscene>();
 				screen = GameObject.Find("Menus").GetComponent<WorldsMenu>();
 			break;
 			case ScreenMenu.LEVELS :

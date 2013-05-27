@@ -101,7 +101,7 @@ public class Controllable : MonoBehaviour
 		this.frictionFactor = 1f;
 		
 		this.BroadcastMessage("ConstantParams", Color.cyan, SendMessageOptions.DontRequireReceiver);
-		//this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
+		this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
 		
 		this.canMove = true;
 		this.canCharge = true;
@@ -355,6 +355,7 @@ public class Controllable : MonoBehaviour
 		if (this.canCharge)
 		{
 			this.isCharged = true;
+			this.BroadcastMessage("OccluderOff", SendMessageOptions.DontRequireReceiver);
 			this.BroadcastMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
 		}
 	}
@@ -367,6 +368,8 @@ public class Controllable : MonoBehaviour
 			Invoke("DisableSpark", 0.5f);
 			this.isCharged = false;
 			this.BroadcastMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
+			this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
+
 		}
 	}
 	
