@@ -126,7 +126,7 @@ public class InterruptorReceiver : MonoBehaviour
 			}
 			
 			if (gameObject.GetComponent<BoxCollider>() != null)
-				gameObject.GetComponent<BoxCollider>().enabled = false;
+				gameObject.GetComponent<BoxCollider>().enabled = isOpen;
 			
 			GlobalVarScript.instance.player.GetComponent<PlayerScript>().onGround = false;
 			
