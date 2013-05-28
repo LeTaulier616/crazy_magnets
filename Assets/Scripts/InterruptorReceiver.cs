@@ -125,9 +125,6 @@ public class InterruptorReceiver : MonoBehaviour
 				cube.body.Awake = true;
 			}
 			
-			if (gameObject.GetComponent<BoxCollider>() != null)
-				gameObject.GetComponent<BoxCollider>().enabled = isOpen;
-			
 			GlobalVarScript.instance.player.GetComponent<PlayerScript>().onGround = false;
 			
 			this.GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = isOpen;
