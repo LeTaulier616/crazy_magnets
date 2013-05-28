@@ -82,7 +82,7 @@ public class PauseMenu : MenuScreen {
 	{
 		Debug.Log("Quit Game");
 		exitScreen = true;
-		screenToGo = MenuGesture.ScreenMenu.MAIN;
+		screenToGo = MenuGesture.ScreenMenu.LEVELS;
 		Datas.sharedDatas().datas.selectedLevel = Datas.sharedDatas().datas.currentLevel;
 		Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
 	}
