@@ -367,11 +367,18 @@ public class Interruptor : MonoBehaviour
 		{
 			for(int trg = 0; trg < targets.Length; ++trg)
 			{
-				if(targets[trg].tag == "Platform" && !this.pushedByEnnemi)
+				if(targets[trg].tag == "Platform")
 				{
-					setOff();
+					if(!this.pushedByEnnemi)
+					{
+						setOff();
+					}
+					else
+					{
+						targets[trg].GetComponent<InterruptorReceiver>().OnActivate();
+					}
 				}
-			}	
+			}
 			if(activator == Activator.PLAYER_OR_CUBE && activated && pushCounter > 0)
 			{
 				if(this.pushedByPlayer)
