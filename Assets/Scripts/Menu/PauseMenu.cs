@@ -26,7 +26,7 @@ public class PauseMenu : MenuScreen {
 		
 		foreach(UIWidget widget in GameObject.Find("Anchor").GetComponentsInChildren<UIWidget>())
         {
-			if(widget.name != "Menu_Background")
+			if(widget.name != "PAUSE_BACKGROUND")
 			{
 				widget.alpha   = 0.0f;
 				widget.color   = new Color(0.0f,0.0f,0.0f,0.0f);
