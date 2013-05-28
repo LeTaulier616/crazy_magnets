@@ -71,6 +71,7 @@ public class Controllable : MonoBehaviour
 		
 		playerBody.FixedRotation = true;
 		playerBody.Mass = 1f;
+		playerBody.SleepingAllowed = false;
 		
 		this.jumpSound = GlobalVarScript.instance.JumpSound;
 		
@@ -81,7 +82,7 @@ public class Controllable : MonoBehaviour
 		this.isCharged  = false;
 		this.isGrabbing = false;
 		this.isCubing	= false;
- 		this.onGround   = true;
+ 		this.onGround   = false;
 		this.headStucked = false;
 		this.onPFM      = false;
 		this.bodyPFM    = null;
