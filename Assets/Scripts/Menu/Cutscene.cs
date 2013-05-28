@@ -163,36 +163,33 @@ public class Cutscene : MonoBehaviour {
 				switch (touch.phase) 
 				{
 					case TouchPhase.Began:
-						startSlidePosition = Input.mousePosition;
+						startSlidePosition = touch.position;
 						swipeTimer = Time.time;
 					break;
 					
 					case TouchPhase.Stationary:
 					case TouchPhase.Moved:
 						// gestion du slide pour les cutscenes
-						if (Mathf.Abs(touch.position.y - touchObj.startPos.y) <= GlobalVarScript.instance.comfortZone) 
+						currentSlidePosition = touch.position;
+					
+						if (Mathf.Abs(startSlidePosition.y - currentSlidePosition.y) <= 100) 
 						{
-							currentSlidePosition = touch.position;
-						
-							if (Mathf.Abs(startSlidePosition.y - currentSlidePosition.y) <= 100) 
-							{
-								float swipeTime = Time.time - swipeTimer;
-								float swipeDist = (new Vector3(currentSlidePosition.x, 0, 0) - new Vector3(startSlidePosition.x, 0, 0)).magnitude;
-								
-								if(currentSlide == 0 && startSlidePosition.x < currentSlidePosition.x)
-									break;
+							float swipeTime = Time.time - swipeTimer;
+							float swipeDist = (new Vector3(currentSlidePosition.x, 0, 0) - new Vector3(startSlidePosition.x, 0, 0)).magnitude;
 							
-								if (swipeTime > 0 && swipeTime < 2 && swipeDist > 100 && !isSliding && canSlide)
-								{
-									if(startSlidePosition.x > currentSlidePosition.x)
-										slideDirection = 1;
-									else
-										slideDirection = -1;
-									swipeTimer = Time.time;
-									startSlidePosition = currentSlidePosition;
-									StartCoroutine(HorizontalSlide());
-									canSlide = false;
-								}
+							if(currentSlide == 0 && startSlidePosition.x < currentSlidePosition.x)
+								break;
+							
+							if (swipeTime > 0 && swipeTime < 2 && swipeDist > 100 && !isSliding && canSlide)
+							{
+								if(startSlidePosition.x > currentSlidePosition.x)
+									slideDirection = 1;
+								else
+									slideDirection = -1;
+								swipeTimer = Time.time;
+								startSlidePosition = currentSlidePosition;
+								StartCoroutine(HorizontalSlide());
+								canSlide = false;
 							}
 						}
 					break;
