@@ -223,7 +223,7 @@ public class PlayerScript : Controllable
 			this.renderer.enabled =false;
 	}
 	
-	private void CollisionHead(GameObject ceiling)
+	override protected void CollisionHead(GameObject ceiling)
 	{
 		/*
 		if (ceiling.transform.tag == "Attractor")
@@ -234,7 +234,7 @@ public class PlayerScript : Controllable
 		*/
 	}
 	
-	private void StayHead(GameObject ceiling)
+	override protected void StayHead(GameObject ceiling)
 	{	/*
 		if (ceiling.transform.tag == "Attractor")
 		{
@@ -255,7 +255,7 @@ public class PlayerScript : Controllable
 		}
 	}
 	
-	private void ExitHead(GameObject ceiling)
+	override protected void ExitHead(GameObject ceiling)
 	{
 		/*
 		if (ceiling.transform.tag == "Attractor")
