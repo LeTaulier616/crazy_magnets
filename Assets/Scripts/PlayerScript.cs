@@ -184,16 +184,8 @@ public class PlayerScript : Controllable
 		{
 			followroad.reloadRoad();
 		}
-		foreach(FollowRoad followroad in GameObject.Find("LD").GetComponentsInChildren<FollowRoad>())
-		{
-			followroad.reloadRoad();
-		}
 		
 		foreach(Interruptor interruptor in GameObject.Find("WORLD").GetComponentsInChildren<Interruptor>())
-		{
-			interruptor.reloadInterruptor();
-		}
-		foreach(Interruptor interruptor in GameObject.Find("LD").GetComponentsInChildren<Interruptor>())
 		{
 			interruptor.reloadInterruptor();
 		}
