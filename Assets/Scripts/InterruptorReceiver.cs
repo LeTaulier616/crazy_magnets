@@ -117,6 +117,19 @@ public class InterruptorReceiver : MonoBehaviour
 				audio.Play();
 			}
 			
+			CubeScript[] cubes = GameObject.Find("BLOCKS").GetComponentsInChildren<CubeScript>();
+			foreach (CubeScript cube in cubes)
+			{
+				if (cube == null)
+					continue;
+				cube.body.Awake = true;
+			}
+			
+			if (gameObject.GetComponent<BoxCollider>() != null)
+				gameObject.GetComponent<BoxCollider>().enabled = false;
+			
+			GlobalVarScript.instance.player.GetComponent<PlayerScript>().onGround = false;
+			
 			this.GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = isOpen;
 
 				if(animation != null)
