@@ -178,7 +178,8 @@ public class FollowRoad : MonoBehaviour {
 	
 	public void reloadRoad()
 	{
-		gameObject.GetComponent<InterruptorReceiver>().reloadInterruptor();
+		if(this.gameObject.GetComponent<InterruptorReceiver>() != null)
+			this.gameObject.GetComponent<InterruptorReceiver>().reloadInterruptor();
 		stopRoad();
 		if(roadRecto.activation == Activation.AUTO)
 			playRoad();
