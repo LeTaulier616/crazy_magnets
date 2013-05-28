@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 public class CubeScript : MonoBehaviour
 {
-	private Body body;
+	public Body body;
 	private int selected;
 	private Vector3 target;
 	private Vector3 origin;
