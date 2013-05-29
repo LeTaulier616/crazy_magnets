@@ -1,0 +1,68 @@
+Initialize engine version: 4.0.0f7
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 9.0c [nvd3dum.dll 8.17.12.9053]
+    Renderer: NVIDIA Quadro FX 880M
+    Vendor:   NVIDIA
+    VRAM:     978 MB (via DXGI)
+    Caps:     Shader=30 DepthRT=1 NativeDepth=1 NativeShadow=1 DF16=0 DF24=0 INTZ=1 RAWZ=0 NULL=1 RESZ=0 SlowINTZ=0
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\~ DONNEES ~\Matthieu\Bureau\GA2\projrt_plateforme\GIT\crazy_magnets\EXE\PC_5.1_CRAZY_MAGNETS_03_05_13_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\~ DONNEES ~\Matthieu\Bureau\GA2\projrt_plateforme\GIT\crazy_magnets\EXE\PC_5.1_CRAZY_MAGNETS_03_05_13_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\~ DONNEES ~\Matthieu\Bureau\GA2\projrt_plateforme\GIT\crazy_magnets\EXE\PC_5.1_CRAZY_MAGNETS_03_05_13_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading D:\~ DONNEES ~\Matthieu\Bureau\GA2\projrt_plateforme\GIT\crazy_magnets\EXE\PC_5.1_CRAZY_MAGNETS_03_05_13_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: D:\~ DONNEES ~\Matthieu\Bureau\GA2\projrt_plateforme\GIT\crazy_magnets\EXE\PC_5.1_CRAZY_MAGNETS_03_05_13_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\~ DONNEES ~\Matthieu\Bureau\GA2\projrt_plateforme\GIT\crazy_magnets\EXE\PC_5.1_CRAZY_MAGNETS_03_05_13_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\~ DONNEES ~\Matthieu\Bureau\GA2\projrt_plateforme\GIT\crazy_magnets\EXE\PC_5.1_CRAZY_MAGNETS_03_05_13_Data\Managed\Fabric.Core.dll (this message is harmless)
+Loading D:\~ DONNEES ~\Matthieu\Bureau\GA2\projrt_plateforme\GIT\crazy_magnets\EXE\PC_5.1_CRAZY_MAGNETS_03_05_13_Data\Managed\Fabric.Core.dll into Unity Child Domain
+- Completed reload, in  0.353 seconds
+desktop: 1600x900 60Hz; virtual: 1600x900 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+Platform assembly: D:\~ DONNEES ~\Matthieu\Bureau\GA2\projrt_plateforme\GIT\crazy_magnets\EXE\PC_5.1_CRAZY_MAGNETS_03_05_13_Data\Managed\System.Xml.dll (this message is harmless)
+Platform assembly: D:\~ DONNEES ~\Matthieu\Bureau\GA2\projrt_plateforme\GIT\crazy_magnets\EXE\PC_5.1_CRAZY_MAGNETS_03_05_13_Data\Managed\System.dll (this message is harmless)
+Platform assembly: D:\~ DONNEES ~\Matthieu\Bureau\GA2\projrt_plateforme\GIT\crazy_magnets\EXE\PC_5.1_CRAZY_MAGNETS_03_05_13_Data\Managed\System.Core.dll (this message is harmless)
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+
+Unloading 8 unused Assets to reduce memory usage. Loaded Objects now: 4922. Operation took 14.793611 ms.
+Set On
+ 
+(Filename: C:/BuildAgent/work/812c4f5049264fad/Runtime/ExportGenerated/StandalonePlayer/UnityEngineDebug.cpp Line: 43)
+
+Push value is : Pushed
+ 
+(Filename: C:/BuildAgent/work/812c4f5049264fad/Runtime/ExportGenerated/StandalonePlayer/UnityEngineDebug.cpp Line: 43)
+
+Set On
+ 
+(Filename: C:/BuildAgent/work/812c4f5049264fad/Runtime/ExportGenerated/StandalonePlayer/UnityEngineDebug.cpp Line: 43)
+
+Push value is : Pushed
+ 
+(Filename: C:/BuildAgent/work/812c4f5049264fad/Runtime/ExportGenerated/StandalonePlayer/UnityEngineDebug.cpp Line: 43)
+
+1
+ 
+(Filename: C:/BuildAgent/work/812c4f5049264fad/Runtime/ExportGenerated/StandalonePlayer/UnityEngineDebug.cpp Line: 43)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+
+Unloading 182 unused Assets to reduce memory usage. Loaded Objects now: 566. Operation took 20.535922 ms.
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+
+Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 1952. Operation took 14.616127 ms.
+Set On
+ 
+(Filename: C:/BuildAgent/work/812c4f5049264fad/Runtime/ExportGenerated/StandalonePlayer/UnityEngineDebug.cpp Line: 43)
+
+Can not play a disabled audio source
+ 
+(Filename: C:/BuildAgent/work/812c4f5049264fad/Runtime/Audio/AudioSource.cpp Line: 318)
+
+Push value is : Pushed
+ 
+(Filename: C:/BuildAgent/work/812c4f5049264fad/Runtime/ExportGenerated/StandalonePlayer/UnityEngineDebug.cpp Line: 43)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+
+Unloading 75 unused Assets to reduce memory usage. Loaded Objects now: 568. Operation took 16.529961 ms.
