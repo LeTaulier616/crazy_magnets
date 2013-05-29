@@ -71,6 +71,7 @@ public class Controllable : MonoBehaviour
 		
 		playerBody.FixedRotation = true;
 		playerBody.Mass = 1f;
+		playerBody.SleepingAllowed = false;
 		
 		this.jumpSound = GlobalVarScript.instance.JumpSound;
 		
@@ -81,7 +82,7 @@ public class Controllable : MonoBehaviour
 		this.isCharged  = false;
 		this.isGrabbing = false;
 		this.isCubing	= false;
- 		this.onGround   = true;
+ 		this.onGround   = false;
 		this.headStucked = false;
 		this.onPFM      = false;
 		this.bodyPFM    = null;
@@ -409,7 +410,7 @@ public class Controllable : MonoBehaviour
 		this.SendMessage("ResetPosition", SendMessageOptions.DontRequireReceiver);
 	}
 	
-	private void CollisionGround(GameObject ground)
+	protected virtual void CollisionGround(GameObject ground)
 	{
 		Camera.main.gameObject.SendMessageUpwards("Reset", SendMessageOptions.DontRequireReceiver);
 		
@@ -447,7 +448,7 @@ public class Controllable : MonoBehaviour
 		}
 	}
 	
-	private void StayGround(GameObject ground)
+	protected virtual void StayGround(GameObject ground)
 	{
 		if (GlobalVarScript.instance.groundTags.Contains(ground.tag))
 		{
@@ -466,9 +467,25 @@ public class Controllable : MonoBehaviour
 		}
 	}
 	
-	private void ExitGround(GameObject ground)
+	protected virtual void ExitGround(GameObject ground)
 	{
 		this.onGround = false;
+	}
+
+	protected virtual void CollisionHead(GameObject ceiling)
+	{
+		if (ceiling.tag == "PlayerObject")
+		{
+			ceiling.SendMessageUpwards("Kill", SendMessageOptions.DontRequireReceiver);
+		}
+	}
+
+	protected virtual void StayHead(GameObject ceiling)
+	{
+	}
+
+	protected virtual void ExitHead(GameObject ceiling)
+	{
 	}
 	
 	public void GrabObject(Vector3 grab)

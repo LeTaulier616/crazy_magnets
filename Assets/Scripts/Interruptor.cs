@@ -35,6 +35,7 @@ public class Interruptor : MonoBehaviour
 	private float     tmpPorteeElec;
 	private float     tmpPorteeNorm;
 	private bool      pushedByPlayer = false;
+	private bool      pushedByEnnemi = false;
 	
 	private AudioClip interruptorSound;
 	private AudioClip interruptorReleaseSound;
@@ -49,8 +50,12 @@ public class Interruptor : MonoBehaviour
 	private AudioSource audio1;
 	private AudioSource audio2;
 	
+	private GameObject player;
+	
 	void Start()
 	{
+		player = GlobalVarScript.instance.player;
+		
 		activated = false;
 		isPushed = false;
 		
@@ -60,6 +65,7 @@ public class Interruptor : MonoBehaviour
 		unpushTime = timeToRevoke + 0.1f;
 
 		FSBodyComponent bodyComponent = gameObject.GetComponent<FSBodyComponent>();
+		
 		if (bodyComponent != null)
 		{
 			body = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
@@ -79,9 +85,14 @@ public class Interruptor : MonoBehaviour
 			clockSound2 = GlobalVarScript.instance.ClockSounds[1];
 			clockSound3 = GlobalVarScript.instance.ClockSounds[2];
 			clockSound4 = GlobalVarScript.instance.ClockSounds[3];
+		
+		if(activator == Activator.ELECTRIC_TOUCH)
+			SendMessage("ConstantParams", Color.cyan, SendMessageOptions.DontRequireReceiver);
+		
+		else
+			SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
 
 		SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
-		SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
 		
 		foreach(AudioSource source in this.GetComponents<AudioSource>())
 		{
@@ -148,6 +159,32 @@ public class Interruptor : MonoBehaviour
 				}
 			}
 		}
+		
+		if(this.activator == Activator.ELECTRIC_TOUCH && !activated)
+		{
+			if(Vector3.Distance(this.transform.position, player.transform.position) <= tmpPorteeElec && player.GetComponent<PlayerScript>().IsCharged())
+			{
+				SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
+			}
+			
+			else
+			{
+				SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
+			}
+		}
+		
+		else if(this.activator == Activator.TOUCH && !activated)
+		{
+			if(Vector3.Distance(this.transform.position, player.transform.position) <= tmpPorteeNorm)
+			{
+				SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
+			}
+			
+			else
+			{
+				SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
+			}
+		}
 	}
 	
 	private bool OnCollisionEvent(Fixture fixtureA, Fixture fixtureB, Contact contact)
@@ -168,6 +205,8 @@ public class Interruptor : MonoBehaviour
 			
 			if(bodyB.UserTag == "PlayerObject")
 				pushedByPlayer = true;
+			if(bodyB.UserTag == "Enemy")
+				pushedByEnnemi = true;
 		}
 		return true;
 	}
@@ -193,6 +232,8 @@ public class Interruptor : MonoBehaviour
 			
 			if(bodyB.UserTag == "PlayerObject")
 				pushedByPlayer = false;
+			if(bodyB.UserTag == "Enemy")
+				pushedByEnnemi = false;
 		}
 	}
 	
@@ -256,6 +297,7 @@ public class Interruptor : MonoBehaviour
 				}
 			}
 		}
+		
 		SendMessage("ConstantParams", Color.green, SendMessageOptions.DontRequireReceiver);
 
 		for(int trg = 0; trg < targets.Length; ++trg)
@@ -327,9 +369,16 @@ public class Interruptor : MonoBehaviour
 			{
 				if(targets[trg].tag == "Platform")
 				{
-					setOff();
+					if(!this.pushedByEnnemi)
+					{
+						setOff();
+					}
+					else
+					{
+						targets[trg].GetComponent<InterruptorReceiver>().OnActivate();
+					}
 				}
-			}	
+			}
 			if(activator == Activator.PLAYER_OR_CUBE && activated && pushCounter > 0)
 			{
 				if(this.pushedByPlayer)

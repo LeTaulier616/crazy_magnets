@@ -26,7 +26,7 @@ public class PauseMenu : MenuScreen {
 		
 		foreach(UIWidget widget in GameObject.Find("Anchor").GetComponentsInChildren<UIWidget>())
         {
-			if(widget.name != "Menu_Background")
+			if(widget.name != "PAUSE_BACKGROUND")
 			{
 				widget.alpha   = 0.0f;
 				widget.color   = new Color(0.0f,0.0f,0.0f,0.0f);
@@ -82,7 +82,7 @@ public class PauseMenu : MenuScreen {
 	{
 		Debug.Log("Quit Game");
 		exitScreen = true;
-		screenToGo = MenuGesture.ScreenMenu.MAIN;
+		screenToGo = MenuGesture.ScreenMenu.LEVELS;
 		Datas.sharedDatas().datas.selectedLevel = Datas.sharedDatas().datas.currentLevel;
 		Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
 	}

@@ -16,7 +16,7 @@ public class MenuGesture : MonoBehaviour {
 	
 	public static ScreenMenu menuScreen;
 	
-	private ScreenMenu nextScreen = ScreenMenu.NONE;
+	private static ScreenMenu nextScreen = ScreenMenu.NONE;
 	private ScreenMenu lastScreen = ScreenMenu.NONE;
 	
 	private float timer       = 0.0f;
@@ -26,12 +26,19 @@ public class MenuGesture : MonoBehaviour {
 	private MenuScreen screen = null;
 	
 	private float lerpMaxValue = 255.0f;
-	private float lerpSpeed    = 1.2f;
+	private float lerpSpeed    = 0.8f;
+	
+	private bool doNothing = false;
 	
 	void Start()
 	{
 		if(Application.loadedLevelName == "MENU")
-			menuScreen = ScreenMenu.MAIN;
+		{
+			if(nextScreen == ScreenMenu.NONE)
+				menuScreen = ScreenMenu.MAIN;
+			else
+				menuScreen = nextScreen;
+		}
 		else 
 		{
 			menuScreen = ScreenMenu.NONE;
@@ -41,12 +48,10 @@ public class MenuGesture : MonoBehaviour {
 			Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
 		}
 		
-		if(menuScreen == ScreenMenu.MAIN)
+		if(Application.loadedLevelName == "MENU")
 		{
-			screen = this.GetComponent<MainMenu>();
-			menuScreen = ScreenMenu.MAIN;
+			setScreen();
 		}
-		
 		else
 		{
 			screen = this.GetComponent<Interface>();
@@ -60,6 +65,9 @@ public class MenuGesture : MonoBehaviour {
 	
 	void LateUpdate()
 	{
+		if(doNothing)
+			return;
+		
 		timer += Time.deltaTime/(lerpMaxValue*lerpSpeed)/Time.timeScale;
 		
 		float lerpValue = Mathf.Lerp(0,lerpMaxValue,timer);
@@ -73,7 +81,12 @@ public class MenuGesture : MonoBehaviour {
         {
 			if(widget.name != "Menu_Background" || lastScreen == ScreenMenu.NONE || nextScreen == ScreenMenu.NONE)
 			{
-				if(setVisible)
+				if(widget.name == "PAUSE_BACKGROUND")
+				{
+					widget.alpha   = 0.5f;
+					widget.color   = new Color(0.5f,0.5f,0.5f,0.5f);
+				}
+				else if(setVisible)
 				{
 					widget.alpha   = lerpValue;
 					widget.color   = new Color(lerpValue,lerpValue,lerpValue,lerpValue);
@@ -89,8 +102,8 @@ public class MenuGesture : MonoBehaviour {
 				widget.alpha = 1.0f;
 				widget.color   = new Color(1.0f,1.0f,1.0f,1.0f);
 			}
-			if(widget.GetComponent<TweenColor>())
-				widget.GetComponent<TweenColor>().enabled = false;
+			//if(widget.GetComponent<TweenColor>())
+			//	widget.GetComponent<TweenColor>().enabled = false;
         }
 		
 		if(screen.exitScreen) 
@@ -155,15 +168,33 @@ public class MenuGesture : MonoBehaviour {
 		menuScreen = nextScreen;
 		
 		if(loadMenus)
+		{
 			Application.LoadLevel("MENU");
+		}
 		else if(loadLevel)
-			Application.LoadLevel(Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld + Datas.sharedDatas().datas.selectedLevel + 1);
+		{
+			doNothing = true;
+			GameObject.Find("Anchor").transform.FindChild("LOADING_PANEL").gameObject.SetActive(true);
+			if(Application.loadedLevelName == "CM_Level_0")
+				StartCoroutine(LoadCutsceneToLoad());
+			else
+				StartCoroutine(LoadLevelToLoad());
+		}
 		else if(loadTuto)
-			Application.LoadLevel("CM_Level_0");
+		{
+			doNothing = true;
+			GameObject.Find("Anchor").transform.FindChild("LOADING_PANEL").gameObject.SetActive(true);
+			StartCoroutine(LoadTutoToLoad());
+		}
 		
 		if(switchHUD || loadMenus || loadLevel)
 			return;
+
+		setScreen ();
+	}
 		
+	public void setScreen()
+	{
 		switch(menuScreen)
 		{
 			case ScreenMenu.NONE :
@@ -173,7 +204,6 @@ public class MenuGesture : MonoBehaviour {
 				screen = GameObject.Find("Menus").GetComponent<MainMenu>();
 			break;
 			case ScreenMenu.WORLDS :
-				//screen = GameObject.Find("Menus").GetComponent<Cutscene>();
 				screen = GameObject.Find("Menus").GetComponent<WorldsMenu>();
 			break;
 			case ScreenMenu.LEVELS :
@@ -219,4 +249,19 @@ public class MenuGesture : MonoBehaviour {
 	{
 		return (m_screen == ScreenMenu.NONE || m_screen == ScreenMenu.PAUSE || m_screen == ScreenMenu.ENDLEVEL);
 	}
+	
+    IEnumerator LoadLevelToLoad() {
+        AsyncOperation async = Application.LoadLevelAsync(Datas.sharedDatas().datas.selectedWorld * MyDefines.kLevelsByWorld + Datas.sharedDatas().datas.selectedLevel + 1);
+        yield return async;
+    }
+	
+    IEnumerator LoadTutoToLoad() {
+		AsyncOperation async = Application.LoadLevelAsync("CM_Level_0");
+		yield return async;
+    }
+	
+    IEnumerator LoadCutsceneToLoad() {
+		AsyncOperation async = Application.LoadLevelAsync("Cutscene");
+		yield return async;
+    }
 }
