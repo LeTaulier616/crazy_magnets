@@ -111,6 +111,7 @@ public class MainMenu : MenuScreen {
 	
 	private void credits(GameObject go)
 	{
-		
+		exitScreen = true;
+		screenToGo = MenuGesture.ScreenMenu.CREDITS;
 	}
 }

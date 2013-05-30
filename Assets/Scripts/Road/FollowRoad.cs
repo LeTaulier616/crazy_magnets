@@ -67,6 +67,9 @@ public class FollowRoad : MonoBehaviour {
 		
 		roadBody.ResetDynamics();
 		
+		if (!playerScript.isAlive)
+			jointConnected = false;
+		
 		if(!playerScript.onGround && jointConnected)
 		{
 			playerScript.onGround = false;
@@ -178,6 +181,7 @@ public class FollowRoad : MonoBehaviour {
 	
 	public void reloadRoad()
 	{
+		deleteJoin();
 		if(this.gameObject.GetComponent<InterruptorReceiver>() != null)
 			this.gameObject.GetComponent<InterruptorReceiver>().reloadInterruptor();
 		stopRoad();
@@ -188,8 +192,15 @@ public class FollowRoad : MonoBehaviour {
 		roadBody.Position = new FVector2(roadRecto.currentPosition.x, roadRecto.currentPosition.y);
 	}
 	
+	public void deleteJoin()
+	{
+		jointConnected = false;
+	}
+	
 	private void OnTriggerEnter(Collider col)
 	{
+		if (!playerScript.isAlive)
+			return;
 		if(col.name == "GROUND_HITBOX" && col.transform.parent.name == "PLAYER" && col.transform.position.y > this.transform.position.y)
 		{
 			playerScript.onGround = true;

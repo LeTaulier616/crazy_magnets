@@ -205,12 +205,21 @@ public class PlayerScript : Controllable
 		this.isAlive = false;
 		this.playerBody.BodyType = BodyType.Static;
 		this.playerBody.Enabled = false;
+		this.onPFM = false;
+		this.bodyPFM = null;
 		Invoke("AbleResurrection", 2f);
 		// TODO
 		if(playerMesh != null)
 			this.playerMesh.SetActiveRecursively(false);
 		else
 			this.renderer.enabled =false;
+		
+		foreach(FollowRoad followroad in GameObject.Find("WORLD").GetComponentsInChildren<FollowRoad>())
+		{
+			followroad.deleteJoin();
+		}
+		
+		GlobalVarScript.instance.blockCamera(this.transform.position);
 	}
 	
 	override protected void CollisionHead(GameObject ceiling)

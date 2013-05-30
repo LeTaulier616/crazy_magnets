@@ -224,6 +224,11 @@ public class GlobalEditor : Editor
 			"Son de fermeture de porte",
 			"Son de fermeture de porte");
 		
+		this.target_.WinSound = addSoundField(this.target_.WinSound,
+			false,
+			"Son de victoire",
+			"Son de victoire");
+		
 		EditorGUILayout.Space();
 			
 		target_.ClockSoundsExpand = EditorGUILayout.Foldout(target_.ClockSoundsExpand, "Sons du timer");

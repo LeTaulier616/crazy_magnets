@@ -140,13 +140,15 @@ public class EndMenu : MenuScreen
 		Debug.Log("Levels");
 		exitScreen = true;
 		screenToGo = MenuGesture.ScreenMenu.LEVELS;
+		Datas.sharedDatas().datas.selectedLevel = Datas.sharedDatas().datas.currentLevel;
+		Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
 	}
 	
 	void quitgame(GameObject go)
 	{
 		Debug.Log("Quit");
 		exitScreen = true;
-		screenToGo = MenuGesture.ScreenMenu.LEVELS;
+		screenToGo = MenuGesture.ScreenMenu.MAIN;
 		Datas.sharedDatas().datas.selectedLevel = Datas.sharedDatas().datas.currentLevel;
 		Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
 	}
