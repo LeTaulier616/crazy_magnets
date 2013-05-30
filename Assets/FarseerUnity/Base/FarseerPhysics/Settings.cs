@@ -659,7 +659,7 @@ namespace FarseerPhysics
         /// <summary>
         /// The number of velocity iterations used in the solver.
         /// </summary>
-        public static int VelocityIterations = 8;
+        public static int VelocityIterations = 4;
 
         /// <summary>
         /// The number of position iterations used in the solver.
@@ -679,7 +679,7 @@ namespace FarseerPhysics
         /// <summary>
         /// The number of position iterations in the TOI solver
         /// </summary>
-        public static int TOIPositionIterations = 16;
+        public static int TOIPositionIterations = 14;
 
         /// <summary>
         /// Maximum number of sub-steps per contact in continuous physics simulation.
@@ -781,7 +781,7 @@ namespace FarseerPhysics
         /// <summary>
         /// Maximum number of contacts to be handled to solve a TOI impact.
         /// </summary>
-        public const int MaxTOIContacts = 32;
+        public const int MaxTOIContacts = 16;
 
         /// <summary>
         /// A velocity threshold for elastic collisions. Any collision with a relative linear
