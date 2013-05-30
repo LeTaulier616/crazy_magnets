@@ -5,12 +5,16 @@ public class EndLevelScript : MonoBehaviour
 {
 	public int boltCount;
 	
+	private AudioClip winSound;
+	
 	private GameObject player;
 	void Start()
 	{
 		boltCount = 0;
 		player = GlobalVarScript.instance.player;
+		winSound = GlobalVarScript.instance.WinSound;
 	}
+	
 	void OnTriggerEnter(Collider other)
 	{
 		if (other.transform.tag == "Player")
@@ -26,6 +30,12 @@ public class EndLevelScript : MonoBehaviour
 		GlobalVarScript.instance.SetCameraTarget(player.GetComponent<PlayerScript>().transform, true);
 		player.GetComponent<PlayerScript>().canMove = false;
 		player.GetComponent<PlayerScript>().canJump = false;
+		
+		if(!audio.isPlaying && winSound != null)
+		{
+			audio.clip = winSound;
+			audio.Play();
+		}
 				
 		yield return new WaitForSeconds(player.GetComponent<PlayerScript>().playerMesh.animation["win"].length / 4.0f);
 				

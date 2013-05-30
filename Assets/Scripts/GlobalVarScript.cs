@@ -77,6 +77,7 @@ public class GlobalVarScript : MonoBehaviour
 	public AudioClip DoorCloseSound;
 	public AudioClip BoltSound;
 	public AudioClip JumpSound;
+	public AudioClip WinSound;
 	
 	public bool ClockSoundsExpand = true;
 	public int ClockSoundsSize = 1;
