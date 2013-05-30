@@ -11,7 +11,8 @@ public class MenuGesture : MonoBehaviour {
 		LEVELS,
 		OPTIONS,
 		PAUSE,
-		ENDLEVEL
+		ENDLEVEL,
+		CREDITS
 	};
 	
 	public static ScreenMenu menuScreen;
@@ -88,13 +89,29 @@ public class MenuGesture : MonoBehaviour {
 				}
 				else if(setVisible)
 				{
-					widget.alpha   = lerpValue;
-					widget.color   = new Color(lerpValue,lerpValue,lerpValue,lerpValue);
+					if(widget.name == "Back")
+					{
+						widget.alpha = lerpValue * 0.5f;
+						widget.color = new Color(lerpValue*0.5f,lerpValue*0.5f,lerpValue*0.5f,lerpValue*0.5f);
+					}
+					else
+					{
+						widget.alpha = lerpValue;
+						widget.color = new Color(lerpValue,lerpValue,lerpValue,lerpValue);
+					}
 				}
 				else if(setHidden)
 				{
-					widget.alpha   = 1.0f - lerpValue;
-					widget.color   = new Color(1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue);
+					if(widget.name == "Back")
+					{
+						widget.alpha = (1.0f - lerpValue) * 0.5f;
+						widget.color = new Color((1.0f - lerpValue)*0.5f,(1.0f - lerpValue)*0.5f,(1.0f - lerpValue)*0.5f,(1.0f - lerpValue)*0.5f);
+					}
+					else
+					{
+						widget.alpha = 1.0f - lerpValue;
+						widget.color = new Color(1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue);
+					}
 				}
 			}
 			else
@@ -217,6 +234,9 @@ public class MenuGesture : MonoBehaviour {
 			break;
 			case ScreenMenu.PAUSE :
 				screen = GameObject.Find("Menus").GetComponent<PauseMenu>();
+			break;
+			case ScreenMenu.CREDITS :
+				screen = GameObject.Find("Menus").GetComponent<Credits>();
 			break;
 		}
 		
