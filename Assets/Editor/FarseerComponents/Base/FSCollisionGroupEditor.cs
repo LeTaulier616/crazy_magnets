@@ -18,6 +18,7 @@ public class FSCollisionGroupEditor : Editor
 	
 	public override void OnInspectorGUI ()
 	{
+		bool changed = false;
 		//base.OnInspectorGUI ();
 		
 		bool flag0;
@@ -28,6 +29,8 @@ public class FSCollisionGroupEditor : Editor
 		target0.BelongsToFold = EditorGUILayout.Foldout(target0.BelongsToFold, "Belongs To");
 		if(target0.BelongsToFold)
 		{
+			
+			
 			flag1 = (target0.BelongsTo & Category.All) == Category.All;
 			//flag0 = EditorGUILayout.BeginToggleGroup("All", flag1);
 			flag0 = EditorGUILayout.Toggle("All", flag1);
@@ -37,6 +40,7 @@ public class FSCollisionGroupEditor : Editor
 					target0.BelongsTo = Category.All;
 				else
 					target0.BelongsTo = Category.None;
+				changed = true;
 			}
 			//Cat1 to Cat31
 			for(int i = 0; i < categorySettings.Cat131.Length; i++)
@@ -51,6 +55,7 @@ public class FSCollisionGroupEditor : Editor
 						target0.BelongsTo |= (Category)((int)Mathf.Pow(2f, (float)i));
 					else
 						target0.BelongsTo ^= (Category)((int)Mathf.Pow(2f, (float)i));
+					changed = true;
 				}
 			}
 			
@@ -62,6 +67,7 @@ public class FSCollisionGroupEditor : Editor
 		target0.CollidesWithFold = EditorGUILayout.Foldout(target0.CollidesWithFold, "Collides With");
 		if(target0.CollidesWithFold)
 		{
+			
 			flag1 = (target0.CollidesWith & Category.All) == Category.All;
 			flag0 = EditorGUILayout.Toggle("All", flag1);
 			if(flag0 != flag1)
@@ -70,6 +76,7 @@ public class FSCollisionGroupEditor : Editor
 					target0.CollidesWith = Category.All;
 				else
 					target0.CollidesWith = Category.None;
+				changed = true;
 			}
 			//Cat1 to Cat31
 			for(int i = 0; i < categorySettings.Cat131.Length; i++)
@@ -84,11 +91,22 @@ public class FSCollisionGroupEditor : Editor
 						target0.CollidesWith |= (Category)((int)Mathf.Pow(2f, (float)i));
 					else
 						target0.CollidesWith ^= (Category)((int)Mathf.Pow(2f, (float)i));
+					changed = true;
 				}
 			}
+			
 		}
 		
 		EditorGUILayout.EndVertical();
+		
+		if(changed)
+		{
+			EditorUtility.SetDirty(target0);
+			EditorApplication.SaveAssets();
+			AssetDatabase.SaveAssets();
+			//Debug.Log("collision group is dirty");
+			AssetDatabase.Refresh();
+		}
 	}
 	
 }
