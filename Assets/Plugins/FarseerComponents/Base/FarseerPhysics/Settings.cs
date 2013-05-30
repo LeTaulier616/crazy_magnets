@@ -40,12 +40,12 @@ namespace FarseerPhysics
         /// NOTE: If you are using a debug view that shows performance counters,
         /// you might want to enable this.
         /// </summary>
-        public static bool EnableDiagnostics = true;
+        public static bool EnableDiagnostics = false;
 
         /// <summary>
         /// The number of velocity iterations used in the solver.
         /// </summary>
-        public static int VelocityIterations = 8;
+        public static int VelocityIterations = 3;
 
         /// <summary>
         /// The number of position iterations used in the solver.
@@ -55,17 +55,17 @@ namespace FarseerPhysics
         /// <summary>
         /// Enable/Disable Continuous Collision Detection (CCD)
         /// </summary>
-        public static bool ContinuousPhysics = true;
+        public static bool ContinuousPhysics = false;
 
         /// <summary>
         /// The number of velocity iterations in the TOI solver
         /// </summary>
-        public static int TOIVelocityIterations = 8;
+        public static int TOIVelocityIterations = 6;
 
         /// <summary>
         /// The number of position iterations in the TOI solver
         /// </summary>
-        public static int TOIPositionIterations = 20;
+        public static int TOIPositionIterations = 16;
 
         /// <summary>
         /// Maximum number of sub-steps per contact in continuous physics simulation.
