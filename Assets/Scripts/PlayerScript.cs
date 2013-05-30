@@ -119,8 +119,8 @@ public class PlayerScript : Controllable
 		if(checkpointIndex < checkpoints.Count - 1)
 			this.checkpointIndex++;
 		
-		else
-			this.checkpointIndex = checkpoints.Count - 1;
+		//else
+		//	this.checkpointIndex = checkpoints.Count - 1;
 		
 		Debug.Log("Checkpoint index : " + checkpointIndex);
 		
@@ -139,9 +139,7 @@ public class PlayerScript : Controllable
 	
 	public void ToNextCheckPoint()
 	{
-		CheckpointReached();
-		
-		Vector3 currentCheckpoint = checkpoints[checkpointIndex];
+		Vector3 currentCheckpoint = checkpoints[this.checkpointIndex + (this.checkpointIndex < checkpoints.Count - 1 ? 1 : 0)];
 		this.playerBody.Position = new FVector2(currentCheckpoint.x, currentCheckpoint.y);
 	}
 	
