@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 592e231a6326bcc4ab165f110b42a151
+guid: ef312739ab922704db6e1d6a00b53729
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -183,7 +183,7 @@ ModelImporter:
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
-    animationWrapMode: 2
+    animationWrapMode: 4
     clipAnimations: []
     isReadable: 1
   meshes:

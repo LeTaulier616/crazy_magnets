@@ -32,6 +32,9 @@ public class CubeScript : MonoBehaviour
 	
 	private float cubeForce;
 	
+	private Color blockRangeColor;
+	private Color blockUseColor;
+	
 	void Start ()
 	{		
 		this.body = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
@@ -50,6 +53,10 @@ public class CubeScript : MonoBehaviour
 		this.cubeForce = GlobalVarScript.instance.BlockForce;
 		
 		this.startPosition = this.transform.position;
+		
+		this.blockRangeColor = GlobalVarScript.instance.BlockRangeColor;
+		this.blockUseColor = GlobalVarScript.instance.BlockUseColor;
+		
 		SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
 		
 		player = GameObject.FindGameObjectWithTag("PlayerObject");

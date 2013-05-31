@@ -113,6 +113,9 @@ public class GlobalVarScript : MonoBehaviour
 	
 	public static GlobalVarScript instance;
 	
+	public Color BlockRangeColor;
+	public Color BlockUseColor;
+	
 	void Awake()
 	{
 		instance = this;

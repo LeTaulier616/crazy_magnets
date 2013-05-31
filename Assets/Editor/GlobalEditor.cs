@@ -14,31 +14,24 @@ public class GlobalEditor : Editor
 	
 	public override void OnInspectorGUI()
 	{
-		openBox ("Parametres globaux");
+		openBox ("Parametres controles");
 		
-		this.target_.hudLimitX = 0.01f * addSlider (100.0f * this.target_.hudLimitX, 0.0f, 40.0f, "Largeur de zone", "Largeur de la zone aux bords de l'ecran pour le deplacement", "%");
-		
-		this.target_.comfortZone = addSlider (this.target_.comfortZone, 20f, 100f, "Deadzone de slide", "Zone de securite du slide", "px.");
-		
-		this.target_.minSwipeDist = addSlider (this.target_.minSwipeDist, 10f, 200f, "Distance de slide min.", "Distance minimum de slide pour activer le saut", "px.");
-		
-		this.target_.maxSwipeTime = addSlider (this.target_.maxSwipeTime, 0.1f, 2f, "Temps de slide max.", "Temps maximal de detection du slide", "sec.");
-		
-		this.target_.maxTapTime = addSlider (this.target_.maxTapTime, 0.1f, 0.5f, "Temps de tap max.", "Temps maximal de detection du tap pour le saut", "sec.");
-		
+		this.target_.hudLimitX						= 0.01f * addSlider (100.0f * this.target_.hudLimitX, 0.0f, 40.0f, "Largeur de zone", "Largeur de la zone aux bords de l'ecran pour le deplacement", "%");
+		this.target_.comfortZone					= addSlider (this.target_.comfortZone, 20f, 100f, "Deadzone de slide", "Zone de securite du slide", "px.");
+		this.target_.minSwipeDist					= addSlider (this.target_.minSwipeDist, 10f, 200f, "Distance de slide min.", "Distance minimum de slide pour activer le saut", "px.");
+		this.target_.maxSwipeTime					= addSlider (this.target_.maxSwipeTime, 0.1f, 2f, "Temps de slide max.", "Temps maximal de detection du slide", "sec.");
+		this.target_.maxTapTime						= addSlider (this.target_.maxTapTime, 0.1f, 0.5f, "Temps de tap max.", "Temps maximal de detection du tap pour le saut", "sec.");
+	
 		closeBox ();
 		
 		
 		
-		openBox ("Parametres joueurs");
+		openBox ("Parametres joueur");
 		
-		this.target_.playerSpeed = addFloatField (this.target_.playerSpeed, "Vitesse", "Vitesse du déplacement du personnage au sol et en l'air", "unites/s");
-		
-		this.target_.playerJumpForce = addFloatField (this.target_.playerJumpForce, "Hauteur du saut", "Puissance de l'impulsion de saut", "unites");
-		
-		this.target_.playerDamping = addFloatField (this.target_.playerDamping, "Amortissement", "Friction de l'air en saut", "u.a");
-		
-		this.target_.playerGravityScale = addFloatField (this.target_.playerGravityScale, "Acceleration en chute", "Facteur d'acceleration pendant une chute", "u.a");
+		this.target_.playerSpeed					= addFloatField (this.target_.playerSpeed, "Vitesse", "Vitesse du déplacement du personnage au sol et en l'air", "unites/s");
+		this.target_.playerJumpForce				= addFloatField (this.target_.playerJumpForce, "Hauteur du saut", "Puissance de l'impulsion de saut", "unites");
+		this.target_.playerDamping					= addFloatField (this.target_.playerDamping, "Amortissement", "Friction de l'air en saut", "u.a");
+		this.target_.playerGravityScale				= addFloatField (this.target_.playerGravityScale, "Acceleration en chute", "Facteur d'acceleration pendant une chute", "u.a");
 
 		
 		this.target_.accelerationFactor = 
@@ -108,11 +101,9 @@ public class GlobalEditor : Editor
 		
 		openBox("Parametres camera");
 		
-		this.target_.cameraTarget = addTransformField(this.target_.cameraTarget, true, "Cible camera", "Objet suivi par la camera");
-		
-		this.target_.cameraSmooth = addSlider(this.target_.cameraSmooth, 0.0f, 1.0f, "Duree d'interpolation", "Duree d'interpolation du mouvement de la camera", "sec.");
-		
-		this.target_.cameraZOffset = addSlider(this.target_.cameraZOffset, 0.0f, 30.0f, "Distance camera", "Distance entre la caméra et le joueur (zoom/dezoom)", "unites");
+		this.target_.cameraTarget						= addTransformField(this.target_.cameraTarget, true, "Cible camera", "Objet suivi par la camera");
+		this.target_.cameraSmooth 						= addSlider(this.target_.cameraSmooth, 0.0f, 1.0f, "Duree d'interpolation", "Duree d'interpolation du mouvement de la camera", "sec.");	
+		this.target_.cameraZOffset						= addSlider(this.target_.cameraZOffset, 0.0f, 30.0f, "Distance camera", "Distance entre la caméra et le joueur (zoom/dezoom)", "unites");
 		
 		closeBox();
 		
@@ -129,6 +120,14 @@ public class GlobalEditor : Editor
 			"Force du magnetisme",
 			"Force de deplacement des cubes",
 			"u.a");
+		
+		this.target_.BlockRangeColor = addColorField(this.target_.BlockRangeColor,
+			"Couleur ''a portee''",
+			"Couleur du surlignage quand le cube est a portee");
+		
+		this.target_.BlockUseColor = addColorField(this.target_.BlockUseColor,
+			"Couleur ''en utilisation''",
+			"Couleur du surlignage quand le cube est touche");
 		
 		this.target_.ButtonRadius = addFloatField(this.target_.ButtonRadius,
 			"Portee du levier",
@@ -565,5 +564,19 @@ public class GlobalEditor : Editor
 		EditorGUILayout.EndHorizontal();
 		
 		return newClip;
+	}
+	
+	private Color addColorField(Color color, string text, string tooltip)
+	{
+		EditorGUILayout.BeginHorizontal();
+		
+		Color newColor = EditorGUILayout.ColorField(new GUIContent(text, tooltip),
+			color);
+		
+		EditorGUILayout.Space();
+		
+		EditorGUILayout.EndHorizontal();
+		
+		return newColor;
 	}
 }
