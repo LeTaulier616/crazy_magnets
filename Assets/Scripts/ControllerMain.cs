@@ -432,4 +432,15 @@ public class ControllerMain : MonoBehaviour
 	    yield return new WaitForSeconds(0.2f);
 		resetSlide();
 	}
+	
+	public void ResetDrag(GameObject obj)
+	{
+		foreach (TouchObject touchObj in this.touchesTab.Values)
+		{
+			if (touchObj.selectedObject != null && touchObj.selectedObject.GetInstanceID() == obj.GetInstanceID())
+			{
+				touchObj.selectedObject = null;
+			}
+		}
+	}
 }

@@ -144,12 +144,16 @@ public class CubeScript : MonoBehaviour
 		{
 			SendMessage("ConstantParams", Color.green, SendMessageOptions.DontRequireReceiver);
 		}
+		this.selected = 1;
 	}
 	
 	void Move(Vector3 target)
 	{
+		if (this.selected != 1)
+		{
+			return;
+		}
 		this.player.SendMessage("GrabObject", this.gameObject.transform.position, SendMessageOptions.DontRequireReceiver);
-		this.selected = 1;
 		this.target = target;
 		if(!audio.isPlaying)
 		{
@@ -182,6 +186,7 @@ public class CubeScript : MonoBehaviour
 			transform.renderer.material.color = Color.green;
 		audioTime = Time.time;
 		SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
+		GlobalVarScript.instance.player.GetComponent<ControllerMain>().ResetDrag(this.gameObject);
 	}
 	
 	public void Attract(float distance)
@@ -193,8 +198,9 @@ public class CubeScript : MonoBehaviour
 	
 	public void ResetPosition()
 	{
-		//Debug.Log("There");
+		this.UnselectObject();
 		this.body.SetTransform(new FVector2(startPosition.x, startPosition.y), 0.0f);
+		this.body.ResetDynamics();
 	}
 	
 	public void UpdateMouseWorld()
