@@ -131,13 +131,13 @@ public class Controllable : MonoBehaviour
 			
 			// pour que le perso tombe plus vite
 			this.playerBody.GravityScale = GlobalVarScript.instance.playerGravityScale;
-			
+			/*
 			RaycastHit hit;
 			if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.down, out hit, 4.5f) && GlobalVarScript.instance.groundTags.Contains(hit.transform.tag))
 			{
 				Camera.main.SendMessage("ResetFall", SendMessageOptions.DontRequireReceiver);
 			}
-			
+			*/
 			if(playerMesh != null && isFalling)
 			{
 				playerMesh.animation.CrossFade("fall", 0.25f);
@@ -412,7 +412,7 @@ public class Controllable : MonoBehaviour
 	
 	protected virtual void CollisionGround(GameObject ground)
 	{
-		Camera.main.gameObject.SendMessageUpwards("Reset", SendMessageOptions.DontRequireReceiver);
+		Camera.main.SendMessage("Reset", SendMessageOptions.DontRequireReceiver);
 		
 		if (GlobalVarScript.instance.groundTags.Contains(ground.tag))
 		{

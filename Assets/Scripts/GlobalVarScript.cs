@@ -152,7 +152,6 @@ public class GlobalVarScript : MonoBehaviour
 	
 	public void resetCamera(bool throwFocus)
 	{
-		cameraFixedPos = Vector3.zero;
 		cameraFree = 0;
 		SetCameraTarget(cameraTargetDefault, throwFocus);
 		cameraSmooth = cameraSmoothDefault;
