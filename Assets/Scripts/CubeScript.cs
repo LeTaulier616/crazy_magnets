@@ -57,7 +57,7 @@ public class CubeScript : MonoBehaviour
 		this.blockRangeColor = GlobalVarScript.instance.BlockRangeColor;
 		this.blockUseColor = GlobalVarScript.instance.BlockUseColor;
 		
-		SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
+		SendMessage("ConstantParams", blockRangeColor, SendMessageOptions.DontRequireReceiver);
 		
 		player = GameObject.FindGameObjectWithTag("PlayerObject");
 	}
@@ -149,7 +149,7 @@ public class CubeScript : MonoBehaviour
 		
 		if (this.selected == 0)
 		{
-			SendMessage("ConstantParams", Color.green, SendMessageOptions.DontRequireReceiver);
+			SendMessage("ConstantParams", blockUseColor, SendMessageOptions.DontRequireReceiver);
 		}
 		this.selected = 1;
 	}
@@ -181,7 +181,7 @@ public class CubeScript : MonoBehaviour
 			audio.clip = RepulsionSound;
 			audio.Play();
 		}
-		SendMessage("ConstantOn", Color.green, SendMessageOptions.DontRequireReceiver);
+		SendMessage("ConstantOn", blockUseColor, SendMessageOptions.DontRequireReceiver);
 	}
 	
 	void UnselectObject()
@@ -192,7 +192,7 @@ public class CubeScript : MonoBehaviour
 		if(renderer != null)
 			transform.renderer.material.color = Color.green;
 		audioTime = Time.time;
-		SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
+		SendMessage("ConstantParams", blockRangeColor, SendMessageOptions.DontRequireReceiver);
 		GlobalVarScript.instance.player.GetComponent<ControllerMain>().ResetDrag(this.gameObject);
 	}
 	
