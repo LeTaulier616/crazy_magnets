@@ -292,7 +292,7 @@ public class HighlightingEffect : MonoBehaviour
 			this.enabled = false;
 			return;
 		}
-		
+	
 		// Set the initial intensity in blur shader
 		blurMaterial.SetFloat("_Intensity", _blurIntensity);
 	}

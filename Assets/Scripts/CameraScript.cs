@@ -23,6 +23,22 @@ public class CameraScript : MonoBehaviour
 	
 	void FixedUpdate ()
 	{
+		if (Application.isEditor || doDecal != 2)
+		{
+			UpdateCamera();
+		}
+	}
+	
+	void LateUpdate()
+	{
+		if (!Application.isEditor && doDecal == 2)
+		{
+			UpdateCamera();
+		}
+	}
+	
+	void UpdateCamera()
+	{
 		smoothTime = GlobalVarScript.instance.cameraSmooth;
 		Vector3 point = camera.WorldToViewportPoint(GlobalVarScript.instance.cameraTarget.position);
         Vector3 delta = GlobalVarScript.instance.cameraTarget.position - camera.ViewportToWorldPoint(new Vector3(0.5f, -1.5f, 0.5f));
@@ -70,7 +86,7 @@ public class CameraScript : MonoBehaviour
 				transform.position = smoothPos;
 			}
 			
-			if (doDecal == 0 && point.y < limitYMin && lastPos.y > GlobalVarScript.instance.cameraTarget.position.y)
+			if (doDecal == 0 && point.y < limitYMin && lastPos.y - GlobalVarScript.instance.cameraTarget.position.y > 0.003f)
 			{
 				doDecal = 2;
 			}

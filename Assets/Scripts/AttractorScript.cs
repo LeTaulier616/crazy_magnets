@@ -44,7 +44,6 @@ public class AttractorScript : MonoBehaviour
 			SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
 					
 			particles = this.transform.FindChild("ATTRACTOR_FX").gameObject;
-			Debug.Log(particles);
 			
 			if(this.enabled)
 			{
