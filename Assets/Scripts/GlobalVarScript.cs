@@ -7,12 +7,16 @@ public class GlobalVarScript : MonoBehaviour
 	public GameObject player;
 	public GameObject playerMesh;
 	
+	public bool controlParams;
+	
 	public float hudLimitX;
 	public float hudLimitY;
 	public float comfortZone;
 	public float minSwipeDist;
 	public float maxSwipeTime;
 	public float maxTapTime;
+	
+	public bool playerParams;
 
 	public GameObject playerGameObject;
 	public float playerSpeed;
@@ -40,8 +44,13 @@ public class GlobalVarScript : MonoBehaviour
 		public float hitTime;
 	}
 	
+	public bool smallEnemyParams;
 	public EnemyInfo smallEnemy = new EnemyInfo();
+	
+	public bool bigEnemyParams;
 	public EnemyInfo bigEnemy = new EnemyInfo();
+	
+	public bool cameraParams;
 	
 	public Vector3 cameraFixedPos = Vector3.zero;
 	public int cameraFree = 0; // 0 : forcee sur la target; 1 : libre; 2 : libre avec controles joueur bloques
@@ -51,16 +60,19 @@ public class GlobalVarScript : MonoBehaviour
 	public float cameraSmoothDefault;
 	public float cameraZOffset;
 	
+	public bool objectParams;
+	
 	public float ChargeButtonRadius;
-	
 	public float ButtonRadius;
-	
 	public float BlockRadius;
-	public float BlockForce;
-	
+	public float BlockForce;	
+	public Color BlockRangeColor;
+	public Color BlockUseColor;
 	public float GrabRadius;
 		
 	public List<string> groundTags;
+	
+	public bool soundParams;
 	
 	public AudioClip AttractionSound;
 	public AudioClip RepulsionSound;
@@ -71,7 +83,8 @@ public class GlobalVarScript : MonoBehaviour
 	public AudioClip ChargeZoneSound;
 	public AudioClip KillSound;
 	public AudioClip GrabSound;
-	public AudioClip AttractorSound;
+	public AudioClip AttractorOnSound;
+	public AudioClip AttractorOffSound;
 	public AudioClip BumperSound;
 	public AudioClip DoorOpenSound;
 	public AudioClip DoorCloseSound;
@@ -111,16 +124,17 @@ public class GlobalVarScript : MonoBehaviour
 	public int SmallChaseSoundsSize = 1;
 	public AudioClip[] SmallChaseSounds;
 	
-	public static GlobalVarScript instance;
+	public GameObject AudioManager;
 	
-	public Color BlockRangeColor;
-	public Color BlockUseColor;
+	public static GlobalVarScript instance;
+
 	
 	void Awake()
 	{
 		instance = this;
 		player = GameObject.FindGameObjectWithTag("PlayerObject");
 		playerMesh = GameObject.FindGameObjectWithTag("PlayerMesh");
+		AudioManager = GameObject.FindGameObjectWithTag("AudioManager");
 		cameraTargetDefault = cameraTarget;
 		cameraSmoothDefault = cameraSmooth;
 		groundTags = new List<string>();
@@ -133,12 +147,16 @@ public class GlobalVarScript : MonoBehaviour
 		{
 			cameraTarget.SendMessageUpwards("ReleaseFocus", SendMessageOptions.DontRequireReceiver);
 		}
+		
 		cameraTarget = target;
+		
 		if (cameraTarget.GetInstanceID() != cameraTargetDefault.GetInstanceID())
 		{
 			cameraFree = 2;
 		}
+		
 		cameraFixedPos = Vector3.zero;
+		
 		if (throwFocus)
 		{
 			cameraTarget.SendMessageUpwards("Focus", SendMessageOptions.DontRequireReceiver);
