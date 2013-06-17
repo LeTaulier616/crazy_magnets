@@ -260,7 +260,8 @@ public class MenuGesture : MonoBehaviour {
 		
 		Debug.Log("Menu Screen");
 		
-		screen.activateMenu();
+		if (screen != null)
+			screen.activateMenu();
 		setHidden = false;
 		setVisible = true;
 		timer = 0.0f;

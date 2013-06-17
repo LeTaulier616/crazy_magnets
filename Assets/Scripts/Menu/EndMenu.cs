@@ -37,7 +37,7 @@ public class EndMenu : MenuScreen
         	{
 				endpanel.transform.GetChild(iii).gameObject.SetActive(false);
 			}
-			next_button_go.SetActive(true);
+			//next_button_go.SetActive(true);
 			
 			nextLevelWorld = 0;
 			nextLevelLevel = 0;
@@ -47,6 +47,8 @@ public class EndMenu : MenuScreen
 			Datas.sharedDatas().datas.selectedLevel = 0;
 			Datas.sharedDatas().datas.isNewGame     = false;
 			Datas.sharedDatas().datas.tutoDone      = true;
+			
+			nextlevel(next_button_go);
 		}
 		else
 		{
