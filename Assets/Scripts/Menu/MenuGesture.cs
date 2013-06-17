@@ -30,6 +30,8 @@ public class MenuGesture : MonoBehaviour {
 	private float lerpSpeed    = 0.8f;
 	
 	private bool doNothing = false;
+	private float alpha = 0;
+	private float alphaDir = 0;
 	
 	void Start()
 	{
@@ -62,12 +64,20 @@ public class MenuGesture : MonoBehaviour {
 		screen.activateMenu();
 		setVisible = true;
 		timer = 0.0f;
+		
+		this.alpha = 0;
+		this.alphaDir = -1f;
 	}
 	
 	void LateUpdate()
 	{
 		if(doNothing)
 			return;
+		
+		if (this.alpha != 0 && this.alpha != 1)
+		{
+			return;
+		}
 		
 		timer += Time.deltaTime/(lerpMaxValue*lerpSpeed)/Time.timeScale;
 		
@@ -141,6 +151,9 @@ public class MenuGesture : MonoBehaviour {
 				lerpValue = 1.0f;
 			}
 			
+			if (this.alphaDir == -1)
+				this.alphaDir = 1;
+			
 			if(lerpValue >= 1.0f && setHidden)
 			{
 				switchScreen();
@@ -190,16 +203,21 @@ public class MenuGesture : MonoBehaviour {
 		}
 		else if(loadLevel)
 		{
-			doNothing = true;
-			GameObject.Find("Anchor").transform.FindChild("LOADING_PANEL").gameObject.SetActive(true);
 			if(Application.loadedLevelName == "CM_Level_0")
+			{
+				doNothing = false;
 				StartCoroutine(LoadEndCutsceneToLoad());
+			}
 			else
+			{
+				doNothing = true;
+				GameObject.Find("Anchor").transform.FindChild("LOADING_PANEL").gameObject.SetActive(true);
 				StartCoroutine(LoadLevelToLoad());
+			}
 		}
 		else if(loadTuto)
 		{
-			doNothing = true;
+			doNothing = false;
 			GameObject.Find("Anchor").transform.FindChild("LOADING_PANEL").gameObject.SetActive(true);
 			StartCoroutine(LoadCutsceneToLoad());
 		}
@@ -289,5 +307,31 @@ public class MenuGesture : MonoBehaviour {
 		AsyncOperation async = Application.LoadLevelAsync("Cutscene2");
 		yield return async;
     }
+	
+	void OnGUI()
+	{
+		if (this.alphaDir == 1)
+		{
+			this.alpha += Time.deltaTime / 2f;
+			if (this.alpha > 1)
+			{
+				this.alpha = 1;
+			}
+		}
+		else if (this.alphaDir == -1)
+		{
+			this.alpha -= Time.deltaTime / 2f;
+			if (this.alpha < 0)
+			{
+				this.alpha = 0;
+			}
+		}
+		Color color = new Color(0, 0, 0, this.alpha);
+		Texture2D texture = new Texture2D(1, 1);
+    	texture.SetPixel(0,0,color);
+	    texture.Apply();
+	    GUI.skin.box.normal.background = texture;
+	    GUI.Box(new Rect(0, 0, Screen.width, Screen.height), GUIContent.none);
+	}
 }
 
