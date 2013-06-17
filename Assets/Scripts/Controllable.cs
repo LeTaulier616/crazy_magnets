@@ -30,6 +30,7 @@ public class Controllable : MonoBehaviour
 	public bool      isFalling;
 	private bool     isCharged;
 	private bool     isCubing;
+	private bool     isBolting;
 	protected bool	attraction;
 	protected float 	angle;
 	private float 	localGravity;
@@ -56,7 +57,8 @@ public class Controllable : MonoBehaviour
 	private float dirCoeff = 0;
 	private float frictionFactor;
 	
-	private LineRenderer Line;
+	private LineRenderer line;
+	private ParticleSystem chargeParticles;
 	
 	[HideInInspector]
 	public GameObject playerMesh;
@@ -64,11 +66,15 @@ public class Controllable : MonoBehaviour
 	public bool canMove;
 	public bool canCharge;
 	public bool canJump;
+	
+	[HideInInspector]
+	public Vector3 chargePosition;
 		
 	protected void Start ()
 	{
 		playerBody = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
-		
+		playerMesh = GlobalVarScript.instance.playerMesh;
+
 		playerBody.FixedRotation = true;
 		playerBody.Mass = 1f;
 		playerBody.SleepingAllowed = false;
@@ -82,6 +88,7 @@ public class Controllable : MonoBehaviour
 		this.isCharged  = false;
 		this.isGrabbing = false;
 		this.isCubing	= false;
+		this.isBolting	= false;
  		this.onGround   = false;
 		this.headStucked = false;
 		this.onPFM      = false;
@@ -94,19 +101,22 @@ public class Controllable : MonoBehaviour
 		this.powerLoop = false;
 		
 		this.target = GlobalVarScript.instance.cameraTarget;
-		Line = this.GetComponent<LineRenderer>();
+		
+		this.line = this.GetComponent<LineRenderer>();
+		this.chargeParticles = this.playerMesh.GetComponentInChildren<ParticleSystem>();
 		
 		this.accelerationFactor = GlobalVarScript.instance.accelerationFactor;
 		this.decelerationFactor = GlobalVarScript.instance.decelerationFactor;
 		
 		this.frictionFactor = 1f;
 		
-		this.BroadcastMessage("ConstantParams", Color.cyan, SendMessageOptions.DontRequireReceiver);
 		this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
 		
 		this.canMove = true;
 		this.canCharge = true;
 		this.canJump = true;
+		
+		this.chargePosition = Vector3.zero;
 	}
 	
 	protected void Update ()
@@ -138,6 +148,7 @@ public class Controllable : MonoBehaviour
 				Camera.main.SendMessage("ResetFall", SendMessageOptions.DontRequireReceiver);
 			}
 			*/
+			
 			if(playerMesh != null && isFalling)
 			{
 				playerMesh.animation.CrossFade("fall", 0.25f);
@@ -146,7 +157,7 @@ public class Controllable : MonoBehaviour
 		
 		if (isWalking)
 		{			
-			if(playerMesh != null && onGround)
+			if(playerMesh != null && onGround && !isCubing)
 			{
 				playerMesh.animation.CrossFade("run", 0.25f);
 			}
@@ -170,14 +181,20 @@ public class Controllable : MonoBehaviour
 							playerMesh.animation.CrossFade("idle", 0.1f);
 						}
 						
-						else
+						else if(!isBolting)
 						{
 							playerMesh.animation.CrossFade("idle", 0.25f);
 						}
+						
+						else
+						{
+							playerMesh.animation.Play("power");
+						}
 					}
+					
 					else
 					{
-						if (!powerLoop)
+						if (!powerLoop && !isBolting)
 						{
 							playerMesh.animation.CrossFade("power", 0.5f);
 						
@@ -186,6 +203,7 @@ public class Controllable : MonoBehaviour
 								SetPowerLoop();
 							}
 						}
+						
 						else
 						{
 							playerMesh.animation.CrossFade("powerLoop", 0.25f);
@@ -206,6 +224,7 @@ public class Controllable : MonoBehaviour
 		{
 			
 		}
+		
 		// orientation du joueur
 		if (lastDir != 0)
 		{
@@ -214,6 +233,12 @@ public class Controllable : MonoBehaviour
 		  
 		// position cible de la camera
 		this.target.transform.localPosition = new Vector3(2.5f, this.angle == 0 ? 2.5f : 0f, 0.0f);
+		
+		if(isBolting)
+		{
+			line.SetPosition(1, transform.InverseTransformPoint(this.chargePosition));
+		}
+		
 	}
 	
 	protected void LateUpdate()
@@ -356,32 +381,37 @@ public class Controllable : MonoBehaviour
 		if (this.canCharge)
 		{
 			this.isCharged = true;
-			this.BroadcastMessage("OccluderOff", SendMessageOptions.DontRequireReceiver);
-			this.BroadcastMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
+			this.chargeParticles.Play();
 		}
 	}
 
 	public void Discharge()
 	{
-		if (this.isCharged)
+		if (this.isCharged && this.onGround)
 		{
-			Line.enabled = true;
+			ReleaseFocus();
+			
+			line.enabled = true;
 			Invoke("DisableSpark", 0.5f);
+			this.chargeParticles.Stop();
+			this.isBolting = true;
 			this.isCharged = false;
-			this.BroadcastMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
-			this.BroadcastMessage("OccluderOn", SendMessageOptions.DontRequireReceiver);
 
 		}
 	}
 	
 	public void SetSparkPoint(Vector3 position)
 	{
-		Line.SetPosition(1, transform.InverseTransformPoint(position));
+		this.chargePosition = position;
 	}
 	
 	void DisableSpark()
 	{
-		Line.enabled = false;
+		line.enabled = false;
+		this.isBolting = false;
+		this.chargePosition = Vector3.zero;
+	
+		Focus();
 	}
 	
 	public void Bump(float bumpForce)
