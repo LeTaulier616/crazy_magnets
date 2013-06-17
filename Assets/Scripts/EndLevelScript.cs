@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Fabric;
 
 public class EndLevelScript : MonoBehaviour
 {
@@ -8,10 +9,13 @@ public class EndLevelScript : MonoBehaviour
 	private AudioClip winSound;
 	
 	private GameObject player;
+	private GameObject audioManager;
+	
 	void Start()
 	{
 		boltCount = 0;
 		player = GlobalVarScript.instance.player;
+		audioManager = GlobalVarScript.instance.AudioManager;
 		winSound = GlobalVarScript.instance.WinSound;
 	}
 	
@@ -30,6 +34,8 @@ public class EndLevelScript : MonoBehaviour
 		GlobalVarScript.instance.SetCameraTarget(player.GetComponent<PlayerScript>().transform, true);
 		player.GetComponent<PlayerScript>().canMove = false;
 		player.GetComponent<PlayerScript>().canJump = false;
+		
+		audioManager.GetComponent<FabricManager>().Stop();
 		
 		if(!audio.isPlaying && winSound != null)
 		{
