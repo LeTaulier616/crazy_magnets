@@ -35,6 +35,8 @@ public class CubeScript : MonoBehaviour
 	private Color blockRangeColor;
 	private Color blockUseColor;
 	
+	private ParticleSystem magnetParticle;
+	
 	void Start ()
 	{		
 		this.body = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
@@ -56,6 +58,8 @@ public class CubeScript : MonoBehaviour
 		
 		this.blockRangeColor = GlobalVarScript.instance.BlockRangeColor;
 		this.blockUseColor = GlobalVarScript.instance.BlockUseColor;
+		
+		this.magnetParticle = this.GetComponentInChildren<ParticleSystem>();
 		
 		SendMessage("ConstantParams", blockRangeColor, SendMessageOptions.DontRequireReceiver);
 		
@@ -151,6 +155,9 @@ public class CubeScript : MonoBehaviour
 		{
 			SendMessage("ConstantParams", blockUseColor, SendMessageOptions.DontRequireReceiver);
 		}
+		
+		this.magnetParticle.Play();
+		
 		this.selected = 1;
 	}
 	
@@ -193,6 +200,7 @@ public class CubeScript : MonoBehaviour
 			transform.renderer.material.color = Color.green;
 		audioTime = Time.time;
 		SendMessage("ConstantParams", blockRangeColor, SendMessageOptions.DontRequireReceiver);
+		this.magnetParticle.Stop();
 		GlobalVarScript.instance.player.GetComponent<ControllerMain>().ResetDrag(this.gameObject);
 	}
 	
