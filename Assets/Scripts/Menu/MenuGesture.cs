@@ -309,6 +309,16 @@ public class MenuGesture : MonoBehaviour {
 		yield return async;
     }
 	
+	public void fadeIn()
+	{
+		this.alphaDir = 1;
+	}
+	
+	public void fadeOut()
+	{
+		this.alphaDir = -1;
+	}
+	
 	void OnGUI()
 	{
 		if (this.alphaDir == 1)

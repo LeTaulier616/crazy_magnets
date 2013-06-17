@@ -159,7 +159,7 @@ public class InterruptorReceiver : MonoBehaviour
 			
 			attractor.enabled = !attractor.enabled;
 			
-			if(audio != null && audio.isPlaying)
+			if(audio != null && !audio.isPlaying)
 			{
 				if(attractor.enabled)
 				{
