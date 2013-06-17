@@ -185,7 +185,6 @@ public class Interruptor : MonoBehaviour
 		{
 			if(Vector3.Distance(this.transform.position, player.transform.position) <= tmpPorteeNorm)
 			{
-				Debug.Log("Here");
 				SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
 				if(!rangeParticle.isPlaying)
 					this.rangeParticle.Play();
