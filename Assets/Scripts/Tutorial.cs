@@ -34,6 +34,8 @@ public class Tutorial : MonoBehaviour
 	
 	public static Tutorial instance;
 	
+	private float alpha;
+	
 	// Use this for initialization
 	void Start () 
 	{
@@ -57,6 +59,8 @@ public class Tutorial : MonoBehaviour
 		playerPosition = player.transform.position;
 		
 		ShowMoveControls();
+		
+		this.alpha = 1;
 	}
 	
 	// Update is called once per frame
@@ -134,7 +138,7 @@ public class Tutorial : MonoBehaviour
 		Invoke("ResetCamera" , 3.0f);
 		Invoke("ToggleControls", 3.0f);
 		Invoke("ToggleMagnetismLabel", 3.0f);
-		Invoke("EndTutorial", 20.0f);
+		//Invoke("EndTutorial", 20.0f);
 	}
 	
 	void ToggleBorders()
@@ -205,14 +209,28 @@ public class Tutorial : MonoBehaviour
 	}
 	void EndTutorial()
 	{
-		EndLabel.SetActive(true);
+		//EndLabel.SetActive(true);
 		ToggleControls();
 		
-		GameObject.Find("Menus").GetComponent<MenuGesture>().endTuto();
+		//GameObject.Find("Menus").GetComponent<MenuGesture>().endTuto();
 	}
 	
 	void OnGUI()
 	{
+		if (this.alpha > 0)
+		{
+			this.alpha -= Time.deltaTime / 2f;
+			if (this.alpha < 0)
+			{
+				this.alpha = 0;
+			}
+		}
+		Color color = new Color(0, 0, 0, this.alpha);
+		Texture2D texture = new Texture2D(1, 1);
+    	texture.SetPixel(0,0,color);
+	    texture.Apply();
+	    GUI.skin.box.normal.background = texture;
+	    GUI.Box(new Rect(0, 0, Screen.width, Screen.height), GUIContent.none);
 		
 		if(showBorders)
 		{
