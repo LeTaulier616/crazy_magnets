@@ -110,16 +110,20 @@ public class CubeScript : MonoBehaviour
 		UpdateMouseWorld();
 		MouseDrag();
 		
-		if (this.selected == 0)
+
+		Vector3 cubePos = Camera.main.WorldToScreenPoint(this.transform.position);
+		if ((cubePos.x > Camera.main.GetScreenWidth() && this.body.LinearVelocity.X > 1f)
+			|| (cubePos.x < 0 && this.body.LinearVelocity.X < -1f))
 		{
-			float posX = Camera.main.WorldToScreenPoint(this.transform.position).x;
-			if ((posX > Camera.main.GetScreenWidth() && this.body.LinearVelocity.X > 1f)
-				|| (posX < 0 && this.body.LinearVelocity.X < -1f))
-			{
-				FVector2 newVelocity = new FVector2(-this.body.LinearVelocity.X/3f, this.body.LinearVelocity.Y);
-				this.body.LinearVelocity = newVelocity;
-			}
+			FVector2 newVelocity = new FVector2(-this.body.LinearVelocity.X/3f, this.body.LinearVelocity.Y);
+			this.body.LinearVelocity = newVelocity;
 		}
+		if (cubePos.y > Camera.main.GetScreenHeight())
+		{
+			FVector2 newVelocity = new FVector2(this.body.LinearVelocity.X, 0);
+			this.body.LinearVelocity = newVelocity;
+		}
+
 		
 		if(audio.isPlaying)
 		{
