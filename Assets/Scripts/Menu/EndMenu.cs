@@ -11,6 +11,9 @@ public class EndMenu : MenuScreen
 	public GameObject time_level;
 	public GameObject screw_gotcha;
 	
+	private float alpha = 0;
+	private float alphaDir = 0;
+	
 	void Start () 
 	{
    		UIEventListener.Get(next_button_go).onClick    = nextlevel;
@@ -110,12 +113,8 @@ public class EndMenu : MenuScreen
 	
 	void nextlevel(GameObject go)
 	{
-		Debug.Log("Next Level");
-		exitScreen = true;
-		screenToGo = MenuGesture.ScreenMenu.NONE;
-		Datas.sharedDatas().datas.selectedLevel = Datas.sharedDatas().datas.currentLevel;
-		Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
-		loadLevel = true;
+		this.alphaDir = 1;
+		StartCoroutine("LoadNextLevel");
 	}
 	
 	void endGame(GameObject go)
@@ -152,4 +151,34 @@ public class EndMenu : MenuScreen
 		Datas.sharedDatas().datas.selectedLevel = Datas.sharedDatas().datas.currentLevel;
 		Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
 	}
+	
+	void OnGUI()
+	{
+		if (this.alphaDir == 1 && this.alpha < 1)
+		{
+			this.alpha += Time.deltaTime / 2f;
+			if (this.alpha > 1)
+			{
+				this.alpha = 1;
+			}
+		}
+		Color color = new Color(0, 0, 0, this.alpha);
+		Texture2D texture = new Texture2D(1, 1);
+    	texture.SetPixel(0,0,color);
+	    texture.Apply();
+	    GUI.skin.box.normal.background = texture;
+	    GUI.Box(new Rect(0, 0, Screen.width, Screen.height), GUIContent.none);
+	}
+	
+	IEnumerator LoadNextLevel()
+	{
+		yield return new WaitForSeconds(1f);
+		Debug.Log("Next Level");
+		exitScreen = true;
+		screenToGo = MenuGesture.ScreenMenu.NONE;
+		Datas.sharedDatas().datas.selectedLevel = Datas.sharedDatas().datas.currentLevel;
+		Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
+		loadLevel = true;
+    }
+	
 }
