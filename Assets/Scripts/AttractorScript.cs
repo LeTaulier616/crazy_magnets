@@ -20,6 +20,8 @@ public class AttractorScript : MonoBehaviour
 	
 	private GameObject particles;
 	
+	private ParticleSystem grabParticles;
+	
 	
 	void Start ()
 	{
@@ -35,6 +37,9 @@ public class AttractorScript : MonoBehaviour
 		if(type == "default")
 		{  
 			Range = GlobalVarScript.instance.GrabRadius;
+			
+			this.grabParticles = this.GetComponentInChildren<ParticleSystem>();
+			
 			SendMessage("ConstantParams", Color.white, SendMessageOptions.DontRequireReceiver);
 		}
 		
@@ -57,7 +62,9 @@ public class AttractorScript : MonoBehaviour
 		if (this.type == "attract")
 		{
 			RaycastHit hit;
+			
 			Vector3 pos = transform.position;
+			
 			if ((transform.position.x - size / 2f) + 1f < transform.position.x + size / 2f)
 			{
 				for (float newX = (transform.position.x - size / 2f) + 0.5f; newX < transform.position.x + size / 2f; newX += 0.5f)
@@ -89,11 +96,17 @@ public class AttractorScript : MonoBehaviour
 			if(Vector3.Distance(this.transform.position, player.transform.position) < Range)
 			{
 				SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
+				
+				if(!grabParticles.isPlaying)
+					grabParticles.Play();
 			}
 			
 			else
 			{
 				SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
+				if(!grabParticles.isStopped)
+					grabParticles.Stop();
+					
 			}
 		}
 	}

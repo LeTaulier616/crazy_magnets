@@ -52,6 +52,8 @@ public class Interruptor : MonoBehaviour
 	
 	private GameObject player;
 	
+	private ParticleSystem rangeParticle;
+	
 	void Start()
 	{
 		player = GlobalVarScript.instance.player;
@@ -127,6 +129,8 @@ public class Interruptor : MonoBehaviour
 				this.GetComponentInChildren<Animation>().animation["press"].speed = -this.GetComponentInChildren<Animation>().animation["press"].speed;
 			}
 		}
+		
+		rangeParticle = this.GetComponentInChildren<ParticleSystem>();
 	}
 	
 	void FixedUpdate()
@@ -160,29 +164,37 @@ public class Interruptor : MonoBehaviour
 			}
 		}
 		
-		if(this.activator == Activator.ELECTRIC_TOUCH && !activated)
+		if(this.activator == Activator.ELECTRIC_TOUCH) //&& !activated)
 		{
 			if(Vector3.Distance(this.transform.position, player.transform.position) <= tmpPorteeElec && player.GetComponent<PlayerScript>().IsCharged())
 			{
 				SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
+				if(!rangeParticle.isPlaying)
+					this.rangeParticle.Play();
 			}
 			
 			else
 			{
 				SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
+				if(!rangeParticle.isStopped)
+					this.rangeParticle.Stop();
 			}
 		}
 		
-		else if(this.activator == Activator.TOUCH && !activated)
+		else if(this.activator == Activator.TOUCH) //&& !activated)
 		{
 			if(Vector3.Distance(this.transform.position, player.transform.position) <= tmpPorteeNorm)
 			{
 				SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
+				if(!rangeParticle.isPlaying)
+					this.rangeParticle.Play();
 			}
 			
 			else
 			{
 				SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
+				if(!rangeParticle.isStopped)
+					this.rangeParticle.Stop();
 			}
 		}
 	}
@@ -325,8 +337,6 @@ public class Interruptor : MonoBehaviour
 				audio1.Play();
 			}
 		}
-		
-		Debug.Log("Set On");
 	}
 	
 	private void setOff()
@@ -358,7 +368,6 @@ public class Interruptor : MonoBehaviour
 			audio1.Play();
 		}
 		
-		Debug.Log("Set Off");
 	}
 	
 	public void reloadInterruptor()

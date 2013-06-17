@@ -32,7 +32,7 @@ public class PlayerScript : Controllable
 			this.playerMesh.animation["jump"].speed = 2.0f;
 			this.playerMesh.animation["fall"].speed = 8.0f;
 			this.playerMesh.animation["idle"].speed = 2.0f;
-			this.playerMesh.animation["power"].speed = 4.0f;
+			this.playerMesh.animation["power"].speed = 6.0f;
 			this.playerMesh.animation["powerLoop"].speed = 2.0f;
 			this.playerMesh.animation["win"].speed = 2.0f;
 			this.playerMesh.animation.Play("idle");
@@ -158,6 +158,11 @@ public class PlayerScript : Controllable
 	
 	private void Resurrect()
 	{
+		if (this.isAlive)
+		{
+			return;
+		}
+		
 		Vector3 lastCheckpoint = this.checkpoints[checkpointIndex];
 		this.playerBody.Position = new FVector2(lastCheckpoint.x, lastCheckpoint.y);
 		this.transform.position = lastCheckpoint;
@@ -192,6 +197,12 @@ public class PlayerScript : Controllable
 		{
 			bolt.Reset();
 		}
+		
+		GameObject menu = GameObject.Find("CAMERA");
+		if (menu != null)
+		{
+			menu.BroadcastMessage("fadeOut", SendMessageOptions.DontRequireReceiver);
+		}
 	}
 	
 	private void AbleResurrection()
@@ -208,6 +219,7 @@ public class PlayerScript : Controllable
 		this.onPFM = false;
 		this.bodyPFM = null;
 		Invoke("AbleResurrection", 2f);
+		Invoke("Resurrect", 4f);
 		// TODO
 		if(playerMesh != null)
 			this.playerMesh.SetActiveRecursively(false);
@@ -220,6 +232,17 @@ public class PlayerScript : Controllable
 		}
 		
 		GlobalVarScript.instance.blockCamera(this.transform.position);
+		
+		Invoke("fadeIn", 2);
+	}
+	
+	void fadeIn()
+	{
+		GameObject menu = GameObject.Find("CAMERA");
+		if (menu != null)
+		{
+			menu.BroadcastMessage("fadeIn", SendMessageOptions.DontRequireReceiver);
+		}
 	}
 	
 	override protected void CollisionHead(GameObject ceiling)

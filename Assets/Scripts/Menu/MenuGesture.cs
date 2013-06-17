@@ -65,7 +65,7 @@ public class MenuGesture : MonoBehaviour {
 		setVisible = true;
 		timer = 0.0f;
 		
-		this.alpha = 0;
+		this.alpha = 1;
 		this.alphaDir = -1f;
 	}
 	
@@ -151,7 +151,7 @@ public class MenuGesture : MonoBehaviour {
 				lerpValue = 1.0f;
 			}
 			
-			if (this.alphaDir == -1)
+			if ((Application.loadedLevelName == "Cutscene" || Application.loadedLevelName == "CM_Level_0" || Application.loadedLevelName == "Cutscene2") && this.alphaDir == -1)
 				this.alphaDir = 1;
 			
 			if(lerpValue >= 1.0f && setHidden)
@@ -260,7 +260,8 @@ public class MenuGesture : MonoBehaviour {
 		
 		Debug.Log("Menu Screen");
 		
-		screen.activateMenu();
+		if (screen != null)
+			screen.activateMenu();
 		setHidden = false;
 		setVisible = true;
 		timer = 0.0f;
@@ -307,6 +308,16 @@ public class MenuGesture : MonoBehaviour {
 		AsyncOperation async = Application.LoadLevelAsync("Cutscene2");
 		yield return async;
     }
+	
+	public void fadeIn()
+	{
+		this.alphaDir = 1;
+	}
+	
+	public void fadeOut()
+	{
+		this.alphaDir = -1;
+	}
 	
 	void OnGUI()
 	{

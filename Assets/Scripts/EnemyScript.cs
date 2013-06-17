@@ -187,6 +187,8 @@ public class ControlledState : State
 		button.activator = Interruptor.Activator.TOUCH;
 		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.Mass = 1.0f;
 		it.GetComponent<Controllable>().isAlive = true;
+		
+		it.GetComponentInChildren<ParticleSystem>().Play();
 	}
 
 	public override void ExitState (GameObject it)
@@ -196,6 +198,8 @@ public class ControlledState : State
 		GlobalVarScript.instance.player.GetComponent<PlayerScript>().playerBody.Mass = 100.0f;
 		GlobalVarScript.instance.resetCamera(true);
 		it.GetComponent<Controllable>().isAlive = false;
+		
+		it.GetComponentInChildren<ParticleSystem>().Stop();
 	}
 }
 
@@ -260,6 +264,8 @@ public class EnemyScript : StateMachine
 			{
 				this.enemyMesh.animation["run"].speed = 2.0f;
 				this.enemyMesh.animation["chase"].speed = 2.0f;
+				//this.enemyMesh.animation["jump"].speed = 2.0f;
+				this.enemyMesh.animation["fall"].speed = 0.25f;
 			}
 		}
 		
