@@ -193,7 +193,7 @@ public class MenuGesture : MonoBehaviour {
 			doNothing = true;
 			GameObject.Find("Anchor").transform.FindChild("LOADING_PANEL").gameObject.SetActive(true);
 			if(Application.loadedLevelName == "CM_Level_0")
-				StartCoroutine(LoadCutsceneToLoad());
+				StartCoroutine(LoadEndCutsceneToLoad());
 			else
 				StartCoroutine(LoadLevelToLoad());
 		}
@@ -201,7 +201,7 @@ public class MenuGesture : MonoBehaviour {
 		{
 			doNothing = true;
 			GameObject.Find("Anchor").transform.FindChild("LOADING_PANEL").gameObject.SetActive(true);
-			StartCoroutine(LoadTutoToLoad());
+			StartCoroutine(LoadCutsceneToLoad());
 		}
 		
 		if(switchHUD || loadMenus || loadLevel)
@@ -284,4 +284,10 @@ public class MenuGesture : MonoBehaviour {
 		AsyncOperation async = Application.LoadLevelAsync("Cutscene");
 		yield return async;
     }
+	
+	IEnumerator LoadEndCutsceneToLoad() {
+		AsyncOperation async = Application.LoadLevelAsync("Cutscene2");
+		yield return async;
+    }
 }
+
