@@ -159,18 +159,16 @@ public class InterruptorReceiver : MonoBehaviour
 			
 			attractor.enabled = !attractor.enabled;
 			
-			if(audio != null && audio.isPlaying)
+			if(audio != null && !audio.isPlaying)
 			{
 				if(attractor.enabled)
 				{
-					Debug.Log("Here");
 					audio.clip = GlobalVarScript.instance.AttractorOnSound;
 					audio.Play();
 				}
 				
 				else
 				{
-					Debug.Log("There");
 					audio.clip = GlobalVarScript.instance.AttractorOffSound;
 					audio.Play();
 				}
