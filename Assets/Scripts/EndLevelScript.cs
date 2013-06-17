@@ -35,7 +35,8 @@ public class EndLevelScript : MonoBehaviour
 		player.GetComponent<PlayerScript>().canMove = false;
 		player.GetComponent<PlayerScript>().canJump = false;
 		
-		audioManager.GetComponent<FabricManager>().Stop();
+		if (audioManager != null && audioManager.GetComponent<FabricManager>() != null)
+			audioManager.GetComponent<FabricManager>().Stop();
 		
 		if(!audio.isPlaying && winSound != null)
 		{
@@ -51,6 +52,11 @@ public class EndLevelScript : MonoBehaviour
 		{
 			GameObject.Find("Menus").GetComponent<Interface>().exitScreen = true;
 			GameObject.Find("Menus").GetComponent<Interface>().screenToGo = MenuGesture.ScreenMenu.ENDLEVEL;
+		}
+		
+		if (Application.loadedLevelName == "CM_Level_0")
+		{
+			GameObject.Find("CAMERA").BroadcastMessage("endTuto", SendMessageOptions.DontRequireReceiver);
 		}
 	}
 }

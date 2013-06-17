@@ -138,7 +138,7 @@ public class Tutorial : MonoBehaviour
 		Invoke("ResetCamera" , 3.0f);
 		Invoke("ToggleControls", 3.0f);
 		Invoke("ToggleMagnetismLabel", 3.0f);
-		Invoke("EndTutorial", 20.0f);
+		//Invoke("EndTutorial", 20.0f);
 	}
 	
 	void ToggleBorders()
@@ -209,10 +209,10 @@ public class Tutorial : MonoBehaviour
 	}
 	void EndTutorial()
 	{
-		EndLabel.SetActive(true);
+		//EndLabel.SetActive(true);
 		ToggleControls();
 		
-		GameObject.Find("Menus").GetComponent<MenuGesture>().endTuto();
+		//GameObject.Find("Menus").GetComponent<MenuGesture>().endTuto();
 	}
 	
 	void OnGUI()
