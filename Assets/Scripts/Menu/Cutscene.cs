@@ -126,7 +126,10 @@ public class Cutscene : MonoBehaviour {
 	{
 		doNothing = true;
 		GameObject.Find("Anchor").transform.FindChild("LOADING_PANEL").gameObject.SetActive(true);
-		StartCoroutine(LoadLevelToLoad());
+		if(Application.loadedLevelName == "Cutscene")
+			StartCoroutine(LoadTutoToLoad());
+		else
+			StartCoroutine(LoadLevelToLoad());
 	}
 	
     IEnumerator LoadLevelToLoad() {
@@ -327,4 +330,9 @@ public class Cutscene : MonoBehaviour {
 	    yield return new WaitForSeconds(0.2f);
 		resetSlide();
 	}
+	
+	IEnumerator LoadTutoToLoad() {
+		AsyncOperation async = Application.LoadLevelAsync("CM_Level_0");
+		yield return async;
+    }
 }

@@ -61,7 +61,13 @@ public class Tutorial : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () 
-	{		
+	{
+		// debug
+		if (Input.GetKeyDown(KeyCode.Return))
+		{
+			EndTutorial();
+		}
+		
 		if(checkDistance)
 		{
 			walkDistance = Vector3.Distance(playerPosition, player.transform.position);

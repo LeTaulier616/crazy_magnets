@@ -75,7 +75,6 @@ public class InterruptorReceiver : MonoBehaviour
 	public void OnActivate()
 	{
 		interruptorCount++;
-		Debug.Log("PRESSCOUNT : " + interruptorCount);
 
 		if (gameObject.CompareTag("MultiDoor"))
 		{
@@ -97,7 +96,6 @@ public class InterruptorReceiver : MonoBehaviour
 			ChangeState();
 
 		interruptorCount--;
-		Debug.Log("PRESSCOUNT : " + interruptorCount);
 	}
 
 	private void ChangeState()
@@ -160,6 +158,21 @@ public class InterruptorReceiver : MonoBehaviour
 			AttractorScript attractor = gameObject.GetComponent<AttractorScript>();
 			
 			attractor.enabled = !attractor.enabled;
+			
+			if(audio != null && audio.isPlaying)
+			{
+				if(attractor.enabled)
+				{
+					audio.clip = GlobalVarScript.instance.AttractorOnSound;
+					audio.Play();
+				}
+				
+				else
+				{
+					audio.clip = GlobalVarScript.instance.AttractorOffSound;
+					audio.Play();
+				}
+			}
 		}
 	}
 }

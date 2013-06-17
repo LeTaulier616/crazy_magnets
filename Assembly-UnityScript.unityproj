@@ -44,7 +44,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\CubemapMaker\Source\CubemapMaker.js" />
+     <Compile Include="Assets\Textures\FX\AnimatedTextureUV.js" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Depth Cutout.shader" />
      <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-lightprobe-VirtualVertexGlossy-Add.shader" />
      <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-skybox.shader" />
@@ -86,13 +86,15 @@
      <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-Lightmap-Unlit-VirtualVertexGlossy-Add.shader" />
      <None Include="Assets\Shaders\MAD_SHADER\Characters\Mobile-TexPseudoBRDF-WrapAround.shader" />
      <None Include="Assets\Fabric\License.txt" />
-     <None Include="Assets\Plugins\FarseerComponents\Base\FarseerDebugViewUnity\FDView.shader" />
+     <None Include="Assets\FarseerUnity\Base\FarseerDebugViewUnity\FDView.shader" />
+     <None Include="Assets\FarseerUnity\Support Files\Tests\Shaders\Color.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Additive Colored.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Depth.shader" />
      <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingStencilTransparentZ.shader" />
      <None Include="Assets\Plugins\NGUI\Resources\Shaders\Unlit - Transparent Colored (SoftClip).shader" />
      <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-cube-env.shader" />
      <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-Unlit-Scroll2Layers-Mul-skybox.shader" />
+     <None Include="Assets\FarseerUnity\Support Files\Tests\Shaders\Transparent Vertex Colored.shader" />
      <None Include="Assets\Shaders\MAD_SHADER\Environment\MADFINGER-skybox-transparent.shader" />
  <Reference Include="Fabric.Core">
  <HintPath>Assets\Fabric\Fabric.Core.dll</HintPath>
