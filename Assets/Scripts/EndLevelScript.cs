@@ -16,6 +16,8 @@ public class EndLevelScript : MonoBehaviour
 	private float time;
 	private float startVolumeBGM;
 	
+	private bool endMusicPlayed;
+	
 	void Start()
 	{
 		boltCount = 0;
@@ -23,6 +25,7 @@ public class EndLevelScript : MonoBehaviour
 		audioManager = GlobalVarScript.instance.AudioManager;
 		winSound = GlobalVarScript.instance.WinSound;
 		soundFade = false;
+		endMusicPlayed = false;
 		
 		startVolumeBGM = audioManager.GetComponent<FabricManager>().GetComponentInChildren<GroupComponent>().Volume;
 	}
@@ -47,15 +50,19 @@ public class EndLevelScript : MonoBehaviour
 					audioManager.GetComponent<FabricManager>().Stop();
 			}
 				
-			if(winSound != null)
+			if(winSound != null && audio != null)
 			{
 				if(audio.clip != winSound)
 					audio.clip = winSound;
 				
-				audio.volume += Time.deltaTime;
+				if(audio.volume < 1.0f)
+					audio.volume += Time.deltaTime;
 				
-				if(!audio.isPlaying)
+				if(!audio.isPlaying && !endMusicPlayed)
+				{
 					audio.Play();
+					endMusicPlayed = true;
+				}
 			}
 		}
 		
