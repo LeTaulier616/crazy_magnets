@@ -55,10 +55,10 @@ public class MenuGesture : MonoBehaviour {
 			Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
 		}
 		
-		ambiantComponent = GameObject.Find("AudioManager_1").transform.FindChild("AMB").GetComponent<Fabric.GroupComponent>();
+		ambiantComponent = GameObject.Find("AudioManager").transform.FindChild("AMB").GetComponent<Fabric.GroupComponent>();
 		ambiantComponent.SetVolume(Datas.sharedDatas().datas.bgmVolume * Datas.sharedDatas().datas.globalVolume);
 		
-		musicComponent = GameObject.Find("AudioManager_1").transform.FindChild("M").GetComponent<Fabric.GroupComponent>();
+		musicComponent = GameObject.Find("AudioManager").transform.FindChild("M").GetComponent<Fabric.GroupComponent>();
 		musicComponent.SetVolume(Datas.sharedDatas().datas.bgmVolume * Datas.sharedDatas().datas.globalVolume);
 		
 		if(Application.loadedLevelName == "MENU")
