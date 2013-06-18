@@ -358,7 +358,7 @@ public class Interruptor : MonoBehaviour
 		
 		if(activator == Activator.PLAYER_OR_CUBE && (type == Type.STAY || type == Type.ONOFF))
 		{
-			audio1.clip = interruptorReleaseSound;
+			audio1.clip = interruptorSound;
 			audio1.Play();
 		}
 		
