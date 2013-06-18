@@ -31,7 +31,7 @@ public class EndMenu : MenuScreen
 		int nextLevelWorld;
 		GameObject endpanel = GameObject.Find("ENDLEVEL_PANEL");
 		
-		if(Application.loadedLevelName == "CM_Level_0")
+		if(Application.loadedLevelName == "CM_Level_0_FINAL")
 		{
 			for(int iii = 0; iii < endpanel.transform.GetChildCount(); ++iii)
         	{

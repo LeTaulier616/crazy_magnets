@@ -8,13 +8,11 @@ using FarseerPhysics.Dynamics;
 public class KillzoneScript : MonoBehaviour
 {
 	private Body killBody;
-	private AudioClip killSound;
 	private AudioClip sawSound;
 	
 	void Start()
 	{
 		killBody = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
-		killSound = GlobalVarScript.instance.KillSound;	
 		sawSound = GlobalVarScript.instance.MultiSawSound;
 		
 		killBody.OnCollision += OnCollisionEvent;
@@ -61,8 +59,6 @@ public class KillzoneScript : MonoBehaviour
 		if(bodyB.UserTag == "PlayerObject")
 		{
 			bodyB.UserFSBodyComponent.gameObject.SendMessageUpwards("Kill", SendMessageOptions.DontRequireReceiver);
-			audio.clip = killSound;
-			audio.Play();
 		}
 		
 		else if (bodyB.UserTag == "Bloc")

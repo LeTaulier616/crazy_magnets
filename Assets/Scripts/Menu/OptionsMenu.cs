@@ -13,15 +13,16 @@ public class OptionsMenu : MenuScreen
 	{
 		UIEventListener.Get(back_button_go).onClick   = goback;
 		UIEventListener.Get(reinit_button_go).onClick = reinit;
-		UIEventListener.Get(global_button_go).onClick = changeVolume;
-		UIEventListener.Get(sfx_button_go).onClick    = changeSFX;
-		UIEventListener.Get(bgm_button_go).onClick    = changeBGM;
 	}
 	
 	public override void activateMenu()
 	{
 		Debug.Log("Options Activated");
 		back_button_go.transform.parent.gameObject.SetActive(true);
+		
+		global_button_go.GetComponent<UISlider>().sliderValue = Datas.sharedDatas().datas.globalVolume;
+		sfx_button_go.GetComponent<UISlider>().sliderValue    = Datas.sharedDatas().datas.sfxVolume;
+		bgm_button_go.GetComponent<UISlider>().sliderValue    = Datas.sharedDatas().datas.bgmVolume;
 		
 		exitScreen = false;
 	}
@@ -36,28 +37,25 @@ public class OptionsMenu : MenuScreen
 		Debug.Log("Reinit");
 	}
 	
-	private void changeVolume(GameObject go)
-	{
-		Debug.Log("Change Volume");
-		Datas.sharedDatas().datas.globalVolume = (int)(go.GetComponent<UISlider>().sliderValue * 100.0f);
-	}
-	
-	private void changeSFX(GameObject go)
-	{
-		Debug.Log("Change SFX");
-		Datas.sharedDatas().datas.sfxVolume = (int)(go.GetComponent<UISlider>().sliderValue * 100.0f);
-	}
-	
-	private void changeBGM(GameObject go)
-	{
-		Debug.Log("Change BGM");
-		Datas.sharedDatas().datas.bgmVolume = (int)(go.GetComponent<UISlider>().sliderValue * 100.0f);
-	}
-	
 	private void goback(GameObject go)
 	{
 		Debug.Log("Go Back");
 		exitScreen = true;
 		screenToGo = MenuGesture.ScreenMenu.MAIN;
+	}
+	
+	public void OnSliderChangeBGM()
+	{
+		Datas.sharedDatas().datas.bgmVolume = bgm_button_go.GetComponent<UISlider>().sliderValue;
+	}
+	
+	public void OnSliderChangeSFX()
+	{
+		Datas.sharedDatas().datas.sfxVolume = sfx_button_go.GetComponent<UISlider>().sliderValue;
+	}
+	
+	public void OnSliderChangeGlobal()
+	{
+		Datas.sharedDatas().datas.globalVolume = global_button_go.GetComponent<UISlider>().sliderValue;
 	}
 }

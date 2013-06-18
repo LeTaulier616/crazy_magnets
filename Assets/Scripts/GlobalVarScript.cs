@@ -80,6 +80,7 @@ public class GlobalVarScript : MonoBehaviour
 	public AudioClip InterruptorReleaseSound;
 	public AudioClip ButtonSound;
 	public AudioClip ElectricButtonSound;
+	public AudioClip EnemyControlSound;
 	public AudioClip ChargeZoneSound;
 	public AudioClip KillSound;
 	public AudioClip GrabSound;
