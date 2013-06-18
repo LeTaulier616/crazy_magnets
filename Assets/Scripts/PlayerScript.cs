@@ -71,6 +71,10 @@ public class PlayerScript : Controllable
 			{
 				playerMesh.animation.CrossFade("win", 0.25f);
 			}
+			else if (this.hasWon)
+			{
+				playerMesh.animation.CrossFade("fall", 0.25f);
+			}
 			else
 			{
 				playerMesh.animation.CrossFade("idle", 0.25f);
