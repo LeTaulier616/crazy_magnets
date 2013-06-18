@@ -515,13 +515,8 @@ public class RoadData
 			
 			case KeyType.DOSOMETHING :
 				typeof(Road)
-<<<<<<< HEAD
-            		.GetMethod(this.keyPoints[this.currentPath].functionName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
-            		.Invoke(this, new object[0]);
-=======
             		.GetMethod(this.keyPoints[this.currentPath].functionName, BindingFlags.Instance |BindingFlags.NonPublic | BindingFlags.Public)
             		.Invoke(road, new object[0]);
->>>>>>> 9fd6eb247031b10d7dd87c85faa2418608312780
 			break;
 			
 			default :
