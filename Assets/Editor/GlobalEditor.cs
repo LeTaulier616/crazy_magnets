@@ -417,7 +417,7 @@ public class GlobalEditor : Editor
 				"Son d'ouverture de trappe",
 				"Son d'ouverture de trappe");
 			
-			this.target_.TrapOpenSound = addSoundField(this.target_.TrapOpenSound,
+			this.target_.TrapCloseSound = addSoundField(this.target_.TrapCloseSound,
 				false,
 				"Son de fermeture de trappe",
 				"Son de fermeture de trappe");
