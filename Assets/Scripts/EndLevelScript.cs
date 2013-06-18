@@ -29,7 +29,8 @@ public class EndLevelScript : MonoBehaviour
 		soundFade = false;
 		endMusicPlayed = false;
 		
-		startVolumeBGM = audioManager.GetComponent<FabricManager>().GetComponentInChildren<GroupComponent>().Volume;
+		if (audioManager != null && audioManager.GetComponent<FabricManager>() != null)
+			startVolumeBGM = audioManager.GetComponent<FabricManager>().GetComponentInChildren<GroupComponent>().Volume;
 		
 		this.endParticles = this.GetComponentsInChildren<ParticleSystem>();
 	}
@@ -83,9 +84,12 @@ public class EndLevelScript : MonoBehaviour
 		
 		soundFade = true;
 		
-		foreach(ParticleSystem particle in endParticles)
+		if (endParticles != null)
 		{
-			particle.Play();
+			foreach(ParticleSystem particle in endParticles)
+			{
+				particle.Play();
+			}
 		}
 				
 		yield return new WaitForSeconds(player.GetComponent<PlayerScript>().playerMesh.animation["win"].length / 4.0f);
@@ -98,7 +102,7 @@ public class EndLevelScript : MonoBehaviour
 			GameObject.Find("Menus").GetComponent<Interface>().screenToGo = MenuGesture.ScreenMenu.ENDLEVEL;
 		}
 		
-		if (Application.loadedLevelName == "CM_Level_0")
+		if (Application.loadedLevelName == "CM_Level_0_FINAL")
 		{
 			GameObject.Find("CAMERA").BroadcastMessage("endTuto", SendMessageOptions.DontRequireReceiver);
 		}

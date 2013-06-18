@@ -33,6 +33,10 @@ public class MenuGesture : MonoBehaviour {
 	private float alpha = 0;
 	private float alphaDir = 0;
 	
+	private Fabric.GroupComponent ambiantComponent = null;
+	private Fabric.GroupComponent musicComponent   = null;
+	private bool firstUpdate = true;
+	
 	void Start()
 	{
 		if(Application.loadedLevelName == "MENU")
@@ -50,6 +54,12 @@ public class MenuGesture : MonoBehaviour {
 			Datas.sharedDatas().datas.selectedLevel = Datas.sharedDatas().datas.currentLevel;
 			Datas.sharedDatas().datas.selectedWorld = Datas.sharedDatas().datas.currentWorld;
 		}
+		
+		ambiantComponent = GameObject.Find("AudioManager_1").transform.FindChild("AMB").GetComponent<Fabric.GroupComponent>();
+		ambiantComponent.SetVolume(Datas.sharedDatas().datas.bgmVolume * Datas.sharedDatas().datas.globalVolume);
+		
+		musicComponent = GameObject.Find("AudioManager_1").transform.FindChild("M").GetComponent<Fabric.GroupComponent>();
+		musicComponent.SetVolume(Datas.sharedDatas().datas.bgmVolume * Datas.sharedDatas().datas.globalVolume);
 		
 		if(Application.loadedLevelName == "MENU")
 		{
@@ -129,11 +139,9 @@ public class MenuGesture : MonoBehaviour {
 				widget.alpha = 1.0f;
 				widget.color   = new Color(1.0f,1.0f,1.0f,1.0f);
 			}
-			//if(widget.GetComponent<TweenColor>())
-			//	widget.GetComponent<TweenColor>().enabled = false;
         }
 		
-		if(screen.exitScreen) 
+		if(screen != null && screen.exitScreen) 
 		{
 			if(!setHidden)
 			{
@@ -151,7 +159,7 @@ public class MenuGesture : MonoBehaviour {
 				lerpValue = 1.0f;
 			}
 			
-			if ((Application.loadedLevelName == "Cutscene" || Application.loadedLevelName == "CM_Level_0" || Application.loadedLevelName == "Cutscene2") && this.alphaDir == -1)
+			if ((Application.loadedLevelName == "Cutscene" || Application.loadedLevelName == "CM_Level_0_FINAL" || Application.loadedLevelName == "Cutscene2") && this.alphaDir == -1)
 				this.alphaDir = 1;
 			
 			if(lerpValue >= 1.0f && setHidden)
@@ -172,6 +180,31 @@ public class MenuGesture : MonoBehaviour {
 		{
 			setVisible = false;
 			setHidden  = false;
+		}
+		
+		if(menuScreen == ScreenMenu.OPTIONS)
+		{
+			AudioSource[] audioLs = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
+      	 	foreach (AudioSource audioL in audioLs) 
+			{
+      	    	audioL.volume = Datas.sharedDatas().datas.globalVolume * Datas.sharedDatas().datas.sfxVolume;
+        	}
+			ambiantComponent.SetVolume(Datas.sharedDatas().datas.bgmVolume * Datas.sharedDatas().datas.globalVolume);
+			musicComponent.SetVolume(Datas.sharedDatas().datas.bgmVolume * Datas.sharedDatas().datas.globalVolume);
+			musicComponent.gameObject.GetComponentInChildren<AudioSource>().volume = Datas.sharedDatas().datas.bgmVolume * Datas.sharedDatas().datas.globalVolume;
+		}
+		
+		if(firstUpdate)
+		{
+			Debug.Log("First Update");
+			AudioSource[] audioLs = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
+      	 	foreach (AudioSource audioL in audioLs)
+			{
+      	    	audioL.volume = Datas.sharedDatas().datas.globalVolume * Datas.sharedDatas().datas.sfxVolume;
+        	}
+			ambiantComponent.SetVolume(Datas.sharedDatas().datas.bgmVolume * Datas.sharedDatas().datas.globalVolume);
+			musicComponent.SetVolume(Datas.sharedDatas().datas.bgmVolume * Datas.sharedDatas().datas.globalVolume);
+			firstUpdate = false;
 		}
 	}
 	
@@ -203,7 +236,7 @@ public class MenuGesture : MonoBehaviour {
 		}
 		else if(loadLevel)
 		{
-			if(Application.loadedLevelName == "CM_Level_0")
+			if(Application.loadedLevelName == "CM_Level_0_FINAL")
 			{
 				doNothing = false;
 				StartCoroutine(LoadEndCutsceneToLoad());
@@ -295,7 +328,7 @@ public class MenuGesture : MonoBehaviour {
     }
 	
     IEnumerator LoadTutoToLoad() {
-		AsyncOperation async = Application.LoadLevelAsync("CM_Level_0");
+		AsyncOperation async = Application.LoadLevelAsync("CM_Level_0_FINAL");
 		yield return async;
     }
 	

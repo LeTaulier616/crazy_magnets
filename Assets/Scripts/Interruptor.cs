@@ -41,6 +41,7 @@ public class Interruptor : MonoBehaviour
 	private AudioClip interruptorReleaseSound;
 	private AudioClip buttonSound;
 	private AudioClip electricButtonSound;
+	private AudioClip enemyControlSound;
 	
 	private AudioClip clockSound1;
 	private AudioClip clockSound2;
@@ -329,9 +330,15 @@ public class Interruptor : MonoBehaviour
 				audio1.Play();
 			}
 			
-			else if(activator == Activator.ELECTRIC_TOUCH)
+			else if(activator == Activator.ELECTRIC_TOUCH && !gameObject.CompareTag("Enemy"))
 			{
 				audio1.clip = electricButtonSound;
+				audio1.Play();
+			}
+			
+			else if (activator == Activator.ELECTRIC_TOUCH && gameObject.CompareTag("Enemy"))
+			{
+				audio1.clip = enemyControlSound;
 				audio1.Play();
 			}
 						
@@ -362,7 +369,7 @@ public class Interruptor : MonoBehaviour
 		
 		if(activator == Activator.PLAYER_OR_CUBE && (type == Type.STAY || type == Type.ONOFF))
 		{
-			audio1.clip = interruptorReleaseSound;
+			audio1.clip = interruptorSound;
 			audio1.Play();
 		}
 		
