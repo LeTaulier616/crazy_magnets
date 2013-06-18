@@ -88,9 +88,14 @@ public class GlobalVarScript : MonoBehaviour
 	public AudioClip BumperSound;
 	public AudioClip DoorOpenSound;
 	public AudioClip DoorCloseSound;
+	public AudioClip TrapOpenSound;
+	public AudioClip TrapCloseSound;
 	public AudioClip BoltSound;
 	public AudioClip JumpSound;
 	public AudioClip WinSound;
+	public AudioClip SingleSawSound;
+	public AudioClip MultiSawSound;
+	public AudioClip MovingKillzoneSound;
 	
 	public bool ClockSoundsExpand = true;
 	public int ClockSoundsSize = 1;

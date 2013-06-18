@@ -11,12 +11,23 @@ public class EndLevelScript : MonoBehaviour
 	private GameObject player;
 	private GameObject audioManager;
 	
+	private bool soundFade;
+	
+	private float time;
+	private float startVolumeBGM;
+	
+	private bool endMusicPlayed;
+	
 	void Start()
 	{
 		boltCount = 0;
 		player = GlobalVarScript.instance.player;
 		audioManager = GlobalVarScript.instance.AudioManager;
 		winSound = GlobalVarScript.instance.WinSound;
+		soundFade = false;
+		endMusicPlayed = false;
+		
+		startVolumeBGM = audioManager.GetComponent<FabricManager>().GetComponentInChildren<GroupComponent>().Volume;
 	}
 	
 	void OnTriggerEnter(Collider other)
@@ -27,6 +38,37 @@ public class EndLevelScript : MonoBehaviour
 		}
 	}
 	
+	void Update()
+	{	
+		if(soundFade)
+		{
+			if (audioManager != null && audioManager.GetComponent<FabricManager>() != null)
+			{
+				audioManager.GetComponent<FabricManager>().GetComponentInChildren<GroupComponent>().Volume -= Time.deltaTime;
+						
+				if(audioManager.GetComponent<FabricManager>().GetComponentInChildren<GroupComponent>().Volume <= 0.0f)
+					audioManager.GetComponent<FabricManager>().Stop();
+			}
+				
+			if(winSound != null && audio != null)
+			{
+				if(audio.clip != winSound)
+					audio.clip = winSound;
+				
+				if(audio.volume < 1.0f)
+					audio.volume += Time.deltaTime;
+				
+				if(!audio.isPlaying && !endMusicPlayed)
+				{
+					audio.Play();
+					endMusicPlayed = true;
+				}
+			}
+		}
+		
+		time += Time.deltaTime;
+	}
+	
 	IEnumerator EndLevel()
 	{
 		player.GetComponent<PlayerScript>().hasWon = true;
@@ -35,14 +77,7 @@ public class EndLevelScript : MonoBehaviour
 		player.GetComponent<PlayerScript>().canMove = false;
 		player.GetComponent<PlayerScript>().canJump = false;
 		
-		if (audioManager != null && audioManager.GetComponent<FabricManager>() != null)
-			audioManager.GetComponent<FabricManager>().Stop();
-		
-		if(!audio.isPlaying && winSound != null)
-		{
-			audio.clip = winSound;
-			audio.Play();
-		}
+		soundFade = true;
 				
 		yield return new WaitForSeconds(player.GetComponent<PlayerScript>().playerMesh.animation["win"].length / 4.0f);
 				

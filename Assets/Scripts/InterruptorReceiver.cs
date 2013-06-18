@@ -109,13 +109,20 @@ public class InterruptorReceiver : MonoBehaviour
 		if(gameObject.CompareTag("MultiDoor") || gameObject.CompareTag("Door") || gameObject.CompareTag("Ground"))
 		{
 			isOpen = !isOpen;
-			if(gameObject.CompareTag("Door") || gameObject.CompareTag("MultiDoor"))
+			
+			if(audio != null)
 			{	
-				audio.clip = GlobalVarScript.instance.DoorOpenSound;
+				if(gameObject.CompareTag("Door") || gameObject.CompareTag("MultiDoor"))
+					audio.clip = isOpen ? GlobalVarScript.instance.DoorOpenSound : GlobalVarScript.instance.DoorCloseSound;
+				
+				else if(gameObject.CompareTag("Ground"))
+					audio.clip = isOpen ? GlobalVarScript.instance.TrapOpenSound : GlobalVarScript.instance.TrapCloseSound;
+								
 				audio.Play();
 			}
 			
 			CubeScript[] cubes = GameObject.Find("BLOCKS").GetComponentsInChildren<CubeScript>();
+			
 			foreach (CubeScript cube in cubes)
 			{
 				if (cube == null)
@@ -127,15 +134,19 @@ public class InterruptorReceiver : MonoBehaviour
 			
 			this.GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = isOpen;
 
-				if(animation != null)
+				
+			if(animation != null)
 			{
 				if (gameObject.CompareTag("Door") || gameObject.CompareTag("MultiDoor"))
 				{
 					animation["open"].speed = (isOpen ? 1.0f : -1.0f);
+					
 					if (!isOpen)
 						animation["open"].time = animation["open"].length;
+					
 					animation.Play();
 				}
+				
 				else
 					animation.Play((isOpen ? "open" : "close"));
 			}

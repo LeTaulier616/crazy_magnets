@@ -121,9 +121,7 @@ public class PlayerScript : Controllable
 		
 		//else
 		//	this.checkpointIndex = checkpoints.Count - 1;
-		
-		Debug.Log("Checkpoint index : " + checkpointIndex);
-		
+				
 		this.boltsToValidate.Clear();
 	}
 	
