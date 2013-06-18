@@ -51,9 +51,9 @@ public class Datas
 		public int selectedLevel;
 		public int selectedWorld;
 		
-		public int globalVolume;
-		public int sfxVolume;
-		public int bgmVolume;
+		public float globalVolume;
+		public float sfxVolume;
+		public float bgmVolume;
 		
 		public bool isNewGame;
 		public bool tutoDone;
@@ -88,9 +88,9 @@ public class Datas
 		datas.selectedLevel = 0;
 		datas.selectedWorld = 0;
 	
-		datas.globalVolume  = 100;
-		datas.sfxVolume     = 100;
-		datas.bgmVolume     = 100;
+		datas.globalVolume  = 1;
+		datas.sfxVolume     = 1;
+		datas.bgmVolume     = 1;
 		
 		datas.isNewGame     = true;
 		datas.tutoDone      = false;

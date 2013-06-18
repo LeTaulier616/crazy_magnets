@@ -18,7 +18,7 @@ public class Interface : MenuScreen {
 		
 		for(int iii = 0; iii < endpanel.transform.GetChildCount(); ++iii)
     	{
-			endpanel.transform.GetChild(iii).gameObject.SetActive(Application.loadedLevelName != "CM_Level_0");
+			endpanel.transform.GetChild(iii).gameObject.SetActive(Application.loadedLevelName != "CM_Level_0_FINAL");
 		}
 		
 		exitScreen = false;
