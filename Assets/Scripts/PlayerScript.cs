@@ -20,6 +20,8 @@ public class PlayerScript : Controllable
 	
 	public bool hasWon;
 	
+	private ParticleSystem deathParticles;
+	
 	void Start()
 	{
 		base.Start();
@@ -48,9 +50,12 @@ public class PlayerScript : Controllable
 		this.canResurrect = false;
 		this.checkpointIndex = 0;
 		this.checkpoints.Add(transform.position);
+		
 		GetCheckpoints();
 		
 		this.hasWon = false;
+		
+		this.deathParticles = this.transform.FindChild("FX_DEAD").GetComponent<ParticleSystem>();
 	}
 	
 	void Update()
@@ -218,11 +223,14 @@ public class PlayerScript : Controllable
 		this.bodyPFM = null;
 		Invoke("AbleResurrection", 2f);
 		Invoke("Resurrect", 4f);
-		// TODO
+		
 		if(playerMesh != null)
 			this.playerMesh.SetActiveRecursively(false);
 		else
 			this.renderer.enabled =false;
+		
+		if(deathParticles != null)
+			deathParticles.Play(true);
 		
 		foreach(FollowRoad followroad in GameObject.Find("WORLD").GetComponentsInChildren<FollowRoad>())
 		{
