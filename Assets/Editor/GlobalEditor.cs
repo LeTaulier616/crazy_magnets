@@ -432,6 +432,11 @@ public class GlobalEditor : Editor
 				"Son de scie multiple",
 				"Son de scie multiple");
 			
+			this.target_.MovingKillzoneSound = addSoundField(this.target_.MovingKillzoneSound,
+				false,
+				"Son de killzone mouvante",
+				"Son de killzone mouvante");
+			
 			this.target_.WinSound = addSoundField(this.target_.WinSound,
 				false,
 				"Son de victoire",
