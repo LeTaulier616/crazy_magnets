@@ -362,6 +362,11 @@ public class GlobalEditor : Editor
 				"Son de l'interrupteur electrique", 
 				"Son de l'interrupteur electrique");
 			
+			this.target_.EnemyControlSound = addSoundField(this.target_.EnemyControlSound,
+				false,
+				"Son de prise de controle des ennemis", 
+				"Son de prise de controle des ennemis");
+			
 			this.target_.ChargeZoneSound = addSoundField(this.target_.ChargeZoneSound,
 				false,
 				"Son de la zone de charge", 

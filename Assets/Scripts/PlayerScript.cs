@@ -21,6 +21,8 @@ public class PlayerScript : Controllable
 	public bool hasWon;
 	
 	private ParticleSystem deathParticles;
+	private AudioClip deathSound;
+	
 	
 	void Start()
 	{
@@ -56,6 +58,7 @@ public class PlayerScript : Controllable
 		this.hasWon = false;
 		
 		this.deathParticles = this.transform.FindChild("FX_DEAD").GetComponent<ParticleSystem>();
+		this.deathSound = GlobalVarScript.instance.KillSound;
 	}
 	
 	void Update()
@@ -231,6 +234,13 @@ public class PlayerScript : Controllable
 		
 		if(deathParticles != null)
 			deathParticles.Play(true);
+		
+		if(audio != null)
+		{
+			audio.clip = deathSound;
+			audio.Play();
+		}
+
 		
 		foreach(FollowRoad followroad in GameObject.Find("WORLD").GetComponentsInChildren<FollowRoad>())
 		{
