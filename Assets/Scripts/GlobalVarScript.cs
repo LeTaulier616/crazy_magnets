@@ -80,6 +80,7 @@ public class GlobalVarScript : MonoBehaviour
 	public AudioClip InterruptorReleaseSound;
 	public AudioClip ButtonSound;
 	public AudioClip ElectricButtonSound;
+	public AudioClip EnemyControlSound;
 	public AudioClip ChargeZoneSound;
 	public AudioClip KillSound;
 	public AudioClip GrabSound;
@@ -95,6 +96,7 @@ public class GlobalVarScript : MonoBehaviour
 	public AudioClip WinSound;
 	public AudioClip SingleSawSound;
 	public AudioClip MultiSawSound;
+	public AudioClip MovingKillzoneSound;
 	
 	public bool ClockSoundsExpand = true;
 	public int ClockSoundsSize = 1;

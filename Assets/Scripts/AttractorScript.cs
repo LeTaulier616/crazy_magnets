@@ -76,6 +76,7 @@ public class AttractorScript : MonoBehaviour
 					}
 				}
 			}
+			
 			else
 			{
 				pos.x = transform.position.x - 0.5f;

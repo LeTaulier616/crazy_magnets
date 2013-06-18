@@ -40,6 +40,7 @@ public class Road : MonoBehaviour
     public List<string>      functionNames;
     public List<KeyPoint>    pathWays;
 	
+	private AudioClip EndSound;
 	
 	void OnEnable()
 	{
@@ -169,6 +170,15 @@ public class Road : MonoBehaviour
 				);
 				Gizmos.DrawLine(startGizmo, endGizmo);
 			}
+		}
+	}
+	
+	public void PlayEndSound()
+	{		
+		if(audio!= null && !audio.isPlaying)
+		{
+			this.audio.clip = EndSound;
+			audio.Play();
 		}
 	}
 }

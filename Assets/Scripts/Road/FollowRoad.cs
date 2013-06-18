@@ -58,6 +58,9 @@ public class FollowRoad : MonoBehaviour {
 		lastRoadPosition = new FVector2(roadRecto.currentPosition.x, roadRecto.currentPosition.y);
 		
 		this.gameObject.GetComponent<FSBodyComponent>().PhysicsBody.UserData = this.gameObject;
+		
+		roadRecto.road = this.road;
+		roadVerso.road = this.road;
 	}
 	
 	void FixedUpdate () 

@@ -362,6 +362,11 @@ public class GlobalEditor : Editor
 				"Son de l'interrupteur electrique", 
 				"Son de l'interrupteur electrique");
 			
+			this.target_.EnemyControlSound = addSoundField(this.target_.EnemyControlSound,
+				false,
+				"Son de prise de controle des ennemis", 
+				"Son de prise de controle des ennemis");
+			
 			this.target_.ChargeZoneSound = addSoundField(this.target_.ChargeZoneSound,
 				false,
 				"Son de la zone de charge", 
@@ -417,7 +422,7 @@ public class GlobalEditor : Editor
 				"Son d'ouverture de trappe",
 				"Son d'ouverture de trappe");
 			
-			this.target_.TrapOpenSound = addSoundField(this.target_.TrapOpenSound,
+			this.target_.TrapCloseSound = addSoundField(this.target_.TrapCloseSound,
 				false,
 				"Son de fermeture de trappe",
 				"Son de fermeture de trappe");
@@ -431,6 +436,11 @@ public class GlobalEditor : Editor
 				false,
 				"Son de scie multiple",
 				"Son de scie multiple");
+			
+			this.target_.MovingKillzoneSound = addSoundField(this.target_.MovingKillzoneSound,
+				false,
+				"Son de killzone mouvante",
+				"Son de killzone mouvante");
 			
 			this.target_.WinSound = addSoundField(this.target_.WinSound,
 				false,
