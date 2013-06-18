@@ -354,7 +354,7 @@ public class Cutscene : MonoBehaviour {
 	}
 	
 	IEnumerator LoadTutoToLoad() {
-		AsyncOperation async = Application.LoadLevelAsync("CM_Level_0");
+		AsyncOperation async = Application.LoadLevelAsync("CM_Level_0_FINAL");
 		yield return async;
     }
 	

@@ -141,7 +141,7 @@ public class MenuGesture : MonoBehaviour {
 			}
         }
 		
-		if(screen.exitScreen) 
+		if(screen != null && screen.exitScreen) 
 		{
 			if(!setHidden)
 			{
@@ -159,7 +159,7 @@ public class MenuGesture : MonoBehaviour {
 				lerpValue = 1.0f;
 			}
 			
-			if ((Application.loadedLevelName == "Cutscene" || Application.loadedLevelName == "CM_Level_0" || Application.loadedLevelName == "Cutscene2") && this.alphaDir == -1)
+			if ((Application.loadedLevelName == "Cutscene" || Application.loadedLevelName == "CM_Level_0_FINAL" || Application.loadedLevelName == "Cutscene2") && this.alphaDir == -1)
 				this.alphaDir = 1;
 			
 			if(lerpValue >= 1.0f && setHidden)
@@ -236,7 +236,7 @@ public class MenuGesture : MonoBehaviour {
 		}
 		else if(loadLevel)
 		{
-			if(Application.loadedLevelName == "CM_Level_0")
+			if(Application.loadedLevelName == "CM_Level_0_FINAL")
 			{
 				doNothing = false;
 				StartCoroutine(LoadEndCutsceneToLoad());
@@ -328,7 +328,7 @@ public class MenuGesture : MonoBehaviour {
     }
 	
     IEnumerator LoadTutoToLoad() {
-		AsyncOperation async = Application.LoadLevelAsync("CM_Level_0");
+		AsyncOperation async = Application.LoadLevelAsync("CM_Level_0_FINAL");
 		yield return async;
     }
 	
