@@ -75,7 +75,6 @@ public class InterruptorReceiver : MonoBehaviour
 	public void OnActivate()
 	{
 		interruptorCount++;
-		Debug.Log("PRESSCOUNT : " + interruptorCount);
 
 		if (gameObject.CompareTag("MultiDoor"))
 		{
@@ -97,7 +96,6 @@ public class InterruptorReceiver : MonoBehaviour
 			ChangeState();
 
 		interruptorCount--;
-		Debug.Log("PRESSCOUNT : " + interruptorCount);
 	}
 
 	private void ChangeState()
@@ -111,13 +109,22 @@ public class InterruptorReceiver : MonoBehaviour
 		if(gameObject.CompareTag("MultiDoor") || gameObject.CompareTag("Door") || gameObject.CompareTag("Ground"))
 		{
 			isOpen = !isOpen;
-			if(gameObject.CompareTag("Door") || gameObject.CompareTag("MultiDoor"))
+			
+			if(audio != null)
 			{	
-				audio.clip = GlobalVarScript.instance.DoorOpenSound;
+				if(gameObject.CompareTag("Door") || gameObject.CompareTag("MultiDoor"))
+					audio.clip = isOpen ? GlobalVarScript.instance.DoorOpenSound : GlobalVarScript.instance.DoorCloseSound;
+				
+				else if(gameObject.CompareTag("Ground"))
+					audio.clip = isOpen ? GlobalVarScript.instance.TrapOpenSound : GlobalVarScript.instance.TrapCloseSound;
+				
+				Debug.Log(gameObject.name + " " + audio.clip);
+				
 				audio.Play();
 			}
 			
 			CubeScript[] cubes = GameObject.Find("BLOCKS").GetComponentsInChildren<CubeScript>();
+			
 			foreach (CubeScript cube in cubes)
 			{
 				if (cube == null)
@@ -129,15 +136,19 @@ public class InterruptorReceiver : MonoBehaviour
 			
 			this.GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = isOpen;
 
-				if(animation != null)
+				
+			if(animation != null)
 			{
 				if (gameObject.CompareTag("Door") || gameObject.CompareTag("MultiDoor"))
 				{
 					animation["open"].speed = (isOpen ? 1.0f : -1.0f);
+					
 					if (!isOpen)
 						animation["open"].time = animation["open"].length;
+					
 					animation.Play();
 				}
+				
 				else
 					animation.Play((isOpen ? "open" : "close"));
 			}
@@ -160,6 +171,21 @@ public class InterruptorReceiver : MonoBehaviour
 			AttractorScript attractor = gameObject.GetComponent<AttractorScript>();
 			
 			attractor.enabled = !attractor.enabled;
+			
+			if(audio != null && !audio.isPlaying)
+			{
+				if(attractor.enabled)
+				{
+					audio.clip = GlobalVarScript.instance.AttractorOnSound;
+					audio.Play();
+				}
+				
+				else
+				{
+					audio.clip = GlobalVarScript.instance.AttractorOffSound;
+					audio.Play();
+				}
+			}
 		}
 	}
 }

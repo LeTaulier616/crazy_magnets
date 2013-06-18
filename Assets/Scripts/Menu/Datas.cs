@@ -28,7 +28,6 @@ public class Datas
 			shared_datas = new Datas();
 			if(System.IO.File.Exists(path))
 				shared_datas.loadDatas();
-			Debug.Log(path);
 		}
 		return shared_datas;
 	}
