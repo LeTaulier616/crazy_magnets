@@ -112,7 +112,7 @@ public class Interruptor : MonoBehaviour
 				if(child.GetComponent<HighlightableObject>() != null)
 				{
 					child.gameObject.AddComponent<HighlightableObject>();
-					child.gameObject.GetComponent<HighlightableObject>().ConstantParams(Color.green);
+					child.gameObject.GetComponent<HighlightableObject>().ConstantParams(Color.cyan);
 				}
 			}
 		}
@@ -169,14 +169,16 @@ public class Interruptor : MonoBehaviour
 			if(Vector3.Distance(this.transform.position, player.transform.position) <= tmpPorteeElec && player.GetComponent<PlayerScript>().IsCharged())
 			{
 				SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
-				if(!rangeParticle.isPlaying)
+				
+				if(rangeParticle != null && !rangeParticle.isPlaying)
 					this.rangeParticle.Play();
 			}
 			
 			else
 			{
 				SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
-				if(!rangeParticle.isStopped)
+				
+				if(rangeParticle != null && !rangeParticle.isStopped)
 					this.rangeParticle.Stop();
 			}
 		}
@@ -186,14 +188,16 @@ public class Interruptor : MonoBehaviour
 			if(Vector3.Distance(this.transform.position, player.transform.position) <= tmpPorteeNorm)
 			{
 				SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
-				if(!rangeParticle.isPlaying)
+				
+				if(rangeParticle != null && !rangeParticle.isPlaying)
 					this.rangeParticle.Play();
 			}
 			
 			else
 			{
 				SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
-				if(!rangeParticle.isStopped)
+				
+				if(rangeParticle != null && !rangeParticle.isStopped)
 					this.rangeParticle.Stop();
 			}
 		}

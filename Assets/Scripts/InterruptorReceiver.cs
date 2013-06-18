@@ -117,9 +117,7 @@ public class InterruptorReceiver : MonoBehaviour
 				
 				else if(gameObject.CompareTag("Ground"))
 					audio.clip = isOpen ? GlobalVarScript.instance.TrapOpenSound : GlobalVarScript.instance.TrapCloseSound;
-				
-				Debug.Log(gameObject.name + " " + audio.clip);
-				
+								
 				audio.Play();
 			}
 			
