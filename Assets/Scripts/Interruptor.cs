@@ -112,7 +112,7 @@ public class Interruptor : MonoBehaviour
 				if(child.GetComponent<HighlightableObject>() != null)
 				{
 					child.gameObject.AddComponent<HighlightableObject>();
-					child.gameObject.GetComponent<HighlightableObject>().ConstantParams(Color.green);
+					child.gameObject.GetComponent<HighlightableObject>().ConstantParams(Color.cyan);
 				}
 			}
 		}
