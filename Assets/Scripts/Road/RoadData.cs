@@ -32,6 +32,8 @@ public class RoadData
 	bool  stop;
 	float currentWait;
 	
+	public Road road;
+	
 	public void reInit()
 	{
 		currentPosition = keyPoints[0].position;
@@ -514,7 +516,7 @@ public class RoadData
 			case KeyType.DOSOMETHING :
 				typeof(Road)
             		.GetMethod(this.keyPoints[this.currentPath].functionName, BindingFlags.Instance |BindingFlags.NonPublic | BindingFlags.Public)
-            		.Invoke(this, new object[0]);
+            		.Invoke(road, new object[0]);
 			break;
 			
 			default :

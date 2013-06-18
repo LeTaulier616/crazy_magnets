@@ -18,6 +18,8 @@ public class EndLevelScript : MonoBehaviour
 	
 	private bool endMusicPlayed;
 	
+	private ParticleSystem[] endParticles;
+	
 	void Start()
 	{
 		boltCount = 0;
@@ -28,6 +30,8 @@ public class EndLevelScript : MonoBehaviour
 		endMusicPlayed = false;
 		
 		startVolumeBGM = audioManager.GetComponent<FabricManager>().GetComponentInChildren<GroupComponent>().Volume;
+		
+		this.endParticles = this.GetComponentsInChildren<ParticleSystem>();
 	}
 	
 	void OnTriggerEnter(Collider other)
@@ -78,6 +82,11 @@ public class EndLevelScript : MonoBehaviour
 		player.GetComponent<PlayerScript>().canJump = false;
 		
 		soundFade = true;
+		
+		foreach(ParticleSystem particle in endParticles)
+		{
+			particle.Play();
+		}
 				
 		yield return new WaitForSeconds(player.GetComponent<PlayerScript>().playerMesh.animation["win"].length / 4.0f);
 				
