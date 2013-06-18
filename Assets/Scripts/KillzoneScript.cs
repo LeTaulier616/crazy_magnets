@@ -9,15 +9,23 @@ public class KillzoneScript : MonoBehaviour
 {
 	private Body killBody;
 	private AudioClip killSound;
+	private AudioClip sawSound;
 	
 	void Start()
 	{
 		killBody = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
 		killSound = GlobalVarScript.instance.KillSound;	
+		sawSound = GlobalVarScript.instance.MultiSawSound;
 		
 		killBody.OnCollision += OnCollisionEvent;
+		
+		if(audio != null && !audio.isPlaying)
+		{
+			audio.clip = sawSound;
+			audio.Play();
+		}
 	}
-
+	
 	public void Enable()
 	{
 		killBody.OnCollision += OnCollisionEvent;

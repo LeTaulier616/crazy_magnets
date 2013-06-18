@@ -19,7 +19,7 @@ public class GlobalEditor : Editor
 		if(target_.controlParams)
 		{
 			
-			openBox ("Parametres controles");
+			openBox ("");
 			
 			this.target_.hudLimitX						= 0.01f * addSlider (100.0f * this.target_.hudLimitX, 0.0f, 40.0f,
 				"Largeur de zone",
@@ -61,7 +61,7 @@ public class GlobalEditor : Editor
 		if(target_.playerParams)
 		{
 			
-			openBox ("Parametres joueur");
+			openBox ("");
 			
 			this.target_.playerSpeed					= addFloatField (this.target_.playerSpeed,
 				"Vitesse",
@@ -115,7 +115,7 @@ public class GlobalEditor : Editor
 		if(target_.smallEnemyParams)
 		{
 			
-			openBox ("Petits ennemis");
+			openBox ("");
 			
 			this.target_.smallEnemy.speed					= addFloatField (this.target_.smallEnemy.speed,
 				"Vitesse",
@@ -186,7 +186,7 @@ public class GlobalEditor : Editor
 		if(target_.bigEnemyParams)
 		{
 				
-			openBox ("Gros ennemis");
+			openBox ("");
 			
 			this.target_.bigEnemy.speed						= addFloatField (this.target_.bigEnemy.speed,
 				"Vitesse",
@@ -257,7 +257,7 @@ public class GlobalEditor : Editor
 		if(target_.cameraParams)
 		{
 				
-			openBox("Parametres camera");
+			openBox("");
 			
 			this.target_.cameraTarget						= addTransformField(this.target_.cameraTarget,
 				true,
@@ -287,7 +287,7 @@ public class GlobalEditor : Editor
 		if(target_.objectParams)
 		{
 			
-			openBox("Parametres objets");
+			openBox("");
 			
 			this.target_.BlockRadius = addFloatField(this.target_.BlockRadius,
 				"Portee du magnetisme",
@@ -330,7 +330,7 @@ public class GlobalEditor : Editor
 		if(target_.soundParams)
 		{
 				
-			openBox("Parametres son");
+			openBox("");
 			
 			this.target_.AttractionSound = addSoundField(this.target_.AttractionSound,
 				false,
@@ -411,6 +411,26 @@ public class GlobalEditor : Editor
 				false,
 				"Son de fermeture de porte",
 				"Son de fermeture de porte");
+			
+			this.target_.TrapOpenSound = addSoundField(this.target_.TrapOpenSound,
+				false,
+				"Son d'ouverture de trappe",
+				"Son d'ouverture de trappe");
+			
+			this.target_.TrapOpenSound = addSoundField(this.target_.TrapOpenSound,
+				false,
+				"Son de fermeture de trappe",
+				"Son de fermeture de trappe");
+			
+			this.target_.SingleSawSound = addSoundField(this.target_.SingleSawSound,
+				false,
+				"Son de scie seule",
+				"Son de scie seule");
+			
+			this.target_.MultiSawSound = addSoundField(this.target_.MultiSawSound,
+				false,
+				"Son de scie multiple",
+				"Son de scie multiple");
 			
 			this.target_.WinSound = addSoundField(this.target_.WinSound,
 				false,

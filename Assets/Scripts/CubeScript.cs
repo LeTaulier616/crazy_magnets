@@ -35,6 +35,8 @@ public class CubeScript : MonoBehaviour
 	private Color blockRangeColor;
 	private Color blockUseColor;
 	
+	private ParticleSystem magnetParticle;
+	
 	void Start ()
 	{		
 		this.body = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
@@ -56,6 +58,8 @@ public class CubeScript : MonoBehaviour
 		
 		this.blockRangeColor = GlobalVarScript.instance.BlockRangeColor;
 		this.blockUseColor = GlobalVarScript.instance.BlockUseColor;
+		
+		this.magnetParticle = this.GetComponentInChildren<ParticleSystem>();
 		
 		SendMessage("ConstantParams", blockRangeColor, SendMessageOptions.DontRequireReceiver);
 		
@@ -110,16 +114,20 @@ public class CubeScript : MonoBehaviour
 		UpdateMouseWorld();
 		MouseDrag();
 		
-		if (this.selected == 0)
+
+		Vector3 cubePos = Camera.main.WorldToScreenPoint(this.transform.position);
+		if ((cubePos.x > Camera.main.GetScreenWidth() && this.body.LinearVelocity.X > 1f)
+			|| (cubePos.x < 0 && this.body.LinearVelocity.X < -1f))
 		{
-			float posX = Camera.main.WorldToScreenPoint(this.transform.position).x;
-			if ((posX > Camera.main.GetScreenWidth() && this.body.LinearVelocity.X > 1f)
-				|| (posX < 0 && this.body.LinearVelocity.X < -1f))
-			{
-				FVector2 newVelocity = new FVector2(-this.body.LinearVelocity.X/3f, this.body.LinearVelocity.Y);
-				this.body.LinearVelocity = newVelocity;
-			}
+			FVector2 newVelocity = new FVector2(-this.body.LinearVelocity.X/3f, this.body.LinearVelocity.Y);
+			this.body.LinearVelocity = newVelocity;
 		}
+		if (cubePos.y > Camera.main.GetScreenHeight())
+		{
+			FVector2 newVelocity = new FVector2(this.body.LinearVelocity.X, 0);
+			this.body.LinearVelocity = newVelocity;
+		}
+
 		
 		if(audio.isPlaying)
 		{
@@ -151,6 +159,9 @@ public class CubeScript : MonoBehaviour
 		{
 			SendMessage("ConstantParams", blockUseColor, SendMessageOptions.DontRequireReceiver);
 		}
+		
+		this.magnetParticle.Play();
+		
 		this.selected = 1;
 	}
 	
@@ -193,6 +204,7 @@ public class CubeScript : MonoBehaviour
 			transform.renderer.material.color = Color.green;
 		audioTime = Time.time;
 		SendMessage("ConstantParams", blockRangeColor, SendMessageOptions.DontRequireReceiver);
+		this.magnetParticle.Stop();
 		GlobalVarScript.instance.player.GetComponent<ControllerMain>().ResetDrag(this.gameObject);
 	}
 	

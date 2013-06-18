@@ -1,17 +1,21 @@
 fileFormatVersion: 2
-guid: 2b9fac34b8f6eed47b5d14539efb27fe
+guid: c9c16509e6a42ab41a83c889fdc2e2ff
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: END_GATE
-    4300002: polySurface342
+    100000: cables_angle4
+    100002: //RootNode
+    400000: cables_angle4
+    400002: //RootNode
+    2300000: cables_angle4
+    2300002: //RootNode
+    3300000: cables_angle4
+    3300002: //RootNode
+    4300000: cables_b_angle4
+    4300002: cables_angle4
     9500000: //RootNode
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
@@ -26,7 +30,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: .5
     meshCompression: 0
     addColliders: 0
     swapUVChannels: 0
@@ -58,5 +62,5 @@ ModelImporter:
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   additionalBone: 1
-  animationType: 2
+  animationType: 0
   userData: 
