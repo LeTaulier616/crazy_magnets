@@ -96,6 +96,7 @@ public class GlobalVarScript : MonoBehaviour
 	public AudioClip WinSound;
 	public AudioClip SingleSawSound;
 	public AudioClip MultiSawSound;
+	public AudioClip ElectricSound;
 	public AudioClip MovingKillzoneSound;
 	
 	public bool ClockSoundsExpand = true;

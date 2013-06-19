@@ -120,9 +120,14 @@ public class Interruptor : MonoBehaviour
 
 		if(animation != null || this.GetComponentInChildren<Animation>() != null)
 		{
-			if(activator == Activator.TOUCH)
+			if(activator == Activator.TOUCH && type != Type.TIMER)
 			{
 				animation["action"].speed = -animation["action"].speed;
+			}
+			
+			else if (activator == Activator.TOUCH && type == Type.TIMER)
+			{
+				animation["run"].speed = 1.0f / timeToRevoke;
 			}
 			
 			else if (activator == Activator.PLAYER_OR_CUBE)
@@ -418,9 +423,10 @@ public class Interruptor : MonoBehaviour
 	{
 		if(animation != null || this.GetComponentInChildren<Animation>() != null)
 		{
-			if(activator == Activator.TOUCH)
+			if(activator == Activator.TOUCH && type != Type.TIMER)
 			{
 				animation["action"].speed = -animation["action"].speed;
+				
 				if (animation["action"].speed < 0f)
 					animation["action"].time = animation["action"].length;
 			}
@@ -428,9 +434,11 @@ public class Interruptor : MonoBehaviour
 			else if (activator == Activator.PLAYER_OR_CUBE)
 			{
 				this.GetComponentInChildren<Animation>().animation["press"].speed = -this.GetComponentInChildren<Animation>().animation["press"].speed;
+				
 				if (this.GetComponentInChildren<Animation>().animation["press"].speed < 0)
 					this.GetComponentInChildren<Animation>().animation["press"].time = this.transform.GetComponentInChildren<Animation>().animation["press"].length;
 			}
+			
 			this.GetComponentInChildren<Animation>().Play();
 		}
 		

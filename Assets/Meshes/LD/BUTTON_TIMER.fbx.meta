@@ -6,15 +6,23 @@ ModelImporter:
     100000: //RootNode
     100002: polySurface345
     100004: polySurface346
+    100006: ARROW_TIMER
     400000: //RootNode
     400002: polySurface345
     400004: polySurface346
+    400006: ARROW_TIMER
     2300000: polySurface345
     2300002: polySurface346
+    2300004: //RootNode
+    2300006: ARROW_TIMER
     3300000: polySurface345
     3300002: polySurface346
+    3300004: //RootNode
+    3300006: ARROW_TIMER
     4300000: polySurface345
     4300002: polySurface346
+    4300004: BUTTON_TIMER
+    4300006: ARROW_TIMER
     9500000: //RootNode
     11100000: //RootNode
   materials:

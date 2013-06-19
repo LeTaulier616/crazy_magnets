@@ -7,19 +7,33 @@ using FarseerPhysics.Dynamics;
 
 public class KillzoneScript : MonoBehaviour
 {
+	public enum KillzoneType
+	{
+		Electric, Saw
+	};
+	
+	public KillzoneType type;
+	
 	private Body killBody;
 	private AudioClip sawSound;
+	private AudioClip electricSound;
 	
 	void Start()
 	{
 		killBody = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
 		sawSound = GlobalVarScript.instance.MultiSawSound;
+		sawSound = GlobalVarScript.instance.ElectricSound;
 		
 		killBody.OnCollision += OnCollisionEvent;
 		
 		if(audio != null && !audio.isPlaying)
 		{
-			audio.clip = sawSound;
+			if(type == KillzoneType.Saw)
+				audio.clip = sawSound;
+			
+			else if(type == KillzoneType.Saw)
+				audio.clip = electricSound;
+				
 			audio.Play();
 		}
 	}
