@@ -73,6 +73,7 @@ public class MenuGesture : MonoBehaviour {
 		
 		screen.activateMenu();
 		setVisible = true;
+		doNothing  = false;
 		timer = 0.0f;
 		
 		this.alpha = 1;
@@ -232,31 +233,34 @@ public class MenuGesture : MonoBehaviour {
 		
 		if(loadMenus)
 		{
+			doNothing = true;
 			Application.LoadLevel("MENU");
 		}
 		else if(loadLevel)
 		{
+			doNothing = true;
 			if(Application.loadedLevelName == "CM_Level_0_FINAL")
 			{
-				doNothing = false;
 				StartCoroutine(LoadEndCutsceneToLoad());
 			}
 			else
 			{
-				doNothing = true;
 				GameObject.Find("Anchor").transform.FindChild("LOADING_PANEL").gameObject.SetActive(true);
 				StartCoroutine(LoadLevelToLoad());
 			}
 		}
 		else if(loadTuto)
 		{
-			doNothing = false;
+			doNothing = true;
 			GameObject.Find("Anchor").transform.FindChild("LOADING_PANEL").gameObject.SetActive(true);
 			StartCoroutine(LoadCutsceneToLoad());
 		}
 		
 		if(switchHUD || loadMenus || loadLevel)
+		{
+			doNothing = true;
 			return;
+		}
 
 		setScreen ();
 	}

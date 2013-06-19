@@ -6,7 +6,7 @@ public class Cutscene : MonoBehaviour {
 	
 	private bool  isSliding;
 	private int   slideDirection;
-	public int   currentSlide;
+	public  int   currentSlide;
 	private bool  doNothing;  
 	
 	private Touch screenTouch;
@@ -136,9 +136,13 @@ public class Cutscene : MonoBehaviour {
 			this.alphaDir = 1;
 			return;
 		}
+		
+		if(doNothing)
+			return;
+		
 		if(Application.loadedLevelName == "Cutscene")
 		{
-			doNothing = false;
+			doNothing = true;
 			StartCoroutine(LoadTutoToLoad());
 		}
 		else
