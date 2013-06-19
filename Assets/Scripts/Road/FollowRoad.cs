@@ -73,7 +73,7 @@ public class FollowRoad : MonoBehaviour {
 		if (!playerScript.isAlive)
 			jointConnected = false;
 		
-		if(!playerScript.onGround && jointConnected)
+		else if(!playerScript.onGround && jointConnected)
 		{
 			playerScript.onGround = false;
 			playerScript.onPFM    = false;

@@ -69,6 +69,8 @@ public class Controllable : MonoBehaviour
 	
 	[HideInInspector]
 	public Vector3 chargePosition;
+
+	private int groundCount = 0;
 		
 	protected void Start ()
 	{
@@ -442,6 +444,10 @@ public class Controllable : MonoBehaviour
 	
 	protected virtual void CollisionGround(GameObject ground)
 	{
+		groundCount++;
+
+		if (groundCount != 1)
+			return;
 		Camera.main.SendMessage("Reset", SendMessageOptions.DontRequireReceiver);
 		
 		if (GlobalVarScript.instance.groundTags.Contains(ground.tag))
@@ -499,6 +505,9 @@ public class Controllable : MonoBehaviour
 	
 	protected virtual void ExitGround(GameObject ground)
 	{
+		groundCount--;
+		if (groundCount != 0)
+			return;
 		this.onGround = false;
 	}
 
