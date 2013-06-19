@@ -153,6 +153,12 @@ public class PlayerScript : Controllable
 		this.playerBody.Position = new FVector2(currentCheckpoint.x, currentCheckpoint.y);
 	}
 	
+	public void ToPreviousCheckPoint()
+	{
+		Vector3 currentCheckpoint = checkpoints[this.checkpointIndex];
+		this.playerBody.Position = new FVector2(currentCheckpoint.x, currentCheckpoint.y);
+	}
+	
 	public void GetBolt(GoldBoltScript bolt)
 	{
 		this.boltsToValidate.Add(bolt);

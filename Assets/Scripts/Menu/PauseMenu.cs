@@ -63,10 +63,10 @@ public class PauseMenu : MenuScreen {
 	
 	private void nextCheckPoint(GameObject go)
 	{
-		Debug.Log("Next CheckPoint");
+		Debug.Log("Previous CheckPoint");
 		exitScreen = true;
 		screenToGo = MenuGesture.ScreenMenu.NONE;
-		GlobalVarScript.instance.player.SendMessage("ToNextCheckPoint", SendMessageOptions.DontRequireReceiver);
+		GlobalVarScript.instance.player.SendMessage("ToPreviousCheckPoint", SendMessageOptions.DontRequireReceiver);
 	}
 	
 	private void restartLevel(GameObject go)
