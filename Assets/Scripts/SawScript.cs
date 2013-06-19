@@ -3,19 +3,15 @@ using System.Collections;
 
 public class SawScript : MonoBehaviour {
 	
-	public float Speed;
-	
-	public bool Inverse;
-	
-	private AudioClip sawSound;	
+	private AudioClip sawSound;
 	
 	// Use this for initialization
 	void Start () 
 	{
+		sawSound = GlobalVarScript.instance.SingleSawSound;
 		
 		if(audio != null && !audio.isPlaying)
 		{
-			sawSound = GlobalVarScript.instance.SingleSawSound;
 			audio.clip = sawSound;
 			audio.Play();
 		}
@@ -24,10 +20,6 @@ public class SawScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if(!Inverse)
-			transform.Rotate(0.0f, Speed, 0.0f);
-		
-		else
-			transform.Rotate(0.0f, -Speed, 0.0f);
+		transform.Rotate(Vector3.forward, 15.0f);
 	}
 }

@@ -23,7 +23,7 @@ public class KillzoneScript : MonoBehaviour
 		killBody = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
 		
 		sawSound = GlobalVarScript.instance.MultiSawSound;
-		electricSound = GlobalVarScript.instance.ElectricSound;
+		sawSound = GlobalVarScript.instance.ElectricSound;
 		
 		killBody.OnCollision += OnCollisionEvent;
 		

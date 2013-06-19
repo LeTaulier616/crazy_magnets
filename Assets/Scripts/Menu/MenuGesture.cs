@@ -76,8 +76,16 @@ public class MenuGesture : MonoBehaviour {
 		doNothing  = false;
 		timer = 0.0f;
 		
-		this.alpha = 1;
-		this.alphaDir = -1f;
+		if (Application.loadedLevelName != "MENU")
+		{
+			this.alpha = 1;
+			this.alphaDir = -1f;
+		}
+		else
+		{
+			this.alpha = 0;
+			this.alphaDir = 0;
+		}
 	}
 	
 	void LateUpdate()
@@ -98,49 +106,52 @@ public class MenuGesture : MonoBehaviour {
 		{
 			lerpValue = 1.0f;
 		}
-			
-		foreach(UIWidget widget in GameObject.Find("Anchor").GetComponentsInChildren<UIWidget>())
-        {
-			if(widget.name != "Menu_Background" || lastScreen == ScreenMenu.NONE || nextScreen == ScreenMenu.NONE)
-			{
-				if(widget.name == "PAUSE_BACKGROUND")
+		
+		if (setVisible || setHidden)
+		{
+			foreach(UIWidget widget in GameObject.Find("Anchor").GetComponentsInChildren<UIWidget>())
+	        {
+				if(widget.name != "Menu_Background" || lastScreen == ScreenMenu.NONE || nextScreen == ScreenMenu.NONE)
 				{
-					widget.alpha   = 0.5f;
-					widget.color   = new Color(0.5f,0.5f,0.5f,0.5f);
+					if(widget.name == "PAUSE_BACKGROUND")
+					{
+						widget.alpha   = 0.5f;
+						widget.color   = new Color(0.5f,0.5f,0.5f,0.5f);
+					}
+					else if(setVisible)
+					{
+						if(widget.name == "Back")
+						{
+							widget.alpha = lerpValue * 0.5f;
+							widget.color = new Color(lerpValue*0.5f,lerpValue*0.5f,lerpValue*0.5f,lerpValue*0.5f);
+						}
+						else
+						{
+							widget.alpha = lerpValue;
+							widget.color = new Color(lerpValue,lerpValue,lerpValue,lerpValue);
+						}
+					}
+					else if(setHidden)
+					{
+						if(widget.name == "Back")
+						{
+							widget.alpha = (1.0f - lerpValue) * 0.5f;
+							widget.color = new Color((1.0f - lerpValue)*0.5f,(1.0f - lerpValue)*0.5f,(1.0f - lerpValue)*0.5f,(1.0f - lerpValue)*0.5f);
+						}
+						else
+						{
+							widget.alpha = 1.0f - lerpValue;
+							widget.color = new Color(1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue);
+						}
+					}
 				}
-				else if(setVisible)
+				else
 				{
-					if(widget.name == "Back")
-					{
-						widget.alpha = lerpValue * 0.5f;
-						widget.color = new Color(lerpValue*0.5f,lerpValue*0.5f,lerpValue*0.5f,lerpValue*0.5f);
-					}
-					else
-					{
-						widget.alpha = lerpValue;
-						widget.color = new Color(lerpValue,lerpValue,lerpValue,lerpValue);
-					}
+					widget.alpha = 1.0f;
+					widget.color   = new Color(1.0f,1.0f,1.0f,1.0f);
 				}
-				else if(setHidden)
-				{
-					if(widget.name == "Back")
-					{
-						widget.alpha = (1.0f - lerpValue) * 0.5f;
-						widget.color = new Color((1.0f - lerpValue)*0.5f,(1.0f - lerpValue)*0.5f,(1.0f - lerpValue)*0.5f,(1.0f - lerpValue)*0.5f);
-					}
-					else
-					{
-						widget.alpha = 1.0f - lerpValue;
-						widget.color = new Color(1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue,1.0f - lerpValue);
-					}
-				}
-			}
-			else
-			{
-				widget.alpha = 1.0f;
-				widget.color   = new Color(1.0f,1.0f,1.0f,1.0f);
-			}
-        }
+	        }
+		}
 		
 		if(screen != null && screen.exitScreen) 
 		{
@@ -358,12 +369,16 @@ public class MenuGesture : MonoBehaviour {
 	
 	void OnGUI()
 	{
+		if (this.alphaDir == 0)
+			return;
+			
 		if (this.alphaDir == 1)
 		{
 			this.alpha += Time.deltaTime / 2f;
 			if (this.alpha > 1)
 			{
 				this.alpha = 1;
+				this.alphaDir = 0;
 			}
 		}
 		else if (this.alphaDir == -1)
@@ -372,6 +387,7 @@ public class MenuGesture : MonoBehaviour {
 			if (this.alpha < 0)
 			{
 				this.alpha = 0;
+				this.alphaDir = 0;
 			}
 		}
 		Color color = new Color(0, 0, 0, this.alpha);
