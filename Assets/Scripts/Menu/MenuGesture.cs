@@ -369,9 +369,6 @@ public class MenuGesture : MonoBehaviour {
 	
 	void OnGUI()
 	{
-		if (this.alphaDir == 0)
-			return;
-			
 		if (this.alphaDir == 1)
 		{
 			this.alpha += Time.deltaTime / 2f;
@@ -390,6 +387,10 @@ public class MenuGesture : MonoBehaviour {
 				this.alphaDir = 0;
 			}
 		}
+		
+		if (this.alpha == 0)
+			return;
+		
 		Color color = new Color(0, 0, 0, this.alpha);
 		Texture2D texture = new Texture2D(1, 1);
     	texture.SetPixel(0,0,color);
