@@ -143,22 +143,24 @@ public class RoadData
 		vx = currentTraveled-lastTraveled;
 		vy = currentTraveled-lastTraveled;
 		va = currentTraveled-lastTraveled;
+		Vector3 curPos = this.keyPoints[currentPath].position;
+		Vector3 nexPos = this.keyPoints[currentPath + 1].position;
 		if(this.keyPoints[currentPath].trajectoire == Trajectoire.LINE)
 		{
-			float ratio = Vector3.Distance(this.keyPoints[currentPath].position, this.keyPoints[currentPath+1].position)
-						  / (Mathf.Abs(this.keyPoints[currentPath+1].position.x - this.keyPoints[currentPath].position.x)
-						  + Mathf.Abs(this.keyPoints[currentPath+1].position.y - this.keyPoints[currentPath].position.y));
+			float ratio = Vector3.Distance(curPos, nexPos)
+						  / (Mathf.Abs(nexPos.x - curPos.x)
+						  + Mathf.Abs(nexPos.y - curPos.y));
 			vx *= ratio;
-			if(this.keyPoints[currentPath+1].position.x == this.keyPoints[currentPath].position.x)
+			if(nexPos.x == curPos.x)
 				vx = 0;
 			vy *= ratio;
-			if(this.keyPoints[currentPath+1].position.y == this.keyPoints[currentPath].position.y)
+			if(nexPos.y == curPos.y)
 				vy = 0;
 			va = 0;
 		}
 		else
 		{
-			va = va * 180.0f / (Mathf.PI * Mathf.Abs(this.keyPoints[currentPath+1].position.x - this.keyPoints[currentPath].position.x));
+			va = va * 180.0f / (Mathf.PI * Mathf.Abs(nexPos.x - curPos.x));
 			vx = 0;
 			vy = 0;
 		}
@@ -190,35 +192,37 @@ public class RoadData
 	
 	void followTheRoad()
 	{
+		Vector3 curPos = this.keyPoints[currentPath].position;
+		Vector3 nexPos = this.keyPoints[currentPath + 1].position;
 		if(this.keyPoints[currentPath].trajectoire == Trajectoire.LINE)
 		{
-			if(this.keyPoints[currentPath+1].position.x != this.keyPoints[currentPath].position.x
-				&& this.keyPoints[currentPath+1].position.y != this.keyPoints[currentPath].position.y)
+			if(nexPos.x != curPos.x
+				&& nexPos.y != curPos.y)
 			{
-				currentPosition.x += vx * (this.keyPoints[currentPath+1].position.x > this.keyPoints[currentPath].position.x ? 1.0f : -1.0f);
-				currentPosition.y += vy * (this.keyPoints[currentPath+1].position.y > this.keyPoints[currentPath].position.y ? 1.0f : -1.0f);
-				if((currentPosition.x >= this.keyPoints[currentPath+1].position.x && this.keyPoints[currentPath+1].position.x > this.keyPoints[currentPath].position.x)
-				   || (currentPosition.x <= this.keyPoints[currentPath+1].position.x && this.keyPoints[currentPath+1].position.x < this.keyPoints[currentPath].position.x)
+				currentPosition.x += vx * (nexPos.x > curPos.x ? 1.0f : -1.0f);
+				currentPosition.y += vy * (nexPos.y > curPos.y ? 1.0f : -1.0f);
+				if((currentPosition.x >= nexPos.x && nexPos.x > curPos.x)
+				   || (currentPosition.x <= nexPos.x && nexPos.x < curPos.x)
 				   || currentTime >= totalTime)
 				{	
 					CheckNewPath();
 				}
 			}
-			else if(this.keyPoints[currentPath+1].position.x != this.keyPoints[currentPath].position.x)
+			else if(nexPos.x != curPos.x)
 			{
-				currentPosition.x += vx * (this.keyPoints[currentPath+1].position.x > this.keyPoints[currentPath].position.x ? 1.0f : -1.0f);
-				if((currentPosition.x >= this.keyPoints[currentPath+1].position.x && this.keyPoints[currentPath+1].position.x > this.keyPoints[currentPath].position.x)
-				   || (currentPosition.x <= this.keyPoints[currentPath+1].position.x && this.keyPoints[currentPath+1].position.x < this.keyPoints[currentPath].position.x)
+				currentPosition.x += vx * (nexPos.x > curPos.x ? 1.0f : -1.0f);
+				if((currentPosition.x >= nexPos.x && nexPos.x > curPos.x)
+				   || (currentPosition.x <= nexPos.x && nexPos.x < curPos.x)
 				   || currentTime >= totalTime)
 				{	
 					CheckNewPath();
 				}
 			}
-			else if(this.keyPoints[currentPath+1].position.y != this.keyPoints[currentPath].position.y)
+			else if(nexPos.y != curPos.y)
 			{
-				currentPosition.y += vy * (this.keyPoints[currentPath+1].position.y > this.keyPoints[currentPath].position.y ? 1.0f : -1.0f);
-				if((currentPosition.y >= this.keyPoints[currentPath+1].position.y && this.keyPoints[currentPath+1].position.y > this.keyPoints[currentPath].position.y)
-				   || (currentPosition.y <= this.keyPoints[currentPath+1].position.y && this.keyPoints[currentPath+1].position.y < this.keyPoints[currentPath].position.y)
+				currentPosition.y += vy * (nexPos.y > curPos.y ? 1.0f : -1.0f);
+				if((currentPosition.y >= nexPos.y && nexPos.y > curPos.y)
+				   || (currentPosition.y <= nexPos.y && nexPos.y < curPos.y)
 				   || currentTime >= totalTime)
 				{
 					CheckNewPath();
@@ -231,7 +235,7 @@ public class RoadData
 			{
 				case PathType.CIRCLEBTOL :
 					this.currentAngle -= this.va;
-					this.circleCenter = new Vector3(this.keyPoints[currentPath].position.x, this.keyPoints[currentPath+1].position.y, this.keyPoints[currentPath].position.z);
+					this.circleCenter = new Vector3(curPos.x, nexPos.y, curPos.z);
 					if(this.currentAngle <= 180.0f)
 					{
 						this.currentAngle = 180.0f;
@@ -240,7 +244,7 @@ public class RoadData
 					break;
 				case PathType.CIRCLEBTOR :
 					this.currentAngle += this.va;
-					this.circleCenter = new Vector3(this.keyPoints[currentPath].position.x, this.keyPoints[currentPath+1].position.y, this.keyPoints[currentPath].position.z);
+					this.circleCenter = new Vector3(curPos.x, nexPos.y, curPos.z);
 					if(this.currentAngle >= 360.0f)
 					{
 						this.currentAngle = 360.0f;
@@ -249,7 +253,7 @@ public class RoadData
 					break;
 				case PathType.CIRCLETTOL :
 					this.currentAngle += this.va;
-					this.circleCenter = new Vector3(this.keyPoints[currentPath].position.x, this.keyPoints[currentPath+1].position.y, this.keyPoints[currentPath].position.z);
+					this.circleCenter = new Vector3(curPos.x, nexPos.y, curPos.z);
 					if(this.currentAngle >= 180.0f)
 					{
 						this.currentAngle = 180.0f;
@@ -258,7 +262,7 @@ public class RoadData
 					break;
 				case PathType.CIRCLETTOR :
 					this.currentAngle -= this.va;
-					this.circleCenter = new Vector3(this.keyPoints[currentPath].position.x, this.keyPoints[currentPath+1].position.y, this.keyPoints[currentPath].position.z);
+					this.circleCenter = new Vector3(curPos.x, nexPos.y, curPos.z);
 					if(this.currentAngle <= 0.0f)
 					{
 						this.currentAngle = 0.0f;
@@ -267,7 +271,7 @@ public class RoadData
 					break;
 				case PathType.CIRCLELTOT :
 					this.currentAngle -= this.va;
-					this.circleCenter = new Vector3(this.keyPoints[currentPath+1].position.x, this.keyPoints[currentPath].position.y, this.keyPoints[currentPath].position.z);
+					this.circleCenter = new Vector3(nexPos.x, curPos.y, curPos.z);
 					if(this.currentAngle <= 90.0f)
 					{
 						this.currentAngle = 90.0f;
@@ -276,7 +280,7 @@ public class RoadData
 					break;
 				case PathType.CIRCLELTOB :
 					this.currentAngle += this.va;
-					this.circleCenter = new Vector3(this.keyPoints[currentPath+1].position.x, this.keyPoints[currentPath].position.y, this.keyPoints[currentPath].position.z);
+					this.circleCenter = new Vector3(nexPos.x, curPos.y, curPos.z);
 					if(this.currentAngle >= 270.0f)
 					{
 						this.currentAngle = 270.0f;
@@ -285,7 +289,7 @@ public class RoadData
 					break;
 				case PathType.CIRCLERTOT :
 					this.currentAngle += this.va;
-					this.circleCenter = new Vector3(this.keyPoints[currentPath+1].position.x, this.keyPoints[currentPath].position.y, this.keyPoints[currentPath].position.z);
+					this.circleCenter = new Vector3(nexPos.x, curPos.y, curPos.z);
 					if(this.currentAngle >= 90.0f)
 					{
 						this.currentAngle = 90.0f;
@@ -294,7 +298,7 @@ public class RoadData
 					break;
 				case PathType.CIRCLERTOB :
 					this.currentAngle -= this.va;
-					this.circleCenter = new Vector3(this.keyPoints[currentPath+1].position.x, this.keyPoints[currentPath].position.y, this.keyPoints[currentPath].position.z);
+					this.circleCenter = new Vector3(nexPos.x, curPos.y, curPos.z);
 					if(this.currentAngle <= 270.0f)
 					{
 						this.currentAngle = 270.0f;
@@ -355,39 +359,41 @@ public class RoadData
 		else
 			currentPath++;
 		
+		Vector3 curPos = this.keyPoints[currentPath].position;
+		Vector3 nexPos = this.keyPoints[currentPath + 1].position;
 		switch(keyPoints[currentPath].type)
 		{
 			case PathType.CIRCLEBTOL :
 				this.currentAngle = 270;
-				this.circleCenter = new Vector3(this.keyPoints[currentPath].position.x, this.keyPoints[currentPath+1].position.y, this.keyPoints[currentPath].position.z);
+				this.circleCenter = new Vector3(curPos.x, nexPos.y, curPos.z);
 				break;
 			case PathType.CIRCLEBTOR :
 				this.currentAngle = 270;
-				this.circleCenter = new Vector3(this.keyPoints[currentPath].position.x, this.keyPoints[currentPath+1].position.y, this.keyPoints[currentPath].position.z);
+				this.circleCenter = new Vector3(curPos.x, nexPos.y, curPos.z);
 				break;
 			case PathType.CIRCLETTOL :
 				this.currentAngle = 90;
-				this.circleCenter = new Vector3(this.keyPoints[currentPath].position.x, this.keyPoints[currentPath+1].position.y, this.keyPoints[currentPath].position.z);
+				this.circleCenter = new Vector3(curPos.x, nexPos.y, curPos.z);
 				break;
 			case PathType.CIRCLETTOR :
 				this.currentAngle = 90;
-				this.circleCenter = new Vector3(this.keyPoints[currentPath].position.x, this.keyPoints[currentPath+1].position.y, this.keyPoints[currentPath].position.z);
+				this.circleCenter = new Vector3(curPos.x, nexPos.y, curPos.z);
 				break;
 			case PathType.CIRCLELTOT :
 				this.currentAngle = 180.0f;
-				this.circleCenter = new Vector3(this.keyPoints[currentPath+1].position.x, this.keyPoints[currentPath].position.y, this.keyPoints[currentPath].position.z);
+				this.circleCenter = new Vector3(nexPos.x, curPos.y, curPos.z);
 				break;
 			case PathType.CIRCLELTOB :
 				this.currentAngle = 180.0f;
-				this.circleCenter = new Vector3(this.keyPoints[currentPath+1].position.x, this.keyPoints[currentPath].position.y, this.keyPoints[currentPath].position.z);
+				this.circleCenter = new Vector3(nexPos.x, curPos.y, curPos.z);
 				break;
 			case PathType.CIRCLERTOT :
 				this.currentAngle = 0.0f;
-				this.circleCenter = new Vector3(this.keyPoints[currentPath+1].position.x, this.keyPoints[currentPath].position.y, this.keyPoints[currentPath].position.z);
+				this.circleCenter = new Vector3(nexPos.x, curPos.y, curPos.z);
 				break;
 			case PathType.CIRCLERTOB :
 				this.currentAngle = 360.0f;
-				this.circleCenter = new Vector3(this.keyPoints[currentPath+1].position.x, this.keyPoints[currentPath].position.y, this.keyPoints[currentPath].position.z);
+				this.circleCenter = new Vector3(nexPos.x, curPos.y, curPos.z);
 				break;
 			default :
 				break;
