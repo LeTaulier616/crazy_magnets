@@ -8,7 +8,8 @@ public class GlobalScript : MonoBehaviour
 		//Screen.showCursor = false;
 		Screen.fullScreen = true;
 		
-		Application.targetFrameRate = 30;
+		//Application.targetFrameRate = 30;
+		Application.targetFrameRate = -1;
 	}
 	
 	void Update ()
