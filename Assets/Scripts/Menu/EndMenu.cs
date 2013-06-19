@@ -74,7 +74,7 @@ public class EndMenu : MenuScreen
 			nextLevelLevel = (Datas.sharedDatas().datas.currentLevel+1)%MyDefines.kLevelsByWorld;
 			nextLevelWorld = Datas.sharedDatas().datas.currentWorld + (nextLevelLevel == 0 ? 1 : 0);
 			
-			if((nextLevelWorld >= MyDefines.kNbWorlds && nextLevelLevel >= MyDefines.kNbLevels) || MyDefines.kNbLevelsAvailable <= levelnumber)
+			if((nextLevelWorld >= MyDefines.kNbWorlds && nextLevelLevel >= MyDefines.kNbLevels) || MyDefines.kNbLevelsAvailable <= levelnumber+1)
 			{
 				nextLevelWorld = 0;
 				nextLevelLevel = 0;
