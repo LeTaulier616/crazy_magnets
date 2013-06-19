@@ -21,6 +21,7 @@ public class KillzoneScript : MonoBehaviour
 	void Start()
 	{
 		killBody = gameObject.GetComponent<FSBodyComponent>().PhysicsBody;
+		
 		sawSound = GlobalVarScript.instance.MultiSawSound;
 		electricSound = GlobalVarScript.instance.ElectricSound;
 		
@@ -31,7 +32,7 @@ public class KillzoneScript : MonoBehaviour
 			if(type == KillzoneType.Saw)
 				audio.clip = sawSound;
 			
-			else if(type == KillzoneType.Saw)
+			else if(type == KillzoneType.Electric)
 				audio.clip = electricSound;
 				
 			audio.Play();
