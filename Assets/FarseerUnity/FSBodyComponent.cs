@@ -108,7 +108,7 @@ public class FSBodyComponent : MonoBehaviour
 			Vector3 pos = transform.position;
 			pos.x = body.Position.X;
 			pos.y = body.Position.Y;
-			if (Vector3.Distance(pos, GlobalVarScript.instance.player.transform.position) < 20f)
+			if (Vector3.Distance(pos, GlobalVarScript.instance.player.transform.position) < 20f || transform.position.x != pos.x || transform.position.y != pos.y)
 			{
 				Vector3 rot = transform.rotation.eulerAngles;
 				rot.z = body.Rotation * Mathf.Rad2Deg;

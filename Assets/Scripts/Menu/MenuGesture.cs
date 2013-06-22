@@ -37,6 +37,8 @@ public class MenuGesture : MonoBehaviour {
 	private Fabric.GroupComponent musicComponent   = null;
 	private bool firstUpdate = true;
 	
+	private bool enableButtons = false;
+	
 	void Start()
 	{
 		if(Application.loadedLevelName == "MENU")
@@ -183,9 +185,14 @@ public class MenuGesture : MonoBehaviour {
 			}
 		}
 		
-		foreach(UIButton button in GameObject.Find("Anchor").GetComponentsInChildren<UIButton>())
-        {
-			button.isEnabled = !(setVisible || setHidden);
+		bool enableButtonsTemp = !(setVisible || setHidden);
+		if (this.enableButtons != enableButtonsTemp)
+		{
+			this.enableButtons = enableButtonsTemp;
+			foreach(UIButton button in GameObject.Find("Anchor").GetComponentsInChildren<UIButton>())
+	        {
+				button.isEnabled = this.enableButtons;
+			}
 		}
 		
 		if(lerpValue >= 1.0f)
