@@ -103,13 +103,19 @@ public class FSBodyComponent : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		Vector3 pos = transform.position;
-		pos.x = body.Position.X;
-		pos.y = body.Position.Y;
-		Vector3 rot = transform.rotation.eulerAngles;
-		rot.z = body.Rotation * Mathf.Rad2Deg;
-		transform.position = pos;
-		transform.rotation = Quaternion.Euler(rot);
+		if (body.BodyType != BodyType.Static)
+		{
+			Vector3 pos = transform.position;
+			pos.x = body.Position.X;
+			pos.y = body.Position.Y;
+			if (Vector3.Distance(pos, GlobalVarScript.instance.player.transform.position) < 20f)
+			{
+				Vector3 rot = transform.rotation.eulerAngles;
+				rot.z = body.Rotation * Mathf.Rad2Deg;
+				transform.position = pos;
+				transform.rotation = Quaternion.Euler(rot);
+			}
+		}
 	}
 	
 	protected virtual void OnDestroy()
