@@ -215,7 +215,6 @@ public class MenuGesture : MonoBehaviour {
 		
 		if(firstUpdate)
 		{
-			Debug.Log("First Update");
 			AudioSource[] audioLs = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
       	 	foreach (AudioSource audioL in audioLs)
 			{

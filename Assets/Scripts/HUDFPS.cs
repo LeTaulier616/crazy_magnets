@@ -26,6 +26,11 @@ public class HUDFPS : MonoBehaviour
 	 
 	void Start()
 	{
+		if(!Debug.isDebugBuild)
+		{
+			Destroy(gameObject);
+		}
+		
 		FPSLabel = GetComponent<UILabel>();
 	    timeleft = updateInterval;
 	}
