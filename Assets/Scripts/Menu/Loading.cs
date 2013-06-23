@@ -6,6 +6,7 @@ public class Loading : MonoBehaviour {
 	GameObject[] frames;
 	int          frame;
 	private int  lastFrame;
+	private int  speed = 8;
 	
 	void Start () 
 	{
@@ -14,21 +15,21 @@ public class Loading : MonoBehaviour {
 		lastFrame = 0;
 		frames = new GameObject[framesParent.childCount];
 		for(int iii = 1; iii <= frames.Length; ++iii)
+		{
 			frames[iii-1] = framesParent.FindChild("loading"+iii).gameObject;
+			frames[iii-1].SetActive(false);
+		}
 	}
 	
 	void Update () 
 	{
 		frame++;
-		int speed = 8;
 		if(frame%speed == 0)
 		{
+			int newFrame = (frame/speed)%frames.Length;
+			frames[newFrame].SetActive(true);
 			frames[lastFrame].SetActive(false);
-			frames[(frame/speed)%frames.Length].SetActive(true);
-			lastFrame = (frame/speed)%frames.Length;
-			
-			frames[(frame/speed)%frames.Length].GetComponent<UISprite>().alpha = 1.0f;
-			frames[(frame/speed)%frames.Length].GetComponent<UISprite>().color = new Color(1.0f,1.0f ,1.0f,1.0f);
+			lastFrame = newFrame;
 		}
 	}
 }
