@@ -17,7 +17,6 @@ public class Loading : MonoBehaviour {
 		for(int iii = 1; iii <= frames.Length; ++iii)
 		{
 			frames[iii-1] = framesParent.FindChild("loading"+iii).gameObject;
-			frames[iii-1].SetActive(false);
 		}
 	}
 	
