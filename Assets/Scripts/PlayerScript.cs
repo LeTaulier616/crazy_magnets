@@ -191,7 +191,7 @@ public class PlayerScript : Controllable
 		Camera.main.SendMessage("ResetPosition", new Vector3(this.target.transform.position.x, this.target.transform.position.y, Camera.main.transform.position.z / 2f), SendMessageOptions.DontRequireReceiver);
 		
 		if(playerMesh != null)
-			this.playerMesh.SetActiveRecursively(true);
+			this.playerMesh.SetActive(true);
 		
 		else
 			this.renderer.enabled = true;
@@ -238,7 +238,7 @@ public class PlayerScript : Controllable
 		Invoke("Resurrect", 4f);
 		
 		if(playerMesh != null)
-			this.playerMesh.SetActiveRecursively(false);
+			this.playerMesh.SetActive(false);
 		else
 			this.renderer.enabled =false;
 		

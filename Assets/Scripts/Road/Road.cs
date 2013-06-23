@@ -39,9 +39,7 @@ public class Road : MonoBehaviour
     public List<KeyType>     keyTypes;
     public List<string>      functionNames;
     public List<KeyPoint>    pathWays;
-	
-	private AudioClip EndSound;
-	
+		
 	void OnEnable()
 	{
 		if(this.lp.Count <= 0) return;
@@ -177,7 +175,7 @@ public class Road : MonoBehaviour
 	{		
 		if(audio!= null && !audio.isPlaying)
 		{
-			this.audio.clip = EndSound;
+			this.audio.clip = GlobalVarScript.instance.MovingKillzoneSound;
 			audio.Play();
 		}
 	}
