@@ -251,6 +251,7 @@ public class MenuGesture : MonoBehaviour {
 		if(loadMenus)
 		{
 			doNothing = true;
+			GameObject.Find("Anchor").transform.FindChild("LOADING_PANEL").gameObject.SetActive(true);
 			Application.LoadLevel("MENU");
 		}
 		else if(loadLevel)
@@ -258,6 +259,7 @@ public class MenuGesture : MonoBehaviour {
 			doNothing = true;
 			if(Application.loadedLevelName == "CM_Level_0_FINAL")
 			{
+				GameObject.Find("Anchor").transform.FindChild("LOADING_PANEL").gameObject.SetActive(true);
 				StartCoroutine(LoadEndCutsceneToLoad());
 			}
 			else
