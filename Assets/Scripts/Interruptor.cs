@@ -373,9 +373,9 @@ public class Interruptor : MonoBehaviour
 			targets[trg].GetComponent<InterruptorReceiver>().OnDesactivate();
 		}
 		
-		if(activator == Activator.PLAYER_OR_CUBE && (type == Type.STAY || type == Type.ONOFF))
+		if(activator == Activator.PLAYER_OR_CUBE && (type == Type.STAY || type == Type.ONOFF) && audio1 != null)
 		{
-			audio1.clip = interruptorSound;
+			audio1.clip = interruptorReleaseSound;
 			audio1.Play();
 		}
 		
