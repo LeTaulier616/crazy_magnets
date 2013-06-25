@@ -143,6 +143,7 @@ public class Cutscene : MonoBehaviour {
 		if(Application.loadedLevelName == "Cutscene")
 		{
 			doNothing = true;
+			GameObject.Find("Anchor").transform.FindChild("LOADING_PANEL").gameObject.SetActive(true);
 			StartCoroutine(LoadTutoToLoad());
 		}
 		else

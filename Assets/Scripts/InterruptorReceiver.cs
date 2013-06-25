@@ -34,7 +34,8 @@ public class InterruptorReceiver : MonoBehaviour
 			}
 			
 			else
-				this.gameObject.active = !isOpen;
+				this.gameObject.SetActive(!isOpen);
+			
 			this.GetComponent<FSBodyComponent>().PhysicsBody.IsSensor = true;
 		}
 	}
@@ -117,9 +118,6 @@ public class InterruptorReceiver : MonoBehaviour
 				
 				else if(gameObject.CompareTag("Ground"))
 					audio.clip = isOpen ? GlobalVarScript.instance.TrapOpenSound : GlobalVarScript.instance.TrapCloseSound;
-							
-				if(gameObject.CompareTag("Ground"))
-					Debug.Log(audio.clip);
 				
 				audio.Play();
 			}
@@ -144,19 +142,16 @@ public class InterruptorReceiver : MonoBehaviour
 				{
 					animation["open"].speed = (isOpen ? 1.0f : -1.0f);
 					
-					if (!isOpen)
-						animation["open"].time = animation["open"].length;
-					
 					animation.Play();
 				}
 				
 				else
-					animation.Play((isOpen ? "open" : "close"));
+					animation.CrossFade((isOpen ? "open" : "close"), 0.2f);
 			}
 			
 			else 
 			{
-				this.gameObject.active = !isOpen;
+				this.gameObject.SetActive(!isOpen);
 			}
 		}
 

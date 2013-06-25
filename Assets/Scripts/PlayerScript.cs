@@ -155,8 +155,31 @@ public class PlayerScript : Controllable
 	
 	public void ToPreviousCheckPoint()
 	{
-		Vector3 currentCheckpoint = checkpoints[this.checkpointIndex];
-		this.playerBody.Position = new FVector2(currentCheckpoint.x, currentCheckpoint.y);
+		this.ReleaseFocus();
+		this.isAlive = false;
+		this.playerBody.BodyType = BodyType.Static;
+		this.playerBody.Enabled = false;
+		this.onPFM = false;
+		this.bodyPFM = null;
+		Invoke("AbleResurrection", 2f);
+		Invoke("restartLastCheckPoint", 4f);
+		
+		if(playerMesh != null)
+			this.playerMesh.SetActive(false);
+		else
+			this.renderer.enabled =false;
+		
+		foreach(FollowRoad followroad in GameObject.Find("WORLD").GetComponentsInChildren<FollowRoad>())
+		{
+			followroad.deleteJoin();
+		}
+		
+		GlobalVarScript.instance.blockCamera(this.transform.position);
+		
+		Invoke("fadeIn", 2);
+		
+		//Vector3 currentCheckpoint = checkpoints[this.checkpointIndex];
+		//this.playerBody.Position = new FVector2(currentCheckpoint.x, currentCheckpoint.y);
 	}
 	
 	public void GetBolt(GoldBoltScript bolt)
@@ -191,7 +214,51 @@ public class PlayerScript : Controllable
 		Camera.main.SendMessage("ResetPosition", new Vector3(this.target.transform.position.x, this.target.transform.position.y, Camera.main.transform.position.z / 2f), SendMessageOptions.DontRequireReceiver);
 		
 		if(playerMesh != null)
-			this.playerMesh.SetActiveRecursively(true);
+			this.playerMesh.SetActive(true);
+		
+		else
+			this.renderer.enabled = true;
+		
+		this.canResurrect = false;
+		this.isAlive = true;
+		
+		foreach(FollowRoad followroad in GameObject.Find("WORLD").GetComponentsInChildren<FollowRoad>())
+		{
+			followroad.reloadRoad();
+		}
+		
+		foreach(Interruptor interruptor in GameObject.Find("WORLD").GetComponentsInChildren<Interruptor>())
+		{
+			interruptor.reloadInterruptor();
+		}
+		
+		foreach (GoldBoltScript bolt in this.boltsToValidate)
+		{
+			bolt.Reset();
+		}
+		
+		GameObject menu = GameObject.Find("CAMERA");
+		if (menu != null)
+		{
+			menu.BroadcastMessage("fadeOut", SendMessageOptions.DontRequireReceiver);
+		}
+	}
+	
+	void restartLastCheckPoint()
+	{
+		Vector3 lastCheckpoint = this.checkpoints[checkpointIndex];
+		this.playerBody.Position = new FVector2(lastCheckpoint.x, lastCheckpoint.y);
+		this.transform.position = lastCheckpoint;
+		this.playerBody.BodyType = BodyType.Dynamic;
+		this.playerBody.Enabled = true;
+		this.playerBody.ResetDynamics();
+		this.playerBody.Mass = 1f;
+		GlobalVarScript.instance.resetCamera(true);
+		// pour teleporter la camera et faire un leger dezoom
+		Camera.main.SendMessage("ResetPosition", new Vector3(this.target.transform.position.x, this.target.transform.position.y, Camera.main.transform.position.z / 2f), SendMessageOptions.DontRequireReceiver);
+		
+		if(playerMesh != null)
+			this.playerMesh.SetActive(true);
 		
 		else
 			this.renderer.enabled = true;
@@ -238,7 +305,7 @@ public class PlayerScript : Controllable
 		Invoke("Resurrect", 4f);
 		
 		if(playerMesh != null)
-			this.playerMesh.SetActiveRecursively(false);
+			this.playerMesh.SetActive(false);
 		else
 			this.renderer.enabled =false;
 		

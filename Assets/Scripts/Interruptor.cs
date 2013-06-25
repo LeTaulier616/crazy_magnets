@@ -83,6 +83,7 @@ public class Interruptor : MonoBehaviour
 		interruptorReleaseSound = GlobalVarScript.instance.InterruptorReleaseSound;
 		buttonSound = GlobalVarScript.instance.ButtonSound;
 		electricButtonSound = GlobalVarScript.instance.ElectricButtonSound;
+		enemyControlSound = GlobalVarScript.instance.EnemyControlSound;
 		
 			clockSound1 = GlobalVarScript.instance.ClockSounds[0];
 			clockSound2 = GlobalVarScript.instance.ClockSounds[1];
@@ -287,7 +288,7 @@ public class Interruptor : MonoBehaviour
 	
 	public void MouseLeft()
 	{
-		if(Application.isEditor)
+		if(Application.isEditor || Application.platform == RuntimePlatform.WindowsPlayer)
 		{
 			TouchTap();
 		}
@@ -372,9 +373,9 @@ public class Interruptor : MonoBehaviour
 			targets[trg].GetComponent<InterruptorReceiver>().OnDesactivate();
 		}
 		
-		if(activator == Activator.PLAYER_OR_CUBE && (type == Type.STAY || type == Type.ONOFF))
+		if(activator == Activator.PLAYER_OR_CUBE && (type == Type.STAY || type == Type.ONOFF) && audio1 != null)
 		{
-			audio1.clip = interruptorSound;
+			audio1.clip = interruptorReleaseSound;
 			audio1.Play();
 		}
 		
@@ -420,15 +421,17 @@ public class Interruptor : MonoBehaviour
 	}
 	
 	private void launchAnimation()
-	{
+	{		
 		if(animation != null || this.GetComponentInChildren<Animation>() != null)
 		{
 			if(activator == Activator.TOUCH && type != Type.TIMER)
 			{
 				animation["action"].speed = -animation["action"].speed;
+								
 				
 				if (animation["action"].speed < 0f)
 					animation["action"].time = animation["action"].length;
+				
 			}
 			
 			else if (activator == Activator.PLAYER_OR_CUBE)

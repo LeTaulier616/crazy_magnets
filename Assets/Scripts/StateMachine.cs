@@ -59,6 +59,5 @@ public class StateMachine : MonoBehaviour
 			state.EnterState(this.gameObject);
 		}
 		this.curState = state;
-		Debug.Log(this.ToString() + " Switch to " + state.ToString());
 	}
 }

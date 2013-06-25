@@ -70,12 +70,12 @@ namespace FarseerPhysics
         /// <summary>
         /// The number of position iterations in the TOI solver
         /// </summary>
-        public static int TOIPositionIterations = 16;
+        public static int TOIPositionIterations = 8;
 
         /// <summary>
         /// Maximum number of sub-steps per contact in continuous physics simulation.
         /// </summary>
-		public const int MaxSubSteps = 8;
+		public const int MaxSubSteps = 4;
 
         /// <summary>
         /// Enable/Disable warmstarting
@@ -679,12 +679,12 @@ namespace FarseerPhysics
         /// <summary>
         /// The number of position iterations in the TOI solver
         /// </summary>
-        public static int TOIPositionIterations = 14;
+        public static int TOIPositionIterations = 8;
 
         /// <summary>
         /// Maximum number of sub-steps per contact in continuous physics simulation.
         /// </summary>
-		public const int MaxSubSteps = 8;
+		public const int MaxSubSteps = 4;
 
         /// <summary>
         /// Enable/Disable warmstarting
@@ -882,12 +882,12 @@ namespace FarseerPhysics
         /// <summary>
         /// The number of position iterations in the TOI solver
         /// </summary>
-        public static int TOIPositionIterations = 16;
+        public static int TOIPositionIterations = 8;
 
         /// <summary>
         /// Maximum number of sub-steps per contact in continuous physics simulation.
         /// </summary>
-		public const int MaxSubSteps = 8;
+		public const int MaxSubSteps = 4;
 
         /// <summary>
         /// Enable/Disable warmstarting
