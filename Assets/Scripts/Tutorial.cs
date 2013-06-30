@@ -36,6 +36,8 @@ public class Tutorial : MonoBehaviour
 	
 	private float alpha;
 	
+	private bool wasJumping;
+	
 	// Use this for initialization
 	void Start () 
 	{
@@ -44,12 +46,6 @@ public class Tutorial : MonoBehaviour
 		
 		playerController = player.GetComponent<ControllerMain>();
 		playerScript = player.GetComponent<PlayerScript>();
-		
-		playerScript.canJump = false;
-		canCheckJump = false;
-				
-		showBorders = false;
-		checkDistance = false;
 		
 		viewportWidthLeft = Camera.mainCamera.ViewportToScreenPoint(new Vector3(GlobalVarScript.instance.hudLimitX, 0.0f, 0.0f));
 		viewportWidthRight = Camera.mainCamera.ViewportToScreenPoint(new Vector3(1.0f - GlobalVarScript.instance.hudLimitX, 0.0f, 0.0f));
@@ -61,6 +57,12 @@ public class Tutorial : MonoBehaviour
 		ShowMoveControls();
 		
 		this.alpha = 1;
+		
+		playerScript.canJump = false;
+		canCheckJump = false;
+				
+		showBorders = true;
+		checkDistance = false;
 	}
 	
 	// Update is called once per frame
@@ -76,6 +78,11 @@ public class Tutorial : MonoBehaviour
 		{
 			walkDistance = Vector3.Distance(playerPosition, player.transform.position);
 			
+			if(playerScript.canJump)
+			{
+				playerScript.canJump = false;
+			}
+			
 			if(walkDistance >= 18.0f)
 			{
 				checkDistance = false;
@@ -84,26 +91,33 @@ public class Tutorial : MonoBehaviour
 			}
 		}
 		
+		/*
 		if(checkJumps)
 		{
-			if (canCheckJump && playerScript.isJumping && playerScript.onGround == false)
+			if (canCheckJump && playerScript.isJumping && !wasJumping)
 			{
 				jumpCount++;
 				canCheckJump = false;
 			}
+			
 			if (!canCheckJump && playerScript.onGround == true)
 			{
 				canCheckJump = true;
 			}
+			
 			if(jumpCount >= 5 && playerScript.onGround)
 			{
 				checkJumps = false;
 				ShowMagnetismControls();
 			}
 		}
-		
+		*/
 	}
 	
+	void LateUpdate()
+	{
+		wasJumping = playerScript.isJumping;
+	}
 	void ShowMoveControls()
 	{
 		ToggleControls();
@@ -207,9 +221,11 @@ public class Tutorial : MonoBehaviour
 	{
 		GlobalVarScript.instance.cameraTarget = player.transform.FindChild("TARGET");
 	}
+	
 	void EndTutorial()
 	{
 		//EndLabel.SetActive(true);
+		
 		ToggleControls();
 		
 		//GameObject.Find("Menus").GetComponent<MenuGesture>().endTuto();
@@ -246,6 +262,15 @@ public class Tutorial : MonoBehaviour
 				GUI.DrawTexture(rightBorder, RedControlTexture);
 			else
 				GUI.DrawTexture(rightBorder, GreenControlTexture);
+		}
+	}
+	
+	void OnTriggerEnter(Collider other)
+	{
+		if(other.CompareTag("Player"))
+		{
+			ShowMagnetismControls();
+			Destroy(collider);
 		}
 	}
 }
