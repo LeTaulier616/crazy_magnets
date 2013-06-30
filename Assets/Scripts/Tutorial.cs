@@ -26,9 +26,9 @@ public class Tutorial : MonoBehaviour
 	private bool checkDistance;
 	private float walkDistance;
 	
-	public bool checkJumps;
-	private bool canCheckJump;
-	public int jumpCount;
+	//public bool checkJumps;
+	//private bool canCheckJump;
+	//public int jumpCount;
 	
 	private Vector3 playerPosition;
 	
@@ -36,7 +36,7 @@ public class Tutorial : MonoBehaviour
 	
 	private float alpha;
 	
-	private bool wasJumping;
+	//private bool wasJumping;
 	
 	// Use this for initialization
 	void Start () 
@@ -59,7 +59,7 @@ public class Tutorial : MonoBehaviour
 		this.alpha = 1;
 		
 		playerScript.canJump = false;
-		canCheckJump = false;
+		//canCheckJump = false;
 				
 		showBorders = true;
 		checkDistance = false;
@@ -114,10 +114,6 @@ public class Tutorial : MonoBehaviour
 		*/
 	}
 	
-	void LateUpdate()
-	{
-		wasJumping = playerScript.isJumping;
-	}
 	void ShowMoveControls()
 	{
 		ToggleControls();
@@ -207,7 +203,7 @@ public class Tutorial : MonoBehaviour
 		else
 			checkDistance = true;
 	}
-	
+	/*
 	void ToggleJumpCheck()
 	{
 		if(checkJumps)
@@ -216,7 +212,7 @@ public class Tutorial : MonoBehaviour
 		else
 			checkJumps = true;
 	}
-	
+	*/
 	void ResetCamera()
 	{
 		GlobalVarScript.instance.cameraTarget = player.transform.FindChild("TARGET");

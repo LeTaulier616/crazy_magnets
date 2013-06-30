@@ -20,6 +20,12 @@ public class MainMenu : MenuScreen {
   	 	UIEventListener.Get(datas_button_go).onClick    = resetDatas;
   	 	UIEventListener.Get(demo_button_go).onClick     = unlockDemo;
   	 	UIEventListener.Get(credits_button_go).onClick  = credits;
+		
+		if(!Debug.isDebugBuild)
+		{
+			Destroy(demo_button_go);
+			Destroy(datas_button_go);
+		}
 	}
 	
 	public override void activateMenu()
