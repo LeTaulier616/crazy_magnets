@@ -36,6 +36,7 @@ public class CubeScript : MonoBehaviour
 	private Color blockUseColor;
 	
 	private ParticleSystem magnetParticle;
+	private ParticleSystem rangeParticle;
 	
 	void Start ()
 	{		
@@ -59,7 +60,8 @@ public class CubeScript : MonoBehaviour
 		this.blockRangeColor = GlobalVarScript.instance.BlockRangeColor;
 		this.blockUseColor = GlobalVarScript.instance.BlockUseColor;
 		
-		this.magnetParticle = this.GetComponentInChildren<ParticleSystem>();
+		this.magnetParticle = this.transform.FindChild("FX_MAGNET").GetComponent<ParticleSystem>();
+		this.rangeParticle = this.transform.FindChild("FX_RANGE").GetComponent<ParticleSystem>();
 		
 		SendMessage("ConstantParams", blockRangeColor, SendMessageOptions.DontRequireReceiver);
 		
@@ -68,15 +70,21 @@ public class CubeScript : MonoBehaviour
 	
 	void Update ()
 	{
-		if(Vector3.Distance(this.player.transform.position, this.transform.position) > range)
+		if(Vector3.Distance(this.player.transform.position, this.transform.position) < range && selected == 0)
 		{
-			SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
+			//SendMessage("ConstantOff", SendMessageOptions.DontRequireReceiver);
+			
+			if(!rangeParticle.isPlaying)
+				rangeParticle.Play();
 		}
 		
 		else
 		{
-			SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
+			//SendMessage("ConstantOn", SendMessageOptions.DontRequireReceiver);
+			if(rangeParticle.isPlaying)
+				rangeParticle.Stop();
 		}
+		
 		/*
 		if (this.selected == 1 && Mathf.Abs(this.target.x - transform.position.x) > 1.2f)
 		{

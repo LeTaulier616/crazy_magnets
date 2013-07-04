@@ -36,7 +36,7 @@ public class PlayerScript : Controllable
 			this.playerMesh.animation["jump"].speed = 2.0f;
 			this.playerMesh.animation["fall"].speed = 8.0f;
 			this.playerMesh.animation["idle"].speed = 2.0f;
-			this.playerMesh.animation["power"].speed = 6.0f;
+			this.playerMesh.animation["power"].speed = 4.0f;
 			this.playerMesh.animation["powerLoop"].speed = 2.0f;
 			this.playerMesh.animation["win"].speed = 2.0f;
 			this.playerMesh.animation.Play("idle");
@@ -97,6 +97,7 @@ public class PlayerScript : Controllable
 					this.grabTarget = null;
 					this.canMove = true;
 					this.playerBody.IgnoreGravity = false;
+					base.isGrabbing = false;
 				}
 				else
 				{
@@ -104,6 +105,7 @@ public class PlayerScript : Controllable
 					playerBody.ApplyLinearImpulse(new FVector2(grabForce.X * 13f, grabForce.Y));
 					this.grabTarget.SendMessageUpwards("PlaySound", SendMessageOptions.DontRequireReceiver);
 					this.playerBody.IgnoreGravity = true;
+					base.isGrabbing = true;
 				}
 			}
 			else
@@ -111,7 +113,13 @@ public class PlayerScript : Controllable
 				this.grabTarget = null;
 				this.canMove = true;
 				this.playerBody.IgnoreGravity = false;
+				base.isGrabbing = false;
 			}
+		}
+		
+		else
+		{
+			base.isGrabbing = false;
 		}
 	}
 	

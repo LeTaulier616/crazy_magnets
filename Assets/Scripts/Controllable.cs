@@ -120,7 +120,7 @@ public class Controllable : MonoBehaviour
 	}
 	
 	protected void Update ()
-	{	
+	{			
 		if (this.isAlive == false)
 		{
 			return;
@@ -196,7 +196,7 @@ public class Controllable : MonoBehaviour
 					{
 						if (!powerLoop && !isBolting)
 						{
-							playerMesh.animation.CrossFade("power", 0.5f);
+							playerMesh.animation.CrossFade("power", 0.3f);
 						
 							if(playerMesh.animation["power"].time >= playerMesh.animation["power"].length)
 							{
@@ -206,7 +206,7 @@ public class Controllable : MonoBehaviour
 						
 						else
 						{
-							playerMesh.animation.CrossFade("powerLoop", 0.25f);
+							playerMesh.animation.CrossFade("powerLoop", 1.0f);
 						}
 					}
 				}
@@ -220,9 +220,9 @@ public class Controllable : MonoBehaviour
 			}
 		}
 		
-		if(isCubing)
+		if(isGrabbing)
 		{
-			
+			playerMesh.animation.CrossFade("grab", 0.1f);
 		}
 		
 		// orientation du joueur
