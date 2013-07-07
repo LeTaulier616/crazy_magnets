@@ -23,8 +23,8 @@ public class MainMenu : MenuScreen {
 		
 		if(!Debug.isDebugBuild)
 		{
-			Destroy(demo_button_go);
-			Destroy(datas_button_go);
+			demo_button_go.SetActive(false);
+			datas_button_go.SetActive(false);
 		}
 	}
 	
@@ -37,7 +37,10 @@ public class MainMenu : MenuScreen {
 		
 		credits_button_go.SetActive(true);
 		
-		datas_button_go.SetActive(MyDefines.developmentMode);
+		if(Debug.isDebugBuild)
+		{
+			datas_button_go.SetActive(MyDefines.developmentMode);
+		}
 		
 		exitScreen = false;
 		loadLevel  = false;
