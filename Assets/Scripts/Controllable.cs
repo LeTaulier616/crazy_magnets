@@ -30,7 +30,7 @@ public class Controllable : MonoBehaviour
 	public bool      isFalling;
 	private bool     isCharged;
 	private bool     isCubing;
-	private bool     isBolting;
+	public bool     isBolting;
 	protected bool	attraction;
 	protected float 	angle;
 	private float 	localGravity;
@@ -57,7 +57,7 @@ public class Controllable : MonoBehaviour
 	private float dirCoeff = 0;
 	private float frictionFactor;
 	
-	private LineRenderer line;
+	public LineRenderer line;
 	private ParticleSystem chargeParticles;
 	
 	[HideInInspector]
@@ -69,6 +69,8 @@ public class Controllable : MonoBehaviour
 	
 	[HideInInspector]
 	public Vector3 chargePosition;
+	[HideInInspector]
+	public Vector3 grabPosition;
 		
 	protected void Start ()
 	{
@@ -223,6 +225,19 @@ public class Controllable : MonoBehaviour
 		if(isGrabbing)
 		{
 			playerMesh.animation.CrossFade("grab", 0.1f);
+			if(!this.line.enabled)
+			{
+				this.SendMessage("SetForGrab");
+				this.line.enabled = true;
+			}
+			
+			line.SetPosition(1, transform.InverseTransformPoint(this.grabPosition));
+		}
+		
+		else if(!isBolting)
+		{
+			if(line != null)
+				this.line.enabled = false;
 		}
 		
 		// orientation du joueur
@@ -391,6 +406,7 @@ public class Controllable : MonoBehaviour
 		{
 			ReleaseFocus();
 			
+			this.SendMessage("SetForBolt");
 			line.enabled = true;
 			Invoke("DisableSpark", 0.5f);
 			this.chargeParticles.Stop();

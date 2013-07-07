@@ -21,8 +21,7 @@ public class PlayerScript : Controllable
 	public bool hasWon;
 	
 	private ParticleSystem deathParticles;
-	private AudioClip deathSound;
-	
+	private AudioClip deathSound;	
 	
 	void Start()
 	{
@@ -106,6 +105,7 @@ public class PlayerScript : Controllable
 					this.grabTarget.SendMessageUpwards("PlaySound", SendMessageOptions.DontRequireReceiver);
 					this.playerBody.IgnoreGravity = true;
 					base.isGrabbing = true;
+					base.grabPosition = hit.point;
 				}
 			}
 			else
