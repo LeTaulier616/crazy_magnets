@@ -130,9 +130,10 @@ public class CubeScript : MonoBehaviour
 			FVector2 newVelocity = new FVector2(-this.body.LinearVelocity.X/3f, this.body.LinearVelocity.Y);
 			this.body.LinearVelocity = newVelocity;
 		}
-		if (cubePos.y > Camera.main.GetScreenHeight())
+		
+		if (cubePos.y > Camera.main.GetScreenHeight() && this.body.LinearVelocity.Y > 0)
 		{
-			FVector2 newVelocity = new FVector2(this.body.LinearVelocity.X, 0);
+			FVector2 newVelocity = new FVector2(this.body.LinearVelocity.X, -this.body.LinearVelocity.Y/3f);
 			this.body.LinearVelocity = newVelocity;
 		}
 

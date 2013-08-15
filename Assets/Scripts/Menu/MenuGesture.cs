@@ -40,7 +40,7 @@ public class MenuGesture : MonoBehaviour {
 	private bool enableButtons = false;
 	
 	void Start()
-	{
+	{	
 		if(Application.loadedLevelName == "MENU")
 		{
 			if(nextScreen == ScreenMenu.NONE)
