@@ -37,6 +37,8 @@ public class CubeScript : MonoBehaviour
 	
 	private ParticleSystem magnetParticle;
 	private ParticleSystem rangeParticle;
+
+	private GameObject explosion;
 	
 	void Start ()
 	{		
@@ -62,6 +64,8 @@ public class CubeScript : MonoBehaviour
 		
 		this.magnetParticle = this.transform.FindChild("FX_MAGNET").GetComponent<ParticleSystem>();
 		this.rangeParticle = this.transform.FindChild("FX_RANGE").GetComponent<ParticleSystem>();
+
+		this.explosion = GlobalVarScript.instance.BlockExplosion;
 		
 		SendMessage("ConstantParams", blockRangeColor, SendMessageOptions.DontRequireReceiver);
 		
@@ -227,8 +231,10 @@ public class CubeScript : MonoBehaviour
 	public void ResetPosition()
 	{
 		this.UnselectObject();
+		this.Explode();
 		this.body.SetTransform(new FVector2(startPosition.x, startPosition.y), 0.0f);
 		this.body.ResetDynamics();
+		
 	}
 	
 	public void UpdateMouseWorld()
@@ -272,5 +278,11 @@ public class CubeScript : MonoBehaviour
 			FVector2 p2 = new FVector2(MouseXWorldPhys, MouseYWorldPhys);
 			mouseJoint.WorldAnchorB = p2;
 		}
+	}
+
+	void Explode()
+	{
+		GameObject explosionInstance = Instantiate(explosion, this.transform.position, this.transform.rotation) as GameObject;
+		Destroy(explosionInstance, 1.5f);
 	}
 }

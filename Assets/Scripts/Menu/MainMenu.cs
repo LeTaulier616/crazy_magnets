@@ -12,14 +12,7 @@ public class MainMenu : MenuScreen {
 	public GameObject credits_button_go;
 
 	void Start () 
-	{
-		/*
-		if(System.DateTime.Now.Year >= 2013 && System.DateTime.Now.Month > 8)
-		{
-			Application.Quit();
-		}
-		*/
-		
+	{	
    		UIEventListener.Get(newgame_button_go).onClick  = newgame;
   	 	UIEventListener.Get(continue_button_go).onClick = continuegame;
    		UIEventListener.Get(options_button_go).onClick  = options;

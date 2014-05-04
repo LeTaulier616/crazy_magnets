@@ -68,6 +68,7 @@ public class GlobalVarScript : MonoBehaviour
 	public float BlockForce;	
 	public Color BlockRangeColor;
 	public Color BlockUseColor;
+	public GameObject BlockExplosion;
 	public float GrabRadius;
 		
 	public List<string> groundTags;

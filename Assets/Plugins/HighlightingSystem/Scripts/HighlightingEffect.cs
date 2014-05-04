@@ -303,6 +303,7 @@ public class HighlightingEffect : MonoBehaviour
 		float off = blurMinSpread + iteration * blurSpread;
 		blurMaterial.SetFloat("_OffsetScale", off);
 		Graphics.Blit(source, dest, blurMaterial);
+		source.DiscardContents();
 	}
 	
 	// Downsamples source texture

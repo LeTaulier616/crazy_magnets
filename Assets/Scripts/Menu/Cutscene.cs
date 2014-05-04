@@ -166,6 +166,11 @@ public class Cutscene : MonoBehaviour {
 	
 	void Update ()
 	{
+
+	
+
+		
+
 		if (Input.touchCount > 0) 
 		{
 			for (int i = 0; i < Input.touchCount; i++)
@@ -387,5 +392,23 @@ public class Cutscene : MonoBehaviour {
 	    texture.Apply();
 	    GUI.skin.box.normal.background = texture;
 	    GUI.Box(new Rect(0, 0, Screen.width, Screen.height), GUIContent.none);
+	}
+
+	public void LeftArrow()
+	{
+		if(!isSliding)
+		{
+			slideDirection = -1;
+			SlideMenu();
+		}
+	}
+
+	public void RightArrow()
+	{
+		if(!isSliding)
+		{
+			slideDirection = 1;
+			SlideMenu();
+		}
 	}
 }

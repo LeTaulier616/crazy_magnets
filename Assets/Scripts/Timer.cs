@@ -28,8 +28,7 @@ public class Timer : MonoBehaviour {
 		time = Time.timeSinceLevelLoad;
 		Minutes = Mathf.Floor(time / 60.0f);
 		Seconds = Mathf.Floor(time % 60.0f);
-		Decisecond = Mathf.Floor((
-		time * 100.0f) % 100.0f);
+		Decisecond = Mathf.Floor((time * 100.0f) % 100.0f);
 		
 		string txtMinutes = Minutes < 10 ? "0" + Minutes : "" + Minutes;
 		string txtSeconds = Seconds < 10 ? "0" + Seconds : "" + Seconds;

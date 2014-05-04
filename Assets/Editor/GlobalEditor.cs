@@ -298,14 +298,11 @@ public class GlobalEditor : Editor
 				"Force du magnetisme",
 				"Force de deplacement des cubes",
 				"u.a");
-			
-			this.target_.BlockRangeColor = addColorField(this.target_.BlockRangeColor,
-				"Couleur ''a portee''",
-				"Couleur du surlignage quand le cube est a portee");
-			
-			this.target_.BlockUseColor = addColorField(this.target_.BlockUseColor,
-				"Couleur ''en utilisation''",
-				"Couleur du surlignage quand le cube est touche");
+
+			this.target_.BlockExplosion = addGameObjectField(this.target_.BlockExplosion,
+			 	false,
+			 	"Prefab d'explosion",
+			 	"Prefab utilise pour l'explosion des cubes");
 			
 			this.target_.ButtonRadius = addFloatField(this.target_.ButtonRadius,
 				"Portee du levier",
@@ -764,7 +761,7 @@ public class GlobalEditor : Editor
 		Transform newTransform = (Transform) EditorGUILayout.ObjectField(new GUIContent(text, tooltip),
 			transform,
 			typeof(Transform),
-			true
+			allowscene
 		);
 		
 		EditorGUILayout.Space();
@@ -774,7 +771,22 @@ public class GlobalEditor : Editor
 		return newTransform;
 	}
 	
-			
+	private GameObject addGameObjectField(GameObject transform, bool allowscene, string text, string tooltip)
+	{
+		EditorGUILayout.BeginHorizontal();
+		GameObject newTransform = (GameObject) EditorGUILayout.ObjectField(new GUIContent(text, tooltip),
+			transform,
+			typeof(GameObject),
+			allowscene
+		);
+		
+		EditorGUILayout.Space();
+		
+		EditorGUILayout.EndHorizontal();
+		
+		return newTransform;
+	}
+
 	private AudioClip addSoundField(AudioClip clip, bool allowscene, string text, string tooltip)
 	{
 		EditorGUILayout.BeginHorizontal();

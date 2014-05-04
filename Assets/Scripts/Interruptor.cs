@@ -106,7 +106,7 @@ public class Interruptor : MonoBehaviour
 			else
 				audio1 = source;
 		}
-		
+		/*
 		if(Pipes != null)
 		{
 			foreach(Transform child in Pipes.transform)
@@ -118,7 +118,7 @@ public class Interruptor : MonoBehaviour
 				}
 			}
 		}
-
+		*/
 		if(animation != null || this.GetComponentInChildren<Animation>() != null)
 		{
 			if(activator == Activator.TOUCH && type != Type.TIMER)
@@ -314,9 +314,19 @@ public class Interruptor : MonoBehaviour
 		{
 			foreach(Transform child in Pipes.transform)
 			{
+				/*
 				if(child.GetComponent<HighlightableObject>() != null)
 				{
 					child.gameObject.GetComponent<HighlightableObject>().ConstantOn();
+				}
+				*/
+
+				if(Random.Range(0.0f, 1.0f) <= 0.4f)
+				{
+					Transform pipeEffect = child.FindChild("FX_PIPE");
+
+					if(pipeEffect.gameObject!= null)
+						pipeEffect.gameObject.SetActive(true);
 				}
 			}
 		}
@@ -449,10 +459,11 @@ public class Interruptor : MonoBehaviour
 		{
 			foreach(Transform child in Pipes.transform)
 			{
-				if(child.GetComponent<HighlightableObject>() != null)
-				{
-					child.gameObject.GetComponent<HighlightableObject>().ConstantOff();
-				}
+				Transform pipeEffect = child.FindChild("FX_PIPE");
+				
+				if(pipeEffect.gameObject!= null)
+					pipeEffect.gameObject.SetActive(false);
+			
 			}
 		}
 	}

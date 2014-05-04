@@ -68,7 +68,7 @@ public class Road : MonoBehaviour
 		foreach(Transform t in this.p)
 		{
 			Gizmos.color = Color.red;
-			Gizmos.DrawCube(t.position, new Vector3(1.5f, 1.5f, 1.5f));
+			Gizmos.DrawCube(t.position, new Vector3(1.0f, 1.0f, 1.0f));
 			Gizmos.color = Color.white;
 		}
 		
