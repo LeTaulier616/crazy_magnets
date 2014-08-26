@@ -288,7 +288,7 @@ public class Interruptor : MonoBehaviour
 	
 	public void MouseLeft()
 	{
-		if(Application.isEditor || Application.platform == RuntimePlatform.WindowsPlayer)
+		if(Application.isEditor || Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.OSXPlayer)
 		{
 			TouchTap();
 		}

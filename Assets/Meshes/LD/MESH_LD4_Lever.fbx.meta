@@ -1,34 +1,58 @@
 fileFormatVersion: 2
 guid: 3cc9967ec0ca9c946979f7acd4a33e03
 ModelImporter:
+  serializedVersion: 16
   fileIDToRecycleName:
+    100000: //RootNode
+    100002: polySurface14
+    100004: polySurface13
+    100006: polySurface12
+    100008: polySurface11
+    100010: polySurface9
+    400000: //RootNode
+    400002: polySurface14
+    400004: polySurface13
+    400006: polySurface12
+    400008: polySurface11
+    400010: polySurface9
+    2300000: polySurface14
+    2300002: polySurface12
+    2300004: polySurface11
+    3300000: polySurface14
+    3300002: polySurface12
+    3300004: polySurface11
     4300000: polySurface11
     4300002: polySurface12
     4300004: polySurface14
-  serializedVersion: 10
+    11100000: //RootNode
   materials:
     importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
-    generateAnimations: 3
+    legacyGenerateAnimations: 3
     bakeSimulation: 0
-    splitAnimations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
     animationCompression: 1
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
     animationWrapMode: 0
+    extraExposedTransformPaths: []
     clipAnimations: []
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: .25
     meshCompression: 0
     addColliders: 0
+    importBlendShapes: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMesh: 0
+    optimizeMeshForGPU: 1
+    weldVertices: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
@@ -38,67 +62,20 @@ ModelImporter:
     splitTangentsAcrossUV: 1
     normalImportMode: 0
     tangentImportMode: 1
-  textMetaNamesToFileIDs:
-    //RootNode:
-      data:
-        first: 1
-        second: a0860100
-      data:
-        first: 4
-        second: 801a0600
-      data:
-        first: 111
-        second: 605fa900
-    polySurface11:
-      data:
-        first: 1
-        second: a8860100
-      data:
-        first: 4
-        second: 881a0600
-      data:
-        first: 23
-        second: 64182300
-      data:
-        first: 33
-        second: a45a3200
-    polySurface12:
-      data:
-        first: 1
-        second: a6860100
-      data:
-        first: 4
-        second: 861a0600
-      data:
-        first: 23
-        second: 62182300
-      data:
-        first: 33
-        second: a25a3200
-    polySurface13:
-      data:
-        first: 1
-        second: a4860100
-      data:
-        first: 4
-        second: 841a0600
-    polySurface14:
-      data:
-        first: 1
-        second: a2860100
-      data:
-        first: 4
-        second: 821a0600
-      data:
-        first: 23
-        second: 60182300
-      data:
-        first: 33
-        second: a05a3200
-    polySurface9:
-      data:
-        first: 1
-        second: aa860100
-      data:
-        first: 4
-        second: 8a1a0600
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  additionalBone: 0
+  userData: 

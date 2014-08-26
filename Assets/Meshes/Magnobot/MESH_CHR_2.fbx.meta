@@ -1,7 +1,210 @@
 fileFormatVersion: 2
 guid: 2eeee8e4f16bbc942a38833eb07bee12
 ModelImporter:
+  serializedVersion: 16
   fileIDToRecycleName:
+    100000: KneePV_R_ctrl
+    100002: Ankle_R_ikhl
+    100004: LegIK_R_ctrl
+    100006: Jaw_C_ctrl
+    100008: Jaw_C_GRP
+    100010: Head_C_ctrl
+    100012: Head_C_GRP
+    100014: Neck_C_ctrl
+    100016: Neck_C_GRP
+    100018: Chest_C_ctrl
+    100020: Chest_C_GRP
+    100022: MidSpine_C_ctrl
+    100024: MidSpine_C_GRP
+    100026: Root_C_ctrl
+    100028: Root_C_GRP
+    100030: Ultimate_C_ctrl
+    100032: MAGNOBOT_RIG
+    100034: Toe_R_jnt
+    100036: Knee_R_jnt
+    100038: Hip_R_jnt
+    100040: Toe_L_jnt
+    100042: Knee_L_jnt
+    100044: Hip_L_jnt
+    100046: Cable_05_jnt
+    100048: Cable_04_jnt
+    100050: Cable_03_jnt
+    100052: Cable_02_jnt
+    100054: Cable_01_jnt
+    100056: Battery_04_jnt
+    100058: Battery_03_jnt
+    100060: Battery_02_jnt
+    100062: Battery_01_jnt
+    100064: Gauntlet_R_jnt
+    100066: Elbow_R_jnt
+    100068: Shoulder_R_jnt
+    100070: Fingers03_L_jnt
+    100072: Fingers02_L_jnt
+    100074: Fingesr01_L_jnt
+    100076: Thumb03_L_jnt
+    100078: Thumb02_L_jnt
+    100080: Thumb01_L_jnt
+    100082: Wrist_L_jnt
+    100084: Elbow_L_jnt
+    100086: Shoulder_L_jnt
+    100088: Jaw_02_jnt
+    100090: Jaw_01_jnt
+    100092: Head_end_C_jnt
+    100094: Head_C_jnt
+    100096: Neck_C_jnt
+    100098: Chest_C_jnt
+    100100: MidSpine_C_jnt
+    100102: Root_C_jnt
+    100104: MAGNOBOT_JAW
+    100106: MAGNOBOT_BODY
+    100108: MAGNOBOT_GEO
+    100110: MAGNOBOT
+    100112: Headband_02_C_ctrl
+    100114: Headband_02_C_GRP
+    100116: Headband_01_C_ctrl
+    100118: Headband_01_C_GRP
+    100120: Headband_03_C_jnt
+    100122: Headband_02_C_jnt
+    100124: Headband_01_C_jnt
+    100126: MAGNOBOT_SKELETTON
+    100128: MAGNOBOT_LIGHT_BATTERY
+    100130: MAGNOBOT_GAUNTLET_GLASS
+    100132: MAGNOBOT_BODY_grp
+    100134: MAGNOBOT_EYE_R_DEEP
+    100136: MAGNOBOT_EYE_R_GLASS
+    100138: MAGNOBOT_EYE_R_grp
+    100140: MAGNOBOT_EYE_L_DEEP
+    100142: MAGNOBOT_EYE_L_GLASS
+    100144: MAGNOBOT_EYE_L_grp
+    100146: MAGNOBOT_HEAD_grp
+    100148: nurbsCube1
+    100150: LegIK_L_ctrl
+    100152: LegIK_L_GRP
+    100154: BatteryPV_ctrl
+    100156: CablePV_ctrl
+    100158: CablePV_GRP
+    100160: Battery_ikhl
+    100162: BatteryPV_GRP
+    100164: Cable_ikhl
+    100166: Elbow_R_ctrl
+    100168: Elbow_R_GRP
+    100170: Shoulder_R_ctrl
+    100172: Shoulder_R_GRP
+    100174: Fingers_L_ctrl
+    100176: Fingers_L_GRP
+    100178: Thumb_L_ctrl
+    100180: Thumb_L_GRP
+    100182: Wrist_L_ctrl
+    100184: Wrist_L_GRP
+    100186: Elbow_L_ctrl
+    100188: Elbow_L_GRP
+    100190: Shoulder_L_ctrl
+    100192: Shoulder_L_GRP
+    100194: LegIK_R_GRP
+    100196: //RootNode
+    100198: KneePV_L_ctrl
+    100200: Ankle_L_ikhl
+    400000: KneePV_R_ctrl
+    400002: Ankle_R_ikhl
+    400004: LegIK_R_ctrl
+    400006: Jaw_C_ctrl
+    400008: Jaw_C_GRP
+    400010: Head_C_ctrl
+    400012: Head_C_GRP
+    400014: Neck_C_ctrl
+    400016: Neck_C_GRP
+    400018: Chest_C_ctrl
+    400020: Chest_C_GRP
+    400022: MidSpine_C_ctrl
+    400024: MidSpine_C_GRP
+    400026: Root_C_ctrl
+    400028: Root_C_GRP
+    400030: Ultimate_C_ctrl
+    400032: MAGNOBOT_RIG
+    400034: Toe_R_jnt
+    400036: Knee_R_jnt
+    400038: Hip_R_jnt
+    400040: Toe_L_jnt
+    400042: Knee_L_jnt
+    400044: Hip_L_jnt
+    400046: Cable_05_jnt
+    400048: Cable_04_jnt
+    400050: Cable_03_jnt
+    400052: Cable_02_jnt
+    400054: Cable_01_jnt
+    400056: Battery_04_jnt
+    400058: Battery_03_jnt
+    400060: Battery_02_jnt
+    400062: Battery_01_jnt
+    400064: Gauntlet_R_jnt
+    400066: Elbow_R_jnt
+    400068: Shoulder_R_jnt
+    400070: Fingers03_L_jnt
+    400072: Fingers02_L_jnt
+    400074: Fingesr01_L_jnt
+    400076: Thumb03_L_jnt
+    400078: Thumb02_L_jnt
+    400080: Thumb01_L_jnt
+    400082: Wrist_L_jnt
+    400084: Elbow_L_jnt
+    400086: Shoulder_L_jnt
+    400088: Jaw_02_jnt
+    400090: Jaw_01_jnt
+    400092: Head_end_C_jnt
+    400094: Head_C_jnt
+    400096: Neck_C_jnt
+    400098: Chest_C_jnt
+    400100: MidSpine_C_jnt
+    400102: Root_C_jnt
+    400104: MAGNOBOT_JAW
+    400106: MAGNOBOT_BODY
+    400108: MAGNOBOT_GEO
+    400110: MAGNOBOT
+    400112: Headband_02_C_ctrl
+    400114: Headband_02_C_GRP
+    400116: Headband_01_C_ctrl
+    400118: Headband_01_C_GRP
+    400120: Headband_03_C_jnt
+    400122: Headband_02_C_jnt
+    400124: Headband_01_C_jnt
+    400126: MAGNOBOT_SKELETTON
+    400128: MAGNOBOT_LIGHT_BATTERY
+    400130: MAGNOBOT_GAUNTLET_GLASS
+    400132: MAGNOBOT_BODY_grp
+    400134: MAGNOBOT_EYE_R_DEEP
+    400136: MAGNOBOT_EYE_R_GLASS
+    400138: MAGNOBOT_EYE_R_grp
+    400140: MAGNOBOT_EYE_L_DEEP
+    400142: MAGNOBOT_EYE_L_GLASS
+    400144: MAGNOBOT_EYE_L_grp
+    400146: MAGNOBOT_HEAD_grp
+    400148: nurbsCube1
+    400150: LegIK_L_ctrl
+    400152: LegIK_L_GRP
+    400154: BatteryPV_ctrl
+    400156: CablePV_ctrl
+    400158: CablePV_GRP
+    400160: Battery_ikhl
+    400162: BatteryPV_GRP
+    400164: Cable_ikhl
+    400166: Elbow_R_ctrl
+    400168: Elbow_R_GRP
+    400170: Shoulder_R_ctrl
+    400172: Shoulder_R_GRP
+    400174: Fingers_L_ctrl
+    400176: Fingers_L_GRP
+    400178: Thumb_L_ctrl
+    400180: Thumb_L_GRP
+    400182: Wrist_L_ctrl
+    400184: Wrist_L_GRP
+    400186: Elbow_L_ctrl
+    400188: Elbow_L_GRP
+    400190: Shoulder_L_ctrl
+    400192: Shoulder_L_GRP
+    400194: LegIK_R_GRP
+    400196: //RootNode
+    400198: KneePV_L_ctrl
+    400200: Ankle_L_ikhl
     4300000: MAGNOBOT_EYE_L_GLASS
     4300002: MAGNOBOT_EYE_L_DEEP
     4300004: MAGNOBOT_EYE_R_GLASS
@@ -10,32 +213,44 @@ ModelImporter:
     4300010: MAGNOBOT_JAW
     4300012: MAGNOBOT_GAUNTLET_GLASS
     4300014: MAGNOBOT_LIGHT_BATTERY
-    7400000: Take 001 //// CHR_MESH_2
-    7400002: Take 001 //// MESH_CHR_2
-  serializedVersion: 10
+    7400002: Take 001
+    11100000: //RootNode
+    13700000: MAGNOBOT_JAW
+    13700002: MAGNOBOT_BODY
+    13700004: MAGNOBOT_LIGHT_BATTERY
+    13700006: MAGNOBOT_GAUNTLET_GLASS
+    13700008: MAGNOBOT_EYE_R_DEEP
+    13700010: MAGNOBOT_EYE_R_GLASS
+    13700012: MAGNOBOT_EYE_L_DEEP
+    13700014: MAGNOBOT_EYE_L_GLASS
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:
-    generateAnimations: 3
+    legacyGenerateAnimations: 3
     bakeSimulation: 0
-    splitAnimations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
     animationCompression: 1
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
     animationWrapMode: 0
+    extraExposedTransformPaths: []
     clipAnimations: []
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: .300000012
     meshCompression: 0
     addColliders: 0
+    importBlendShapes: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMesh: 0
+    optimizeMeshForGPU: 1
+    weldVertices: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
@@ -45,738 +260,20 @@ ModelImporter:
     splitTangentsAcrossUV: 1
     normalImportMode: 0
     tangentImportMode: 1
-  textMetaNamesToFileIDs:
-    //RootNode:
-      data:
-        first: 1
-        second: 64870100
-      data:
-        first: 4
-        second: 441b0600
-      data:
-        first: 111
-        second: 605fa900
-    Ankle_L_ikhl:
-      data:
-        first: 1
-        second: 68870100
-      data:
-        first: 4
-        second: 481b0600
-    Ankle_R_ikhl:
-      data:
-        first: 1
-        second: a2860100
-      data:
-        first: 4
-        second: 821a0600
-    BatteryPV_GRP:
-      data:
-        first: 1
-        second: 42870100
-      data:
-        first: 4
-        second: 221b0600
-    BatteryPV_ctrl:
-      data:
-        first: 1
-        second: 3a870100
-      data:
-        first: 4
-        second: 1a1b0600
-    Battery_01_jnt:
-      data:
-        first: 1
-        second: de860100
-      data:
-        first: 4
-        second: be1a0600
-    Battery_02_jnt:
-      data:
-        first: 1
-        second: dc860100
-      data:
-        first: 4
-        second: bc1a0600
-    Battery_03_jnt:
-      data:
-        first: 1
-        second: da860100
-      data:
-        first: 4
-        second: ba1a0600
-    Battery_04_jnt:
-      data:
-        first: 1
-        second: d8860100
-      data:
-        first: 4
-        second: b81a0600
-    Battery_ikhl:
-      data:
-        first: 1
-        second: 40870100
-      data:
-        first: 4
-        second: 201b0600
-    CablePV_GRP:
-      data:
-        first: 1
-        second: 3e870100
-      data:
-        first: 4
-        second: 1e1b0600
-    CablePV_ctrl:
-      data:
-        first: 1
-        second: 3c870100
-      data:
-        first: 4
-        second: 1c1b0600
-    Cable_01_jnt:
-      data:
-        first: 1
-        second: d6860100
-      data:
-        first: 4
-        second: b61a0600
-    Cable_02_jnt:
-      data:
-        first: 1
-        second: d4860100
-      data:
-        first: 4
-        second: b41a0600
-    Cable_03_jnt:
-      data:
-        first: 1
-        second: d2860100
-      data:
-        first: 4
-        second: b21a0600
-    Cable_04_jnt:
-      data:
-        first: 1
-        second: d0860100
-      data:
-        first: 4
-        second: b01a0600
-    Cable_05_jnt:
-      data:
-        first: 1
-        second: ce860100
-      data:
-        first: 4
-        second: ae1a0600
-    Cable_ikhl:
-      data:
-        first: 1
-        second: 44870100
-      data:
-        first: 4
-        second: 241b0600
-    Chest_C_GRP:
-      data:
-        first: 1
-        second: b4860100
-      data:
-        first: 4
-        second: 941a0600
-    Chest_C_ctrl:
-      data:
-        first: 1
-        second: b2860100
-      data:
-        first: 4
-        second: 921a0600
-    Chest_C_jnt:
-      data:
-        first: 1
-        second: 02870100
-      data:
-        first: 4
-        second: e21a0600
-    Elbow_L_GRP:
-      data:
-        first: 1
-        second: 5c870100
-      data:
-        first: 4
-        second: 3c1b0600
-    Elbow_L_ctrl:
-      data:
-        first: 1
-        second: 5a870100
-      data:
-        first: 4
-        second: 3a1b0600
-    Elbow_L_jnt:
-      data:
-        first: 1
-        second: f4860100
-      data:
-        first: 4
-        second: d41a0600
-    Elbow_R_GRP:
-      data:
-        first: 1
-        second: 48870100
-      data:
-        first: 4
-        second: 281b0600
-    Elbow_R_ctrl:
-      data:
-        first: 1
-        second: 46870100
-      data:
-        first: 4
-        second: 261b0600
-    Elbow_R_jnt:
-      data:
-        first: 1
-        second: e2860100
-      data:
-        first: 4
-        second: c21a0600
-    Fingers02_L_jnt:
-      data:
-        first: 1
-        second: e8860100
-      data:
-        first: 4
-        second: c81a0600
-    Fingers03_L_jnt:
-      data:
-        first: 1
-        second: e6860100
-      data:
-        first: 4
-        second: c61a0600
-    Fingers_L_GRP:
-      data:
-        first: 1
-        second: 50870100
-      data:
-        first: 4
-        second: 301b0600
-    Fingers_L_ctrl:
-      data:
-        first: 1
-        second: 4e870100
-      data:
-        first: 4
-        second: 2e1b0600
-    Fingesr01_L_jnt:
-      data:
-        first: 1
-        second: ea860100
-      data:
-        first: 4
-        second: ca1a0600
-    Gauntlet_R_jnt:
-      data:
-        first: 1
-        second: e0860100
-      data:
-        first: 4
-        second: c01a0600
-    Head_C_GRP:
-      data:
-        first: 1
-        second: ac860100
-      data:
-        first: 4
-        second: 8c1a0600
-    Head_C_ctrl:
-      data:
-        first: 1
-        second: aa860100
-      data:
-        first: 4
-        second: 8a1a0600
-    Head_C_jnt:
-      data:
-        first: 1
-        second: fe860100
-      data:
-        first: 4
-        second: de1a0600
-    Head_end_C_jnt:
-      data:
-        first: 1
-        second: fc860100
-      data:
-        first: 4
-        second: dc1a0600
-    Headband_01_C_GRP:
-      data:
-        first: 1
-        second: 16870100
-      data:
-        first: 4
-        second: f61a0600
-    Headband_01_C_ctrl:
-      data:
-        first: 1
-        second: 14870100
-      data:
-        first: 4
-        second: f41a0600
-    Headband_01_C_jnt:
-      data:
-        first: 1
-        second: 1c870100
-      data:
-        first: 4
-        second: fc1a0600
-    Headband_02_C_GRP:
-      data:
-        first: 1
-        second: 12870100
-      data:
-        first: 4
-        second: f21a0600
-    Headband_02_C_ctrl:
-      data:
-        first: 1
-        second: 10870100
-      data:
-        first: 4
-        second: f01a0600
-    Headband_02_C_jnt:
-      data:
-        first: 1
-        second: 1a870100
-      data:
-        first: 4
-        second: fa1a0600
-    Headband_03_C_jnt:
-      data:
-        first: 1
-        second: 18870100
-      data:
-        first: 4
-        second: f81a0600
-    Hip_L_jnt:
-      data:
-        first: 1
-        second: cc860100
-      data:
-        first: 4
-        second: ac1a0600
-    Hip_R_jnt:
-      data:
-        first: 1
-        second: c6860100
-      data:
-        first: 4
-        second: a61a0600
-    Jaw_01_jnt:
-      data:
-        first: 1
-        second: fa860100
-      data:
-        first: 4
-        second: da1a0600
-    Jaw_02_jnt:
-      data:
-        first: 1
-        second: f8860100
-      data:
-        first: 4
-        second: d81a0600
-    Jaw_C_GRP:
-      data:
-        first: 1
-        second: a8860100
-      data:
-        first: 4
-        second: 881a0600
-    Jaw_C_ctrl:
-      data:
-        first: 1
-        second: a6860100
-      data:
-        first: 4
-        second: 861a0600
-    KneePV_L_ctrl:
-      data:
-        first: 1
-        second: 66870100
-      data:
-        first: 4
-        second: 461b0600
-    KneePV_R_ctrl:
-      data:
-        first: 1
-        second: a0860100
-      data:
-        first: 4
-        second: 801a0600
-    Knee_L_jnt:
-      data:
-        first: 1
-        second: ca860100
-      data:
-        first: 4
-        second: aa1a0600
-    Knee_R_jnt:
-      data:
-        first: 1
-        second: c4860100
-      data:
-        first: 4
-        second: a41a0600
-    LegIK_L_GRP:
-      data:
-        first: 1
-        second: 38870100
-      data:
-        first: 4
-        second: 181b0600
-    LegIK_L_ctrl:
-      data:
-        first: 1
-        second: 36870100
-      data:
-        first: 4
-        second: 161b0600
-    LegIK_R_GRP:
-      data:
-        first: 1
-        second: 62870100
-      data:
-        first: 4
-        second: 421b0600
-    LegIK_R_ctrl:
-      data:
-        first: 1
-        second: a4860100
-      data:
-        first: 4
-        second: 841a0600
-    MAGNOBOT:
-      data:
-        first: 1
-        second: 0e870100
-      data:
-        first: 4
-        second: ee1a0600
-    MAGNOBOT_BODY:
-      data:
-        first: 1
-        second: 0a870100
-      data:
-        first: 4
-        second: ea1a0600
-      data:
-        first: 137
-        second: a20bd100
-    MAGNOBOT_BODY_grp:
-      data:
-        first: 1
-        second: 24870100
-      data:
-        first: 4
-        second: 041b0600
-    MAGNOBOT_EYE_L_DEEP:
-      data:
-        first: 1
-        second: 2c870100
-      data:
-        first: 4
-        second: 0c1b0600
-      data:
-        first: 137
-        second: ac0bd100
-    MAGNOBOT_EYE_L_GLASS:
-      data:
-        first: 1
-        second: 2e870100
-      data:
-        first: 4
-        second: 0e1b0600
-      data:
-        first: 137
-        second: ae0bd100
-    MAGNOBOT_EYE_L_grp:
-      data:
-        first: 1
-        second: 30870100
-      data:
-        first: 4
-        second: 101b0600
-    MAGNOBOT_EYE_R_DEEP:
-      data:
-        first: 1
-        second: 26870100
-      data:
-        first: 4
-        second: 061b0600
-      data:
-        first: 137
-        second: a80bd100
-    MAGNOBOT_EYE_R_GLASS:
-      data:
-        first: 1
-        second: 28870100
-      data:
-        first: 4
-        second: 081b0600
-      data:
-        first: 137
-        second: aa0bd100
-    MAGNOBOT_EYE_R_grp:
-      data:
-        first: 1
-        second: 2a870100
-      data:
-        first: 4
-        second: 0a1b0600
-    MAGNOBOT_GAUNTLET_GLASS:
-      data:
-        first: 1
-        second: 22870100
-      data:
-        first: 4
-        second: 021b0600
-      data:
-        first: 137
-        second: a60bd100
-    MAGNOBOT_GEO:
-      data:
-        first: 1
-        second: 0c870100
-      data:
-        first: 4
-        second: ec1a0600
-    MAGNOBOT_HEAD_grp:
-      data:
-        first: 1
-        second: 32870100
-      data:
-        first: 4
-        second: 121b0600
-    MAGNOBOT_JAW:
-      data:
-        first: 1
-        second: 08870100
-      data:
-        first: 4
-        second: e81a0600
-      data:
-        first: 137
-        second: a00bd100
-    MAGNOBOT_LIGHT_BATTERY:
-      data:
-        first: 1
-        second: 20870100
-      data:
-        first: 4
-        second: 001b0600
-      data:
-        first: 137
-        second: a40bd100
-    MAGNOBOT_RIG:
-      data:
-        first: 1
-        second: c0860100
-      data:
-        first: 4
-        second: a01a0600
-    MAGNOBOT_SKELETTON:
-      data:
-        first: 1
-        second: 1e870100
-      data:
-        first: 4
-        second: fe1a0600
-    MidSpine_C_GRP:
-      data:
-        first: 1
-        second: b8860100
-      data:
-        first: 4
-        second: 981a0600
-    MidSpine_C_ctrl:
-      data:
-        first: 1
-        second: b6860100
-      data:
-        first: 4
-        second: 961a0600
-    MidSpine_C_jnt:
-      data:
-        first: 1
-        second: 04870100
-      data:
-        first: 4
-        second: e41a0600
-    Neck_C_GRP:
-      data:
-        first: 1
-        second: b0860100
-      data:
-        first: 4
-        second: 901a0600
-    Neck_C_ctrl:
-      data:
-        first: 1
-        second: ae860100
-      data:
-        first: 4
-        second: 8e1a0600
-    Neck_C_jnt:
-      data:
-        first: 1
-        second: 00870100
-      data:
-        first: 4
-        second: e01a0600
-    Root_C_GRP:
-      data:
-        first: 1
-        second: bc860100
-      data:
-        first: 4
-        second: 9c1a0600
-    Root_C_ctrl:
-      data:
-        first: 1
-        second: ba860100
-      data:
-        first: 4
-        second: 9a1a0600
-    Root_C_jnt:
-      data:
-        first: 1
-        second: 06870100
-      data:
-        first: 4
-        second: e61a0600
-    Shoulder_L_GRP:
-      data:
-        first: 1
-        second: 60870100
-      data:
-        first: 4
-        second: 401b0600
-    Shoulder_L_ctrl:
-      data:
-        first: 1
-        second: 5e870100
-      data:
-        first: 4
-        second: 3e1b0600
-    Shoulder_L_jnt:
-      data:
-        first: 1
-        second: f6860100
-      data:
-        first: 4
-        second: d61a0600
-    Shoulder_R_GRP:
-      data:
-        first: 1
-        second: 4c870100
-      data:
-        first: 4
-        second: 2c1b0600
-    Shoulder_R_ctrl:
-      data:
-        first: 1
-        second: 4a870100
-      data:
-        first: 4
-        second: 2a1b0600
-    Shoulder_R_jnt:
-      data:
-        first: 1
-        second: e4860100
-      data:
-        first: 4
-        second: c41a0600
-    Thumb01_L_jnt:
-      data:
-        first: 1
-        second: f0860100
-      data:
-        first: 4
-        second: d01a0600
-    Thumb02_L_jnt:
-      data:
-        first: 1
-        second: ee860100
-      data:
-        first: 4
-        second: ce1a0600
-    Thumb03_L_jnt:
-      data:
-        first: 1
-        second: ec860100
-      data:
-        first: 4
-        second: cc1a0600
-    Thumb_L_GRP:
-      data:
-        first: 1
-        second: 54870100
-      data:
-        first: 4
-        second: 341b0600
-    Thumb_L_ctrl:
-      data:
-        first: 1
-        second: 52870100
-      data:
-        first: 4
-        second: 321b0600
-    Toe_L_jnt:
-      data:
-        first: 1
-        second: c8860100
-      data:
-        first: 4
-        second: a81a0600
-    Toe_R_jnt:
-      data:
-        first: 1
-        second: c2860100
-      data:
-        first: 4
-        second: a21a0600
-    Ultimate_C_ctrl:
-      data:
-        first: 1
-        second: be860100
-      data:
-        first: 4
-        second: 9e1a0600
-    Wrist_L_GRP:
-      data:
-        first: 1
-        second: 58870100
-      data:
-        first: 4
-        second: 381b0600
-    Wrist_L_ctrl:
-      data:
-        first: 1
-        second: 56870100
-      data:
-        first: 4
-        second: 361b0600
-    Wrist_L_jnt:
-      data:
-        first: 1
-        second: f2860100
-      data:
-        first: 4
-        second: d21a0600
-    nurbsCube1:
-      data:
-        first: 1
-        second: 34870100
-      data:
-        first: 4
-        second: 141b0600
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  additionalBone: 0
+  userData: 
